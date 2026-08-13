@@ -3,11 +3,11 @@
  * build-vercel.mjs
  *
  * Runs after `vite build` to assemble the .vercel/output directory
- * that Vercel's Build Output API expects.
+ * that Vercel's Build Output API v3 expects.
  *
  * Structure produced:
  *   .vercel/output/
- *     config.json          — tells Vercel this is a serverless deployment
+ *     config.json          — route config (static → CDN, everything else → SSR)
  *     static/              — all static client assets (served by CDN)
  *     functions/
  *       index.func/        — the SSR serverless function
@@ -32,10 +32,28 @@ fs.rmSync(outDir, { recursive: true, force: true });
 fs.mkdirSync(path.join(outDir, "static"),                       { recursive: true });
 fs.mkdirSync(path.join(outDir, "functions", "index.func"),      { recursive: true });
 
-// ── 1. config.json ────────────────────────────────────────────────────────────
+// ── 1. config.json — MUST include routes or Vercel won't route to the SSR fn ──
 fs.writeFileSync(
   path.join(outDir, "config.json"),
-  JSON.stringify({ version: 3 }, null, 2),
+  JSON.stringify(
+    {
+      version: 3,
+      routes: [
+        // Immutable hashed assets — 1 year cache, served from CDN
+        {
+          src: "^/assets/(.+)$",
+          headers: { "cache-control": "public, max-age=31536000, immutable" },
+          continue: true,
+        },
+        // Serve static files directly from CDN where they exist
+        { handle: "filesystem" },
+        // Everything else (SSR, API, etc.) → serverless function
+        { src: "/(.*)", dest: "/index" },
+      ],
+    },
+    null,
+    2,
+  ),
 );
 
 // ── 2. Static assets — copy entire dist/client into static/ ──────────────────
@@ -47,7 +65,7 @@ const funcDir = path.join(outDir, "functions", "index.func");
 // Copy dist/server into the function directory
 copyDir(distServer, funcDir);
 
-// Write the function entry point — wraps the fetch handler for Vercel
+// Write the function entry point — adapts Node.js req/res → Web Request/Response
 fs.writeFileSync(
   path.join(funcDir, "index.mjs"),
   `
@@ -100,7 +118,7 @@ function readBody(req) {
 `.trimStart(),
 );
 
-// Write the Vercel function config
+// Write the Vercel function config — nodejs20.x (NOT edge; edge lacks process.env + fs)
 fs.writeFileSync(
   path.join(funcDir, ".vc-config.json"),
   JSON.stringify(
@@ -117,10 +135,14 @@ fs.writeFileSync(
 // ── Done ──────────────────────────────────────────────────────────────────────
 console.log("✓ .vercel/output assembled successfully");
 console.log(`  static/    — ${countFiles(path.join(outDir, "static"))} files`);
-console.log(`  index.func — serverless SSR function`);
+console.log(`  index.func — serverless SSR function (nodejs20.x)`);
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function copyDir(src, dest) {
+  if (!fs.existsSync(src)) {
+    console.warn(`⚠️  Source not found, skipping: ${src}`);
+    return;
+  }
   fs.mkdirSync(dest, { recursive: true });
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
     const srcPath  = path.join(src,  entry.name);
@@ -134,6 +156,7 @@ function copyDir(src, dest) {
 }
 
 function countFiles(dir) {
+  if (!fs.existsSync(dir)) return 0;
   let count = 0;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) count += countFiles(path.join(dir, entry.name));
