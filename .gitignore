@@ -1,40 +1,3 @@
-# # Logs
-# logs
-# *.log
-# npm-debug.log*
-# yarn-debug.log*
-# yarn-error.log*
-# pnpm-debug.log*
-# lerna-debug.log*
-
-# node_modules
-# dist
-# dist-ssr
-# .output
-# .vinxi
-# .tanstack/**
-# .nitro
-# *.local
-
-# # Wrangler / Cloudflare
-# .wrangler/
-# .dev.vars
-
-# # Editor directories and files
-# .vscode/*
-# !.vscode/extensions.json
-# .idea
-# .DS_Store
-# *.suo
-# *.ntvs*
-# *.njsproj
-# *.sln
-# *.sw?
-
-# # Environment
-# .env
-# .env.local
-
 # Logs
 logs
 *.log
@@ -44,7 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Build output
 node_modules
 dist
 dist-ssr
@@ -69,10 +31,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment (SECRET — never push to GitHub)
+# Environment
 .env
 .env.local
-
-
-# Supabase local temp files (contains project ref, internal URLs)
-supabase/.temp/

@@ -7,10 +7,11 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "vercel-build": "vite build",
+    "vercel-build": "vite build && node build-vercel.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:vercel": "vite build && node build-vercel.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
