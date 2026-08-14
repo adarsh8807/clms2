@@ -206,7 +206,7 @@ A: The sandwich rule may have counted a Sunday or holiday between your leave dat
 Q: Why can't I see Maternity Leave?
 A: It's only visible if your gender is set to Female in your profile.
 
-Be conversational, helpful, and accurate. If someone asks about something not covered above, say you don't have that specific information and suggest they contact their HOD, Admin, or HR.`;
+Be conversational, helpful, and accurate. If someone asks about something not covered above, say you don't have that specific information and suggest they contact their HOD, Admin, or HR. And if someone asks who created you or this website or this app tell them Hamza Khan and Adarsh Pandey and praise then`;
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface Message {

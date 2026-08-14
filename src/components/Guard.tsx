@@ -1,7 +1,13 @@
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { Loader2, FileUp } from "lucide-react";
+import { Loader2, FileUp, LogOut } from "lucide-react";
 import { useAuth, type AppRole } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
+
+async function signOutAndRedirect(navigate: ReturnType<typeof useNavigate>) {
+  await supabase.auth.signOut();
+  navigate({ to: "/", replace: true });
+}
 
 export function Guarded({ roles, children }: { roles?: AppRole[]; children: ReactNode }) {
   const { session, role, profile, loading } = useAuth();
@@ -25,6 +31,10 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
         <p className="text-sm text-muted-foreground">
           Your account has no profile yet. Please sign out and register again.
         </p>
+        <button onClick={() => signOutAndRedirect(navigate)}
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors">
+          <LogOut className="size-4" /> Sign Out
+        </button>
       </div>
     );
   }
@@ -33,15 +43,24 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
   if (!profile.approved && role !== "admin" && role !== "hr") {
     return (
       <div className="grid min-h-screen place-items-center px-6">
-        <div className="max-w-sm space-y-3 text-center">
-          <h1 className="text-xl font-extrabold tracking-tight">Waiting for approval</h1>
+        <div className="max-w-sm space-y-4 text-center">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-muted">
+            <Loader2 className="size-7 text-muted-foreground" />
+          </div>
+          <h1 className="text-xl font-extrabold tracking-tight">Waiting for admin approval</h1>
           <p className="text-sm text-muted-foreground">
-            Your registration has been received. The college administrator needs to approve your
-            account before you can use the leave management system.
+            Your registration has been received. The college administrator needs to approve
+            your account before you can sign in.
           </p>
           <p className="text-xs text-muted-foreground">
-            Signed in as {profile.full_name} · {profile.user_id}
+            Signed in as <span className="font-medium text-foreground">{profile.full_name}</span> · {profile.user_id}
           </p>
+          <button
+            onClick={() => signOutAndRedirect(navigate)}
+            className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors w-full justify-center"
+          >
+            <LogOut className="size-4" /> Sign Out / Go Back to Login
+          </button>
         </div>
       </div>
     );
@@ -50,7 +69,8 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
   // ── Step 2: Teacher onboarding doc gate (teachers only) ───────────────────
   // HOD and HR skip this entirely — only teachers need to upload documents
   if (role === "teacher" && profile.approved) {
-    // HR rejected — show reason
+
+    // HR rejected — show reason + re-upload
     if (profile.hr_approved === false) {
       return (
         <div className="grid min-h-screen place-items-center px-6">
@@ -72,16 +92,22 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
             </p>
             <Link
               to="/onboarding"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground w-full justify-center"
             >
               <FileUp className="size-4" /> Re-upload Documents
             </Link>
+            <button
+              onClick={() => signOutAndRedirect(navigate)}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors w-full justify-center"
+            >
+              <LogOut className="size-4" /> Sign Out / Go Back to Login
+            </button>
           </div>
         </div>
       );
     }
 
-    // HR not yet approved (null = pending) — show upload prompt or waiting screen
+    // HR not yet approved — show upload prompt
     if (profile.hr_approved === null) {
       return (
         <div className="grid min-h-screen place-items-center px-6">
@@ -102,10 +128,16 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
             </ul>
             <Link
               to="/onboarding"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground w-full justify-center"
             >
               <FileUp className="size-4" /> Upload Documents
             </Link>
+            <button
+              onClick={() => signOutAndRedirect(navigate)}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors w-full justify-center"
+            >
+              <LogOut className="size-4" /> Sign Out / Go Back to Login
+            </button>
             <p className="text-xs text-muted-foreground">
               Signed in as {profile.full_name} · {profile.user_id}
             </p>
