@@ -13,6 +13,7 @@ import {
   LogOut,
   ClipboardCheck,
   Repeat,
+  Briefcase,
   Menu,
   Wallet,
   Megaphone,
@@ -62,8 +63,22 @@ export function AppShell({
     },
   });
 
+  const { data: pendingHR = 0 } = useQuery({
+    queryKey: ["pending-hr-count"],
+    enabled: role === "hr" || role === "admin",
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("profiles")
+        .select("id", { count: "exact", head: true })
+        .eq("approved", true)
+        .is("hr_approved", null);
+      return count ?? 0;
+    },
+  });
+
   const items: NavItem[] = [
     { to: "/admin", label: "Admin Panel", icon: ShieldCheck, roles: ["admin"] },
+    { to: "/hr", label: "HR Panel", icon: Briefcase, roles: ["hr", "admin"], badge: pendingHR },
     { to: "/admin-reports", label: "Reports", icon: BarChart3, roles: ["admin", "principal"] },
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["teacher", "hod", "principal"] },
     { to: "/apply", label: "Apply Leave", icon: CalendarPlus, roles: ["teacher", "hod"] },
