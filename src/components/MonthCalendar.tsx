@@ -1,5 +1,8 @@
 import { useMemo, useState, useRef, useEffect, useCallback } from "react";
+<<<<<<< HEAD
 import { createPortal } from "react-dom";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeft, ChevronRight, X, Star,
@@ -8,10 +11,13 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { cn } from "@/lib/utils";
 import { eachDate, leaveTypeLabel, type LeaveType } from "@/lib/leave";
 
@@ -79,11 +85,16 @@ const MONTH_NAMES = ["January","February","March","April","May","June","July","A
 
 // ── Hover popover (desktop) ───────────────────────────────────────────────────
 function HoverPopover({ cell, anchorRef }: { cell: DayCell; anchorRef: React.RefObject<HTMLButtonElement | null> }) {
+<<<<<<< HEAD
   const [pos, setPos] = useState({ top: 0, left: 0, above: false });
+=======
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   useEffect(() => {
     if (!anchorRef.current) return;
     const rect = anchorRef.current.getBoundingClientRect();
+<<<<<<< HEAD
     const popoverH = 120; // estimated popover height
     const spaceBelow = window.innerHeight - rect.bottom;
     const above = spaceBelow < popoverH + 12;
@@ -91,6 +102,12 @@ function HoverPopover({ cell, anchorRef }: { cell: DayCell; anchorRef: React.Ref
       top:  above ? rect.top - 6 : rect.bottom + 6,
       left: Math.min(Math.max(rect.left + rect.width / 2, 120), window.innerWidth - 120),
       above,
+=======
+    const scrollY = window.scrollY;
+    setPos({
+      top:  rect.bottom + scrollY + 6,
+      left: rect.left + rect.width / 2,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     });
   }, [anchorRef]);
 
@@ -100,11 +117,15 @@ function HoverPopover({ cell, anchorRef }: { cell: DayCell; anchorRef: React.Ref
   return (
     <div
       className="fixed z-50 pointer-events-none"
+<<<<<<< HEAD
       style={{
         top:  pos.above ? pos.top : pos.top,
         left: pos.left,
         transform: pos.above ? "translateX(-50%) translateY(-100%)" : "translateX(-50%)",
       }}
+=======
+      style={{ top: pos.top, left: pos.left, transform: "translateX(-50%)" }}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     >
       <div className="bg-popover text-popover-foreground rounded-xl shadow-xl border border-border px-3.5 py-2.5 text-xs min-w-[160px] max-w-[220px] animate-in fade-in-0 zoom-in-95 duration-150">
         <p className="font-semibold text-[11px] text-muted-foreground uppercase tracking-wide mb-1">{dateStr}</p>
@@ -115,22 +136,32 @@ function HoverPopover({ cell, anchorRef }: { cell: DayCell; anchorRef: React.Ref
         {cell.note && cell.kind !== "present" && (
           <p className="mt-1.5 text-muted-foreground leading-snug">{cell.note}</p>
         )}
+<<<<<<< HEAD
         {/* Arrow — top or bottom */}
         {pos.above
           ? <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-popover border-r border-b border-border" />
           : <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-popover border-l border-t border-border" />
         }
+=======
+        {/* Arrow */}
+        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-popover border-l border-t border-border" />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
     </div>
   );
 }
 
+<<<<<<< HEAD
 // ── Click detail modal (centered) ────────────────────────────────────────────
+=======
+// ── Click detail bottom-sheet (mobile) / popover already handles desktop ──────
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function DayDetailCard({ cell, onClose }: { cell: DayCell; onClose: () => void }) {
   const d = new Date(cell.date + "T00:00:00");
   const dayName = DAY_NAMES[d.getDay()];
   const dateStr = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
 
+<<<<<<< HEAD
   // Lock body scroll while open
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -171,6 +202,33 @@ function DayDetailCard({ cell, onClose }: { cell: DayCell; onClose: () => void }
       </div>
     </>,
     document.body
+=======
+  return (
+    <>
+      <div className="fixed inset-0 z-40 bg-black/40" onClick={onClose} />
+      <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-background border-t border-border shadow-2xl p-5 pb-8 animate-in slide-in-from-bottom-4 duration-300">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">{dayName}</p>
+            <p className="text-lg font-extrabold">{dateStr}</p>
+          </div>
+          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-muted transition-colors" aria-label="Close">
+            <X className="size-4" />
+          </button>
+        </div>
+        <div className={cn("inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border border-transparent", KIND_CLASS[cell.kind])}>
+          <span>{KIND_ICON[cell.kind]}</span>
+          <span>{KIND_LABEL[cell.kind]}</span>
+        </div>
+        {cell.note && cell.kind !== "present" && (
+          <p className="mt-3 text-sm text-muted-foreground">{cell.note}</p>
+        )}
+        {cell.detail && (
+          <p className="mt-1 text-xs text-muted-foreground">{cell.detail}</p>
+        )}
+      </div>
+    </>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   );
 }
 
@@ -200,8 +258,13 @@ function DayCell_({
           "relative flex flex-col items-center justify-start rounded-lg border text-xs font-semibold pt-1 pb-0.5 min-h-[2.75rem] cursor-pointer transition-all duration-150",
           "hover:brightness-95 hover:scale-105 hover:z-10 hover:shadow-md active:scale-100",
           KIND_CLASS[cell.kind],
+<<<<<<< HEAD
           // Today highlight — bold outline that works on all bg colours
           isToday && "outline outline-2 outline-offset-[-2px] outline-primary/70 shadow-md",
+=======
+          // Today ring — white/dark ring around the number
+          isToday && "ring-2 ring-offset-1 ring-primary shadow-md",
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         )}
       >
         {/* Holiday star — top-right pip */}
@@ -317,7 +380,11 @@ export function MonthCalendar({
     for (const l of data?.leaves ?? []) {
       const unpaid  = Number(l.unpaid_days) > 0;
       const pending = l.status === "pending_hod";
+<<<<<<< HEAD
       const typeLabel   = leaveTypeLabel(l.leave_type as LeaveType) ?? l.leave_type ?? "leave";
+=======
+      const typeLabel   = leaveTypeLabel(l.leave_type as LeaveType);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       const statusLabel = pending ? "Pending HOD approval" : unpaid ? "Unpaid" : "Paid";
       for (const d of eachDate(l.from_date, l.to_date)) {
         leaveMap.set(d, {
@@ -380,6 +447,7 @@ export function MonthCalendar({
     <div>
       {/* Month navigation */}
       <div className="mb-4 flex items-center justify-between gap-2">
+<<<<<<< HEAD
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -407,6 +475,25 @@ export function MonthCalendar({
           </TooltipTrigger>
           <TooltipContent side="bottom">Next month</TooltipContent>
         </Tooltip>
+=======
+        <Button
+          variant="ghost" size="icon" aria-label="Previous month"
+          onClick={() => navigateMonth("prev")}
+          disabled={animating}
+        >
+          <ChevronLeft className="size-4" />
+        </Button>
+        <p className="text-sm font-bold select-none">
+          {month.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
+        </p>
+        <Button
+          variant="ghost" size="icon" aria-label="Next month"
+          onClick={() => navigateMonth("next")}
+          disabled={animating}
+        >
+          <ChevronRight className="size-4" />
+        </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
 
       {/* Sliding grid wrapper */}
@@ -442,7 +529,13 @@ export function MonthCalendar({
                 cell={c}
                 isToday={c.date === todayISO}
                 onClick={(cell) => {
+<<<<<<< HEAD
                   setSelectedCell(selectedCell?.date === cell.date ? null : cell);
+=======
+                  // On mobile show bottom sheet; on desktop popover handles hover
+                  if (isMobile) setSelectedCell(cell);
+                  else setSelectedCell(selectedCell?.date === cell.date ? null : cell);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 }}
               />
             ))}
@@ -484,6 +577,7 @@ export function MonthCalendar({
     </div>
   );
 }
+<<<<<<< HEAD
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -642,3 +736,5 @@ export function DeptMonthCalendar({ deptId }: { deptId: string }) {
     </div>
   );
 }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

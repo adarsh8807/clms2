@@ -3,7 +3,11 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const adminCreateStaff = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator(
+=======
+  .inputValidator(
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     (input: {
       email: string;
       password: string;
@@ -101,7 +105,11 @@ export const adminCreateStaff = createServerFn({ method: "POST" })
 
 export const adminDeleteStaff = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator((input: { staffId: string }) => input)
+=======
+  .inputValidator((input: { staffId: string }) => input)
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   .handler(async ({ data, context }) => {
     const { data: isAdmin } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
@@ -128,7 +136,11 @@ export const adminDeleteStaff = createServerFn({ method: "POST" })
  */
 export const unlockAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator((input: { targetUserId: string; newPassword?: string }) => input)
+=======
+  .inputValidator((input: { targetUserId: string; newPassword?: string }) => input)
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -206,7 +218,11 @@ export const unlockAccount = createServerFn({ method: "POST" })
  */
 export const applyPasswordChange = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator((input: { requestId: string }) => input)
+=======
+  .inputValidator((input: { requestId: string }) => input)
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -269,7 +285,11 @@ export const applyPasswordChange = createServerFn({ method: "POST" })
  */
 export const rejectPasswordChange = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator((input: { requestId: string; note?: string }) => input)
+=======
+  .inputValidator((input: { requestId: string; note?: string }) => input)
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -350,7 +370,11 @@ function _enforcePasswordChangePermission(
  */
 export const directPasswordReset = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
+<<<<<<< HEAD
   .validator((input: { targetUserId: string; newPassword: string }) => input)
+=======
+  .inputValidator((input: { targetUserId: string; newPassword: string }) => input)
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   .handler(async ({ data, context }) => {
     if (data.newPassword.length < 12) throw new Error("Password must be at least 12 characters");
 
@@ -388,6 +412,7 @@ export const directPasswordReset = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
+<<<<<<< HEAD
 
 /**
  * Fetch all pending password reset requests — admin only, uses service role.
@@ -502,3 +527,5 @@ export const completeHodPasswordResetRequest = createServerFn({ method: "POST" }
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

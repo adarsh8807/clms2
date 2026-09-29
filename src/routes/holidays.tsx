@@ -3,7 +3,10 @@ import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
+<<<<<<< HEAD
 import { savePDF, saveXLSX } from "../lib/download";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
@@ -22,7 +25,10 @@ import {
 export const Route = createFileRoute("/holidays")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Holiday Calendar — CSC Leave Management" },
       { name: "description", content: "Indian public holidays. Upload a yearly Excel file or add custom holidays." },
       { property: "og:title", content: "Holiday Calendar — CSC Leave Management" },
@@ -146,7 +152,11 @@ function parseHolidaySheet(workbook: XLSX.WorkBook): {
 }
 
 // ── Generate the 2026 reference document ─────────────────────────────────────
+<<<<<<< HEAD
 async function downloadReferenceDoc() {
+=======
+function downloadReferenceDoc() {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   // DD-MM-YYYY format — matches what Excel auto-displays when you type dates
   const rows2026 = [
     ["Date",        "Occasion",                              "Kind"    ],
@@ -207,7 +217,11 @@ async function downloadReferenceDoc() {
   ws2["!cols"] = [{ wch: 14 }, { wch: 44 }, { wch: 12 }];
   XLSX.utils.book_append_sheet(wb, ws2, "Upload Template (clean)");
 
+<<<<<<< HEAD
   await saveXLSX(XLSX, wb, "CSC_Holiday_Format_2026.xlsx");
+=======
+  XLSX.writeFile(wb, "CSC_Holiday_Format_2026.xlsx");
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   toast.success("Format document downloaded — use 'Upload Template (clean)' sheet for uploading");
 }
 
@@ -455,8 +469,13 @@ function HolidaysPage() {
                 ) : (
                   <>
                     {/* Preview table */}
+<<<<<<< HEAD
                     <div className="rounded-lg border border-border overflow-hidden max-h-64 overflow-y-auto overflow-x-auto">
                       <table className="w-full text-xs min-w-[320px]">
+=======
+                    <div className="rounded-lg border border-border overflow-hidden max-h-64 overflow-y-auto">
+                      <table className="w-full text-xs">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                         <thead className="sticky top-0 bg-muted/80">
                           <tr>
                             <th className="px-3 py-2 text-left font-semibold text-muted-foreground">#</th>
@@ -578,6 +597,7 @@ function HolidaysPage() {
                 const isUpload = src === "upload";
                 const isManual = src === "manual";
                 return (
+<<<<<<< HEAD
                   <li key={h.id} className={`flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 group transition-colors hover:bg-muted/20 sm:flex-nowrap sm:px-5 ${isPast ? "opacity-50" : ""}`}>
                     {/* Date block */}
                     <div className="shrink-0 flex items-baseline gap-1.5 min-w-[120px] sm:w-36">
@@ -593,6 +613,34 @@ function HolidaysPage() {
                     {/* Occasion */}
                     <div className="flex-1 min-w-0 flex items-center gap-2">
                       <p className="text-sm font-medium truncate">{h.occasion}</p>
+=======
+                  <li key={h.id} className={`flex items-center gap-4 px-5 py-3 group transition-colors hover:bg-muted/20 ${isPast ? "opacity-50" : ""}`}>
+                    {/* Date block */}
+                    <div className="shrink-0 w-44 flex items-baseline gap-1.5">
+                      <span className="text-sm font-bold tabular-nums">
+                        {String(day).padStart(2, "0")} {month} {year}
+                      </span>
+                    </div>
+                    {/* Day name */}
+                    <div className="shrink-0 w-28">
+                      <span className="text-sm text-muted-foreground">{dayFull}</span>
+                    </div>
+                    {/* Separator */}
+                    <span className="text-muted-foreground/40 shrink-0">—</span>
+                    {/* Occasion */}
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                      <p className="text-sm font-medium truncate">{h.occasion}</p>
+                      <Badge
+                        variant="secondary"
+                        className={`text-[10px] px-1.5 py-0 leading-4 shrink-0 ${
+                          isUpload ? "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-950/30 dark:text-violet-300" :
+                          isManual ? "bg-info/12 text-info border-info/20" :
+                          "bg-success/12 text-success border-success/20"
+                        }`}
+                      >
+                        {isUpload ? "Uploaded" : isManual ? (h.kind ?? "Custom") : (h.kind ?? "National")}
+                      </Badge>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     </div>
                     {isPrincipalOrAdmin && (
                       <button

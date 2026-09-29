@@ -1,15 +1,26 @@
+<<<<<<< HEAD
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+=======
+import { createFileRoute } from "@tanstack/react-router";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
+<<<<<<< HEAD
 import { SectionCard, StatCard, StatusBadge, Empty } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
 import {
+=======
+import { SectionCard, StatusBadge, Empty } from "@/components/ui-bits";
+import { Button } from "@/components/ui/button";
+import {
+  eachDate,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   fmtDate,
   fmtTime,
   leaveTypeLabel,
@@ -21,9 +32,14 @@ import {
   type LeaveType,
   type DocStatus,
 } from "@/lib/leave";
+<<<<<<< HEAD
 import { AlertTriangle, Calendar, CheckCircle2, List, Paperclip, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MonthCalendar } from "@/components/MonthCalendar";
+=======
+import { useRef, useState } from "react";
+import { CheckCircle2, FileText, Upload } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,6 +50,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+<<<<<<< HEAD
 type FilterTab = "all" | "pending" | "approved" | "rejected" | "with_docs";
 
 export const Route = createFileRoute("/leaves")({
@@ -49,6 +66,15 @@ export const Route = createFileRoute("/leaves")({
       {
         name: "description",
         content: "Track your leave history, approval progress and pay-cut days.",
+=======
+export const Route = createFileRoute("/leaves")({
+  head: () => ({
+    meta: [
+      { title: "My Leaves — CSC Leave Management" },
+      {
+        name: "description",
+        content: "Track your leave history, approval progress, proxy cover and pay-cut days.",
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       },
       { property: "og:title", content: "My Leaves — CSC Leave Management" },
       { property: "og:description", content: "Your leave history and approval status." },
@@ -61,6 +87,11 @@ export const Route = createFileRoute("/leaves")({
   ),
 });
 
+<<<<<<< HEAD
+=======
+type FilterTab = "all" | "pending" | "approved" | "rejected" | "with_docs";
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 const FILTER_OPTIONS: { value: FilterTab; label: string }[] = [
   { value: "all",       label: "All Leaves" },
   { value: "pending",   label: "Pending" },
@@ -69,6 +100,7 @@ const FILTER_OPTIONS: { value: FilterTab; label: string }[] = [
   { value: "with_docs", label: "With Documents" },
 ];
 
+<<<<<<< HEAD
 const PENDING_STATUSES: string[] = ["pending_hod", "hod_recommended", "pending_principal"];
 // Can only withdraw while still waiting for HOD — not after HOD has acted
 const WITHDRAWABLE_STATUSES: string[] = ["pending_hod"];
@@ -82,10 +114,17 @@ function MyLeavesPage() {
   function setFilter(f: FilterTab) {
     navigate({ search: { filter: f }, replace: true });
   }
+=======
+function MyLeavesPage() {
+  const { profile } = useAuth();
+  const qc = useQueryClient();
+  const [filter, setFilter] = useState<FilterTab>("all");
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const { data: leaves = [] } = useQuery({
     queryKey: ["my-leaves", profile?.id],
     enabled: !!profile,
+<<<<<<< HEAD
     staleTime: 5_000,
     refetchInterval: 8_000,
     refetchOnWindowFocus: true,
@@ -93,6 +132,12 @@ function MyLeavesPage() {
       const { data, error } = await supabase
         .from("leave_requests")
         .select("id, leave_type, from_date, to_date, session, status, total_days, paid_days, unpaid_days, reason, doc_url, doc_status, doc_note, created_at, hod_note, principal_note, teacher_id")
+=======
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("leave_requests")
+        .select("*")
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         .eq("teacher_id", profile!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -100,6 +145,7 @@ function MyLeavesPage() {
     },
   });
 
+<<<<<<< HEAD
 
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
@@ -136,10 +182,32 @@ function MyLeavesPage() {
   const filteredLeaves = useMemo(() => leaves.filter((l) => {
     if (filter === "all") return true;
     if (filter === "pending")  return PENDING_STATUSES.includes(l.status);
+=======
+  const { data: proxies = [] } = useQuery({
+    queryKey: ["my-leave-proxies", profile?.id, leaves.map((l) => l.id).join(",")],
+    enabled: leaves.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("proxy_assignments")
+        .select("*")
+        .in(
+          "leave_request_id",
+          leaves.map((l) => l.id),
+        );
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const filteredLeaves = leaves.filter((l) => {
+    if (filter === "all") return true;
+    if (filter === "pending") return l.status === "pending_hod" || l.status === "pending_principal";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     if (filter === "approved") return l.status === "approved" || l.status === "hod_approved";
     if (filter === "rejected") return l.status === "rejected";
     if (filter === "with_docs") return !!l.doc_status;
     return true;
+<<<<<<< HEAD
   }), [leaves, filter]);
 
   // Memoised counts for filter badges — not recalculated per-item in JSX (#15)
@@ -247,6 +315,24 @@ function MyLeavesPage() {
           {/* Select — mobile only */}
           <Select value={filter} onValueChange={(v) => setFilter(v as FilterTab)}>
             <SelectTrigger className="w-44 sm:hidden">
+=======
+  });
+
+  async function cancel(id: string) {
+    const { error } = await supabase.from("leave_requests").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Request withdrawn");
+    qc.invalidateQueries();
+  }
+
+  return (
+    <AppShell title="My Leaves" subtitle="All leave requests you have submitted">
+      <div className="space-y-4">
+        {/* Filter dropdown */}
+        <div className="flex items-center gap-3">
+          <Select value={filter} onValueChange={(v) => setFilter(v as FilterTab)}>
+            <SelectTrigger className="w-48">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <SelectValue placeholder="Filter leaves" />
             </SelectTrigger>
             <SelectContent>
@@ -255,13 +341,24 @@ function MyLeavesPage() {
                   {opt.label}
                   {opt.value !== "all" && (
                     <span className="ml-2 text-xs text-muted-foreground">
+<<<<<<< HEAD
                       ({filterCounts[opt.value as keyof typeof filterCounts] ?? 0})
+=======
+                      ({leaves.filter((l) => {
+                        if (opt.value === "pending")   return l.status === "pending_hod" || l.status === "pending_principal";
+                        if (opt.value === "approved")  return l.status === "approved" || l.status === "hod_approved";
+                        if (opt.value === "rejected")  return l.status === "rejected";
+                        if (opt.value === "with_docs") return !!l.doc_status;
+                        return false;
+                      }).length})
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     </span>
                   )}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+<<<<<<< HEAD
           <div className="ml-auto flex items-center gap-1 rounded-lg border border-border p-0.5">
             <button
               onClick={() => setViewMode("list")}
@@ -286,6 +383,18 @@ function MyLeavesPage() {
         {/* List view */}
         {viewMode === "list" && (<>
 
+=======
+          {filter !== "all" && (
+            <button
+              className="text-xs text-muted-foreground underline"
+              onClick={() => setFilter("all")}
+            >
+              Clear filter
+            </button>
+          )}
+        </div>
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {leaves.length === 0 && (
           <SectionCard>
             <Empty>You have not applied for any leave yet.</Empty>
@@ -296,6 +405,7 @@ function MyLeavesPage() {
             <Empty>No leaves match the selected filter.</Empty>
           </SectionCard>
         )}
+<<<<<<< HEAD
         {/* 2-column grid for leave cards */}
         <div className="grid gap-3 sm:grid-cols-2">
         {filteredLeaves.map((l) => {
@@ -353,6 +463,46 @@ function MyLeavesPage() {
 
               {(l.hod_note || l.principal_note || l.doc_note) && (
                 <div className="space-y-1 rounded-lg bg-muted p-3 text-xs">
+=======
+        {filteredLeaves.map((l) => {
+          const cover = proxies.filter((p) => p.leave_request_id === l.id);
+          return (
+            <SectionCard key={l.id}>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-base font-bold">{leaveTypeLabel(l.leave_type as LeaveType)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {fmtDate(l.from_date)} – {fmtDate(l.to_date)} ·{" "}
+                    {SESSION_LABEL[l.session as LeaveSession]}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Dates: {eachDate(l.from_date, l.to_date).map(fmtDate).join(", ")}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={l.status as LeaveStatus} />
+                  {(l.status === "pending_hod" || l.status === "pending_principal") && (
+                    <Button variant="ghost" size="sm" onClick={() => cancel(l.id)}>
+                      Withdraw
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-4 grid gap-3 text-sm sm:grid-cols-4">
+                <Field label="Reason" value={l.reason ?? "—"} />
+                <Field label="Days counted" value={`${Number(l.total_days)}`} />
+                <Field label="Paid days" value={`${Number(l.paid_days)}`} />
+                <Field
+                  label="Pay cut days"
+                  value={`${Number(l.unpaid_days)}`}
+                  tone={Number(l.unpaid_days) > 0 ? "destructive" : undefined}
+                />
+              </div>
+
+              {(l.hod_note || l.principal_note || l.doc_note) && (
+                <div className="mt-3 space-y-1 rounded-lg bg-muted p-3 text-xs">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                   {l.hod_note && <p>HOD: {l.hod_note}</p>}
                   {l.principal_note && <p>Principal: {l.principal_note}</p>}
                   {l.doc_note && <p>Document note: {l.doc_note}</p>}
@@ -368,15 +518,23 @@ function MyLeavesPage() {
                     docStatus={(l.doc_status as DocStatus) ?? null}
                     docUrl={l.doc_url ?? null}
                     requiredDoc={docLabel(l.leave_type as LeaveType) ?? "Document"}
+<<<<<<< HEAD
                     profileId={profile?.id}
                   />
                 )}
               {isHodFinalLeave(l.leave_type as LeaveType) && l.doc_status === "verified" && (
                 <div className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success flex items-center gap-2">
+=======
+                  />
+                )}
+              {isHodFinalLeave(l.leave_type as LeaveType) && l.doc_status === "verified" && (
+                <div className="mt-3 rounded-lg border border-success/30 bg-success/8 p-3 text-sm text-success flex items-center gap-2">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                   <CheckCircle2 className="size-4 shrink-0" /> {docLabel(l.leave_type as LeaveType)} verified by principal.
                 </div>
               )}
 
+<<<<<<< HEAD
             </div>
           );
         })}
@@ -405,6 +563,35 @@ function MyLeavesPage() {
         </div>,
         document.body
       )}
+=======
+              {cover.length > 0 && (
+                <div className="mt-4">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    Proxy cover
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    {cover.map((p) => (
+                      <li
+                        key={p.id}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border p-2.5"
+                      >
+                        <span>
+                          {fmtDate(p.proxy_date)} · {fmtTime(p.start_time)} – {fmtTime(p.end_time)} ·{" "}
+                          {p.subject} ({p.class_name})
+                        </span>
+                        <span className="text-xs font-semibold capitalize text-muted-foreground">
+                          {p.status}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </SectionCard>
+          );
+        })}
+      </div>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     </AppShell>
   );
 }
@@ -446,13 +633,19 @@ function DocUploadSection({
   docStatus,
   docUrl,
   requiredDoc,
+<<<<<<< HEAD
   profileId,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }: {
   leaveId: string;
   docStatus: DocStatus | null;
   docUrl: string | null;
   requiredDoc: string;
+<<<<<<< HEAD
   profileId?: string;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }) {
   const qc = useQueryClient();
   const [uploading, setUploading] = useState(false);
@@ -502,7 +695,11 @@ function DocUploadSection({
     setSelectedFile(null);
     if (fileRef.current) fileRef.current.value = "";
     toast.success("Document submitted — awaiting principal verification");
+<<<<<<< HEAD
     qc.invalidateQueries({ queryKey: ["my-leaves", profileId] });
+=======
+    qc.invalidateQueries();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   if (docStatus === "verified") return null;
@@ -539,7 +736,11 @@ function DocUploadSection({
         {selectedFile && (
           <div className="flex items-center gap-2">
             <span className="truncate text-xs text-muted-foreground">
+<<<<<<< HEAD
               <span className="inline-flex items-center gap-1"><Paperclip className="size-3.5"/>{selectedFile.name}</span>
+=======
+              📎 {selectedFile.name}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </span>
             <Button
               size="sm"

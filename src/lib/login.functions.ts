@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 /**
+<<<<<<< HEAD
  * Syncs the latest OneSignal push token for a user from OneSignal's player list.
  * Called automatically on every login — no manual sync needed.
  */
@@ -57,6 +58,8 @@ async function syncPushTokenForUser(userId: string): Promise<void> {
 }
 
 /**
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
  * Resolves a college ID (e.g. priya@CSC.COM) to the account's real login email
  * and signs in. Plain email addresses are passed through unchanged.
  *
@@ -64,7 +67,11 @@ async function syncPushTokenForUser(userId: string): Promise<void> {
  * and blocks login when the account is locked.
  */
 export const signInWithIdentifier = createServerFn({ method: "POST" })
+<<<<<<< HEAD
   .validator((data: { identifier: string; password: string }) => {
+=======
+  .inputValidator((data: { identifier: string; password: string }) => {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const identifier = String(data?.identifier ?? "").trim();
     const password = String(data?.password ?? "");
     if (!identifier || !password) throw new Error("Enter your user ID and password");
@@ -76,6 +83,7 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
     let email = data.identifier;
     let profileId: string | null = null;
 
+<<<<<<< HEAD
     if (/@csc\.com$/i.test(email)) {
       // College ID path: fetch profile + auth user in parallel
       const { data: profile } = await supabaseAdmin
@@ -112,6 +120,40 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
         if (profile?.account_locked) {
           return { error: "Your account has been locked due to too many failed login attempts. Please contact your HOD or Admin to reset your password." as const };
         }
+=======
+    // Resolve college ID (firstname@CSC.COM) → real auth email
+    if (/@csc\.com$/i.test(email)) {
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("id")
+        .ilike("user_id", email)
+        .maybeSingle();
+      if (!profile) return { error: "Invalid user ID or password" as const };
+      profileId = profile.id;
+      const { data: user } = await supabaseAdmin.auth.admin.getUserById(profile.id);
+      if (!user?.user?.email) return { error: "Invalid user ID or password" as const };
+      email = user.user.email;
+    } else {
+      // Plain email login — find profileId for lockout tracking
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("id")
+        .eq("id", (await supabaseAdmin.auth.admin.listUsers()).data.users.find(u => u.email === email.toLowerCase())?.id ?? "")
+        .maybeSingle();
+      profileId = profile?.id ?? null;
+    }
+
+    // Check lockout status before attempting sign-in
+    if (profileId) {
+      const { data: prof } = await supabaseAdmin
+        .from("profiles")
+        .select("account_locked, failed_login_attempts")
+        .eq("id", profileId)
+        .maybeSingle();
+
+      if (prof?.account_locked) {
+        return { error: "Your account has been locked due to too many failed login attempts. Please contact your HOD or Admin to reset your password." as const };
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       }
     }
 
@@ -126,9 +168,15 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
     });
 
     if (error || !signIn?.session) {
+<<<<<<< HEAD
       if (profileId) {
         const MAX_ATTEMPTS = 5;
         // Re-read current attempts (we may not have it for the plain-email path)
+=======
+      // Increment failed attempts if we have a profileId
+      if (profileId) {
+        const MAX_ATTEMPTS = 5;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         const { data: prof } = await supabaseAdmin
           .from("profiles")
           .select("failed_login_attempts")
@@ -153,6 +201,7 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
       return { error: "Invalid user ID or password" as const };
     }
 
+<<<<<<< HEAD
     // Successful login — reset failed attempts (fire-and-forget, don't block the response)
     if (profileId) {
       supabaseAdmin
@@ -172,6 +221,14 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
       // Auto-sync push token from OneSignal for this user (fire-and-forget)
       // This replaces needing to manually visit /api/push-sync-all
       syncPushTokenForUser(profileId).catch(() => {});
+=======
+    // Successful login — reset failed attempts
+    if (profileId) {
+      await supabaseAdmin
+        .from("profiles")
+        .update({ failed_login_attempts: 0, account_locked: false })
+        .eq("id", profileId);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     }
 
     return {
@@ -188,7 +245,11 @@ export const signInWithIdentifier = createServerFn({ method: "POST" })
  * - Saves gender and dob to profiles
  */
 export const registerStaff = createServerFn({ method: "POST" })
+<<<<<<< HEAD
   .validator(
+=======
+  .inputValidator(
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     (data: {
       email: string;
       password: string;
@@ -198,7 +259,10 @@ export const registerStaff = createServerFn({ method: "POST" })
       role: "teacher" | "admin" | "hod" | "hr";
       gender?: string;
       dob?: string | null;
+<<<<<<< HEAD
       phone?: string | null;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     }) => {
       const email = String(data?.email ?? "").trim().toLowerCase();
       const password = String(data?.password ?? "");
@@ -285,9 +349,14 @@ export const registerStaff = createServerFn({ method: "POST" })
       department_id: dept,
       approved,
       hr_approved: hrApproved,
+<<<<<<< HEAD
       ...(data.gender ? { gender: data.gender as "female" | "male" | "other" } : {}),
       ...(data.dob ? { date_of_birth: data.dob } : {}),
       ...(data.phone ? { phone: data.phone } : {}),
+=======
+      ...(data.gender ? { gender: data.gender } : {}),
+      ...(data.dob ? { date_of_birth: data.dob } : {}),
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       password_changed_at: new Date().toISOString(),
     });
     if (profileError) {
@@ -325,6 +394,7 @@ export const registerStaff = createServerFn({ method: "POST" })
       };
     }
 
+<<<<<<< HEAD
     // Notify admins of the new registration (fire-and-forget)
     try {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -349,6 +419,8 @@ export const registerStaff = createServerFn({ method: "POST" })
       }
     } catch (e) { if (process.env.NODE_ENV==="development") console.warn("[registerStaff]",e); }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     return { role: data.role as "teacher" | "hod" | "hr", collegeUserId };
   });
 
@@ -358,7 +430,11 @@ export const registerStaff = createServerFn({ method: "POST" })
  * Safe to call unauthenticated — returns only the candidate ID string.
  */
 export const resolvePreviewUserId = createServerFn({ method: "POST" })
+<<<<<<< HEAD
   .validator((data: { firstName: string }) => {
+=======
+  .inputValidator((data: { firstName: string }) => {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const firstName = String(data?.firstName ?? "").trim();
     return { firstName };
   })
@@ -391,6 +467,7 @@ export const resolvePreviewUserId = createServerFn({ method: "POST" })
 
     return { userId: candidate };
   });
+<<<<<<< HEAD
 
 /**
  * Verifies a college ID exists in profiles.
@@ -499,3 +576,5 @@ export const submitForgotPasswordRequest = createServerFn({ method: "POST" })
 
     return { ok: true as const };
   });
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

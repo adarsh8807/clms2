@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { initPush, logoutPush, registerNotificationTapHandler } from "@/lib/push";
+=======
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export type AppRole = "teacher" | "hod" | "principal" | "admin" | "hr";
 
@@ -9,7 +15,10 @@ export interface Profile {
   id: string;
   user_id: string;
   full_name: string;
+<<<<<<< HEAD
   name?: string | null;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   designation: string;
   department_id: string | null;
   department_name?: string | null;
@@ -22,7 +31,10 @@ export interface Profile {
   hr_approved: boolean | null;
   hr_rejection_reason: string | null;
   failed_login_attempts: number;
+<<<<<<< HEAD
   phone: string | null;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 
 
@@ -43,14 +55,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<AppRole | null>(null);
   const [loading, setLoading] = useState(true);
 
+<<<<<<< HEAD
   // useCallback keeps loadProfile reference stable so realtime listeners and
   // auth event handlers don't close over a stale version (#4)
   const loadProfile = useCallback(async (userId: string) => {
+=======
+  async function loadProfile(userId: string) {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const [{ data: p }, { data: r }] = await Promise.all([
       supabase
         .from("profiles")
         .select(
+<<<<<<< HEAD
           "id, user_id, full_name, designation, department_id, monthly_salary, approved, password_changed_at, gender, date_of_birth, account_locked, failed_login_attempts, hr_approved, hr_rejection_reason, phone, departments(name)",
+=======
+          "id, user_id, full_name, designation, department_id, monthly_salary, approved, password_changed_at, gender, date_of_birth, account_locked, failed_login_attempts, hr_approved, hr_rejection_reason, departments(name)",
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         )
         .eq("id", userId)
         .maybeSingle(),
@@ -73,22 +93,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         hr_approved: (p as any).hr_approved ?? null,
         hr_rejection_reason: (p as any).hr_rejection_reason ?? null,
         failed_login_attempts: Number((p as any).failed_login_attempts ?? 0),
+<<<<<<< HEAD
         phone: (p as any).phone ?? null,
       });
+=======
+      });
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     } else {
       setProfile(null);
     }
     setRole((r?.role as AppRole | undefined) ?? null);
+<<<<<<< HEAD
   }, []);
+=======
+  }
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   useEffect(() => {
     let initialised = false;
 
+<<<<<<< HEAD
     // Register the global notification tap handler for Median bridge
     registerNotificationTapHandler();
 
     const profileLoadEvents = new Set([
       'INITIAL_SESSION', 'SIGNED_IN', 'USER_UPDATED', 'PASSWORD_RECOVERY', 'TOKEN_REFRESHED',
+=======
+    // onAuthStateChange fires INITIAL_SESSION synchronously with the stored
+    // session, so we don't need a separate getSession() call — that would
+    // trigger a second token refresh and hit the 429 rate limit.
+    //
+    // TOKEN_REFRESHED fires every ~55 minutes when the access token auto-renews.
+    // We deliberately skip reloading the profile on that event — the user/role
+    // data hasn't changed, and re-fetching would hammer the DB and auth endpoints.
+    const profileLoadEvents = new Set([
+      'INITIAL_SESSION', 'SIGNED_IN', 'USER_UPDATED', 'PASSWORD_RECOVERY',
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     ]);
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, next) => {
@@ -98,13 +139,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setRole(null);
         setLoading(false);
         initialised = true;
+<<<<<<< HEAD
         logoutPush(); // unlink device from OneSignal on logout
       } else if (profileLoadEvents.has(event)) {
         setLoading(true);
+=======
+      } else if (profileLoadEvents.has(event)) {
+        // Keep loading=true until profile is fully fetched so Guard never
+        // flashes the "no profile" message between session arriving and profile loading.
+        setLoading(true);
+        // Use setTimeout(0) so Supabase internal state settles before we
+        // make additional DB queries with the new token.
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         setTimeout(() => {
           loadProfile(next.user.id).finally(() => {
             setLoading(false);
             initialised = true;
+<<<<<<< HEAD
             // Register device for push notifications after profile loads.
             // Run on INITIAL_SESSION too so token is refreshed on every app open.
             if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
@@ -143,6 +194,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           });
         }, 0);
       } else {
+=======
+          });
+        }, 0);
+      } else {
+        // TOKEN_REFRESHED or other events — just update loading state
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         if (!initialised) {
           setLoading(false);
           initialised = true;
@@ -150,6 +207,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     });
 
+<<<<<<< HEAD
     // ── Single-device enforcement: detect when this session was revoked ──────
     // When another device logs in, Supabase revokes our refresh_token.
     // The next auto-refresh attempt returns a 401. We intercept this at the
@@ -174,10 +232,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const fallback = setTimeout(() => {
       if (!initialised) setLoading(false);
     }, 5000);
+=======
+    // Safety fallback: if onAuthStateChange never fires (e.g. no session),
+    // stop the loading spinner after a short delay.
+    const fallback = setTimeout(() => {
+      if (!initialised) setLoading(false);
+    }, 2000);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
     return () => {
       sub.subscription.unsubscribe();
       clearTimeout(fallback);
+<<<<<<< HEAD
       // Restore fetch if we replaced it
       window.fetch = origFetch;
     };
@@ -211,6 +277,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       supabase.removeChannel(channel);
     };
   }, [session?.user.id, loadProfile]);
+=======
+    };
+  }, []);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const value: AuthState = {
     session,
@@ -221,11 +291,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session) await loadProfile(session.user.id);
     },
     signOut: async () => {
+<<<<<<< HEAD
       // scope:"global" calls /logout?scope=global which requires a service-role
       // key and returns 403 with an anon/publishable key. scope:"local" simply
       // clears the local session without any server round-trip, which is correct
       // for a frontend-only logout.
       await supabase.auth.signOut({ scope: "local" });
+=======
+      await supabase.auth.signOut();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     },
   };
 

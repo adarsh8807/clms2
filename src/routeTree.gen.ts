@@ -29,11 +29,14 @@ import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TeachersRouteImport } from './routes/teachers'
+<<<<<<< HEAD
 import { Route as ApiProxyCleanupRouteImport } from './routes/api.proxy-cleanup'
 import { Route as ApiPushDebugRouteImport } from './routes/api.push-debug'
 import { Route as ApiPushSendRouteImport } from './routes/api.push-send'
 import { Route as ApiPushSyncAllRouteImport } from './routes/api.push-sync-all'
 import { Route as ApiPushTokenRouteImport } from './routes/api.push-token'
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -135,6 +138,7 @@ const TeachersRoute = TeachersRouteImport.update({
   path: '/teachers',
   getParentRoute: () => rootRouteImport,
 } as any)
+<<<<<<< HEAD
 const ApiProxyCleanupRoute = ApiProxyCleanupRouteImport.update({
   id: '/api/proxy-cleanup',
   path: '/api/proxy-cleanup',
@@ -160,6 +164,8 @@ const ApiPushTokenRoute = ApiPushTokenRouteImport.update({
   path: '/api/push-token',
   getParentRoute: () => rootRouteImport,
 } as any)
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -182,11 +188,14 @@ export interface FileRoutesByFullPath {
   '/schedule': typeof ScheduleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teachers': typeof TeachersRoute
+<<<<<<< HEAD
   '/api/proxy-cleanup': typeof ApiProxyCleanupRoute
   '/api/push-debug': typeof ApiPushDebugRoute
   '/api/push-send': typeof ApiPushSendRoute
   '/api/push-sync-all': typeof ApiPushSyncAllRoute
   '/api/push-token': typeof ApiPushTokenRoute
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -209,11 +218,14 @@ export interface FileRoutesByTo {
   '/schedule': typeof ScheduleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teachers': typeof TeachersRoute
+<<<<<<< HEAD
   '/api/proxy-cleanup': typeof ApiProxyCleanupRoute
   '/api/push-debug': typeof ApiPushDebugRoute
   '/api/push-send': typeof ApiPushSendRoute
   '/api/push-sync-all': typeof ApiPushSyncAllRoute
   '/api/push-token': typeof ApiPushTokenRoute
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -237,11 +249,14 @@ export interface FileRoutesById {
   '/schedule': typeof ScheduleRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/teachers': typeof TeachersRoute
+<<<<<<< HEAD
   '/api/proxy-cleanup': typeof ApiProxyCleanupRoute
   '/api/push-debug': typeof ApiPushDebugRoute
   '/api/push-send': typeof ApiPushSendRoute
   '/api/push-sync-all': typeof ApiPushSyncAllRoute
   '/api/push-token': typeof ApiPushTokenRoute
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -266,11 +281,14 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/sitemap.xml'
     | '/teachers'
+<<<<<<< HEAD
     | '/api/proxy-cleanup'
     | '/api/push-debug'
     | '/api/push-send'
     | '/api/push-sync-all'
     | '/api/push-token'
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -293,11 +311,14 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/sitemap.xml'
     | '/teachers'
+<<<<<<< HEAD
     | '/api/proxy-cleanup'
     | '/api/push-debug'
     | '/api/push-send'
     | '/api/push-sync-all'
     | '/api/push-token'
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   id:
     | '__root__'
     | '/'
@@ -320,11 +341,14 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/sitemap.xml'
     | '/teachers'
+<<<<<<< HEAD
     | '/api/proxy-cleanup'
     | '/api/push-debug'
     | '/api/push-send'
     | '/api/push-sync-all'
     | '/api/push-token'
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -348,11 +372,14 @@ export interface RootRouteChildren {
   ScheduleRoute: typeof ScheduleRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeachersRoute: typeof TeachersRoute
+<<<<<<< HEAD
   ApiProxyCleanupRoute: typeof ApiProxyCleanupRoute
   ApiPushDebugRoute: typeof ApiPushDebugRoute
   ApiPushSendRoute: typeof ApiPushSendRoute
   ApiPushSyncAllRoute: typeof ApiPushSyncAllRoute
   ApiPushTokenRoute: typeof ApiPushTokenRoute
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 
 declare module '@tanstack/react-router' {
@@ -497,6 +524,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeachersRouteImport
       parentRoute: typeof rootRouteImport
     }
+<<<<<<< HEAD
     '/api/proxy-cleanup': {
       id: '/api/proxy-cleanup'
       path: '/api/proxy-cleanup'
@@ -532,6 +560,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPushTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 }
 
@@ -556,11 +586,14 @@ const rootRouteChildren: RootRouteChildren = {
   ScheduleRoute: ScheduleRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeachersRoute: TeachersRoute,
+<<<<<<< HEAD
   ApiProxyCleanupRoute: ApiProxyCleanupRoute,
   ApiPushDebugRoute: ApiPushDebugRoute,
   ApiPushSendRoute: ApiPushSendRoute,
   ApiPushSyncAllRoute: ApiPushSyncAllRoute,
   ApiPushTokenRoute: ApiPushTokenRoute,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

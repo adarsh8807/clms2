@@ -1,9 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+<<<<<<< HEAD
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import { savePDF, saveXLSX } from "../lib/download";
+=======
+import { useState, useCallback, useMemo } from "react";
+import * as XLSX from "xlsx";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,10 +19,13 @@ import { Guarded } from "@/components/Guard";
 import { SectionCard, StatCard, Empty } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   Select,
   SelectContent,
@@ -43,7 +51,10 @@ import {
 export const Route = createFileRoute("/reports")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Leave Reports — CSC Leave Management" },
       { name: "description", content: "Yearly leave usage and monthly schedule for HODs." },
       { property: "og:title", content: "Leave Reports — CSC Leave Management" },
@@ -117,6 +128,7 @@ function fmtTime(t: string): string {
   return `${h%12||12}:${String(m).padStart(2,"0")} ${h>=12?"PM":"AM"}`;
 }
 
+<<<<<<< HEAD
 // ── Subject abbreviation system ───────────────────────────────────────────────
 // Generates a short 3-5 char abbreviation from a subject name and tracks
 // the full mapping so we can render a legend below the table.
@@ -150,6 +162,8 @@ function resetAbbrevRegistry() {
   _subjectToAbbrev.clear();
 }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 // ── Period filter ─────────────────────────────────────────────────────────────
 type PeriodFilter = "day" | "week" | "month";
 
@@ -218,7 +232,10 @@ interface DayInfo {
   isLeave: boolean;
   ownLectures: { subject: string; class_name: string; start_time: string; end_time: string }[];
   proxyLectures: { subject: string; class_name: string; start_time: string; end_time: string }[];
+<<<<<<< HEAD
   unassignedLectures: { subject: string; class_name: string; start_time: string; end_time: string }[];
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 
 function computeTeacherRow(
@@ -260,6 +277,7 @@ function computeTeacherRow(
       .filter((p) => p.proxy_teacher_id === teacherId && p.proxy_date === dateStr)
       .map((p) => ({ subject: p.subject, class_name: p.class_name, start_time: p.start_time, end_time: p.end_time }));
 
+<<<<<<< HEAD
     // Unassigned lectures: teacher is on leave, has lectures that day, but NO proxy was assigned for them
     const coveredSlots = new Set(proxies
       .filter((p) => p.absentee_teacher_id === teacherId && p.proxy_date === dateStr)
@@ -281,6 +299,9 @@ function computeTeacherRow(
     ].map((l) => ({ subject: l.subject, class_name: l.class_name, start_time: l.start_time, end_time: l.end_time })) : [];
 
     return { dateStr, isLeave, ownLectures, proxyLectures, unassignedLectures };
+=======
+    return { dateStr, isLeave, ownLectures, proxyLectures };
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   });
 }
 
@@ -312,7 +333,11 @@ function fmtDateFull(d: Date): string {
 
 // ── Apply header row styles in XLSX ──────────────────────────────────────────
 
+<<<<<<< HEAD
 async function exportExcel(month: number, year: number, label: string, summaries: ReturnType<typeof buildTeacherSummary>[], workingDays: Date[], fixedLectures: any[], datedLectures: any[], proxies: any[], compensations: any[]) {
+=======
+function exportExcel(month: number, year: number, label: string, summaries: ReturnType<typeof buildTeacherSummary>[], workingDays: Date[], fixedLectures: any[], datedLectures: any[], proxies: any[], compensations: any[]) {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const wb = XLSX.utils.book_new();
   const weeks = getWeeksInMonth(workingDays);
 
@@ -325,10 +350,14 @@ async function exportExcel(month: number, year: number, label: string, summaries
     s.name,
     s.role === "hod" ? "HOD" : "Teacher",
     ...s.days.map((d) => {
+<<<<<<< HEAD
       if (d.isLeave) {
         const unassigned = d.unassignedLectures?.map((l) => `EMPTY CLASS: ${l.class_name} (${fmtTime(l.start_time)}-${fmtTime(l.end_time)})`) ?? [];
         return ["ON LEAVE", ...unassigned].join("\n");
       }
+=======
+      if (d.isLeave) return "ON LEAVE";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       const own = d.ownLectures.map((l) => `${l.subject} (${fmtTime(l.start_time)}-${fmtTime(l.end_time)}) [${l.class_name}]`);
       const prx = d.proxyLectures.map((l) => `PROXY: ${l.subject} (${fmtTime(l.start_time)}-${fmtTime(l.end_time)}) [${l.class_name}]`);
       return [...own, ...prx].join("\n") || "—";
@@ -410,11 +439,19 @@ async function exportExcel(month: number, year: number, label: string, summaries
     XLSX.utils.book_append_sheet(wb, ws5, "Compensations");
   }
 
+<<<<<<< HEAD
   await saveXLSX(XLSX, wb, `${label.replace(/[^a-zA-Z0-9 _-]/g,"_")}_${MONTH_NAMES[month]}_${year}.xlsx`);
 }
 
 // ── Principal Excel export (leave-based, not schedule-based) ─────────────────
 async function exportPrincipalExcel(
+=======
+  XLSX.writeFile(wb, `${label.replace(/[^a-zA-Z0-9 _-]/g,"_")}_${MONTH_NAMES[month]}_${year}.xlsx`);
+}
+
+// ── Principal Excel export (leave-based, not schedule-based) ─────────────────
+function exportPrincipalExcel(
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   year: number,
   deptTabLabel: string,
   leaves: any[],
@@ -514,11 +551,19 @@ async function exportPrincipalExcel(
   ws4["!cols"] = [{ wch: 50 }];
   XLSX.utils.book_append_sheet(wb, ws4, "Report Info");
 
+<<<<<<< HEAD
   await saveXLSX(XLSX, wb, `Principal_Leave_Report_${deptTabLabel.replace(/[^a-zA-Z0-9]/g, "_")}_${year}.xlsx`);
 }
 
 // ── Principal PDF export ──────────────────────────────────────────────────────
 async function exportPrincipalPDF(
+=======
+  XLSX.writeFile(wb, `Principal_Leave_Report_${deptTabLabel.replace(/[^a-zA-Z0-9]/g, "_")}_${year}.xlsx`);
+}
+
+// ── Principal PDF export ──────────────────────────────────────────────────────
+function exportPrincipalPDF(
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   year: number,
   deptTabLabel: string,
   leaves: any[],
@@ -614,9 +659,15 @@ async function exportPrincipalPDF(
     },
   });
 
+<<<<<<< HEAD
   await savePDF(doc, `Principal_Leave_Report_${deptTabLabel.replace(/[^a-zA-Z0-9]/g, "_")}_${year}.pdf`);
 }
 async function exportPDF(month: number, year: number, label: string, summaries: ReturnType<typeof buildTeacherSummary>[], workingDays: Date[]) {
+=======
+  doc.save(`Principal_Leave_Report_${deptTabLabel.replace(/[^a-zA-Z0-9]/g, "_")}_${year}.pdf`);
+}
+function exportPDF(month: number, year: number, label: string, summaries: ReturnType<typeof buildTeacherSummary>[], workingDays: Date[]) {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const weeks   = getWeeksInMonth(workingDays);
   const doc     = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
   const pageW   = doc.internal.pageSize.getWidth();
@@ -629,7 +680,11 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
   doc.setFontSize(9);  doc.setFont("helvetica", "normal");
   doc.text(`Monthly Schedule  ·  ${MONTH_NAMES[month]} ${year}`, 14, 18);
   doc.setFontSize(7.5);
+<<<<<<< HEAD
   doc.text("LEAVE = On Leave   ·   NO PROXY = Unassigned lecture (empty class)   ·   P: = Proxy Duty   ·   Subject codes = lectures taken", 14, 24);
+=======
+  doc.text("LEAVE = On Leave   ·   P: = Proxy Duty   ·   Subject codes = lectures taken", 14, 24);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   doc.setTextColor(0, 0, 0);
 
   // ── Table head: full "DD Mon\nFullDay" for each working day ──────────────
@@ -642,23 +697,35 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
     "Total\nLects", "Leave\nDays", "Proxy\nDuties",
   ]];
 
+<<<<<<< HEAD
   // Build abbreviations fresh for this export so the legend is accurate
   resetAbbrevRegistry();
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const body = summaries.map((s) => [
     s.name,
     s.role === "hod" ? "HOD" : "Teacher",
     ...s.days.map((d) => {
+<<<<<<< HEAD
       if (d.isLeave) {
         const unassigned = d.unassignedLectures ?? [];
         if (unassigned.length === 0) return "LEAVE";
         return ["LEAVE", ...unassigned.map((l) => `NO PROXY: ${l.class_name}`)].join("\n");
       }
+=======
+      if (d.isLeave) return "LEAVE";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       const n = d.ownLectures.length;
       const p = d.proxyLectures.length;
       if (!n && !p) return "\u2014";
       const parts: string[] = [];
+<<<<<<< HEAD
       if (n) parts.push(d.ownLectures.map((l) => toAbbrev(l.subject)).join("\n"));
       if (p) parts.push(d.proxyLectures.map((l) => `P:${toAbbrev(l.subject)}`).join("\n"));
+=======
+      if (n) parts.push(d.ownLectures.map((l) => l.subject.slice(0, 6)).join("\n"));
+      if (p) parts.push(d.proxyLectures.map((l) => `P:${l.subject.slice(0, 5)}`).join("\n"));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       return parts.join("\n");
     }),
     ...s.weeklyOwn,
@@ -710,6 +777,7 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
     didParseCell: (data) => {
       const v = String(data.cell.raw ?? "");
       if (data.section === "body" && data.column.index >= 2) {
+<<<<<<< HEAD
         if (v === "LEAVE" || v.startsWith("LEAVE\n")) {
           data.cell.styles.fillColor = [254, 226, 226];
           data.cell.styles.textColor = [185, 28, 28];
@@ -717,6 +785,12 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
           if (v.includes("NO PROXY")) {
             data.cell.styles.fillColor = [255, 237, 213]; // orange tint for leave+unassigned
           }
+=======
+        if (v === "LEAVE") {
+          data.cell.styles.fillColor = [254, 226, 226];
+          data.cell.styles.textColor = [185, 28, 28];
+          data.cell.styles.fontStyle = "bold";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         } else if (v.startsWith("P:") || v.includes("\nP:")) {
           data.cell.styles.fillColor = [254, 243, 199];
           data.cell.styles.textColor = [120, 53, 15];
@@ -739,6 +813,7 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
     },
   });
 
+<<<<<<< HEAD
   // ── Abbreviation legend — append on a new section after table ───────────
   if (_abbrevRegistry.size > 0) {
     const abbrevEntries = [..._abbrevRegistry.entries()];
@@ -788,6 +863,9 @@ async function exportPDF(month: number, year: number, label: string, summaries: 
   }
 
   await savePDF(doc, `${label.replace(/[^a-zA-Z0-9 _-]/g, "_")}_${MONTH_NAMES[month]}_${year}.pdf`);
+=======
+  doc.save(`${label.replace(/[^a-zA-Z0-9 _-]/g, "_")}_${MONTH_NAMES[month]}_${year}.pdf`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }
 
 // ── Main page ─────────────────────────────────────────────────────────────────
@@ -811,19 +889,31 @@ function ReportsPage() {
   const COMMERCE_ARTS_KEYWORDS   = ["commerce", "arts", "economics", "history", "english", "sociology", "philosophy", "political", "geography", "hindi", "marathi"];
   const SCIENCE_TECH_KEYWORDS    = ["science", "technology", "physics", "chemistry", "biology", "maths", "mathematics", "computer", "it", "information", "botany", "zoology", "microbiology"];
 
+<<<<<<< HEAD
   const getDeptGroup = useCallback((deptName: string): "commerce_arts" | "science_tech" | "other" => {
+=======
+  function getDeptGroup(deptName: string): "commerce_arts" | "science_tech" | "other" {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const n = (deptName ?? "").toLowerCase();
     if (SCIENCE_TECH_KEYWORDS.some((k) => n.includes(k))) return "science_tech";
     if (COMMERCE_ARTS_KEYWORDS.some((k) => n.includes(k))) return "commerce_arts";
     return "other";
+<<<<<<< HEAD
   }, []); // depends only on module-level constants — stable
+=======
+  }
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // ── Yearly leave data (all roles) ─────────────────────────────────────────
   const { data } = useQuery({
     queryKey: ["reports", role, profile?.department_id, year],
     enabled: !!profile,
     queryFn: async () => {
+<<<<<<< HEAD
       let q = supabase.from("leave_requests").select("id, teacher_id, leave_type, from_date, to_date, total_days, paid_days, unpaid_days, status, session").in("status", ["approved","hod_approved"]).gte("from_date", `${year}-01-01`).lte("from_date", `${year}-12-31`);
+=======
+      let q = supabase.from("leave_requests").select("*").in("status", ["approved","hod_approved"]).gte("from_date", `${year}-01-01`).lte("from_date", `${year}-12-31`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       if (isHod) q = q.eq("department_id", profile!.department_id ?? "");
       const { data: leaves, error } = await q;
       if (error) throw error;
@@ -894,9 +984,12 @@ function ReportsPage() {
     return rows;
   }, [allSummaries, selectedTeacher, periodFilter, filterWorkingDays, monthlyData]);
 
+<<<<<<< HEAD
   // Reset abbreviation registry whenever filtered summaries change so mappings stay correct
   useEffect(() => { resetAbbrevRegistry(); }, [filteredSummaries]);
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const displayWorkingDays = periodFilter !== "month" ? filterWorkingDays : viewWorkingDays;
   const weeks = getWeeksInMonth(displayWorkingDays);
   const downloadLabel = `${deptName} — ${downloadRange.label}${selectedTeacher !== "all" ? ` (${monthlyData?.teachers.find((t: any) => t.id === selectedTeacher)?.full_name ?? ""})` : ""}`;
@@ -922,7 +1015,11 @@ function ReportsPage() {
       });
     }
     return rows;
+<<<<<<< HEAD
   }, [allLeaves, isHod, isPrincipal, downloadRange, selectedTeacher, principalDeptTab, data?.people, getDeptGroup]);
+=======
+  }, [allLeaves, isHod, isPrincipal, downloadRange, selectedTeacher, principalDeptTab, data?.people]);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const leaves = (isHod || isPrincipal) ? filteredLeaves : allLeaves;
   const totalDays  = leaves.reduce((s, l) => s + Number(l.total_days), 0);
@@ -932,6 +1029,7 @@ function ReportsPage() {
 
   // ── Download handlers ─────────────────────────────────────────────────────
   const handleDownloadExcel = useCallback(() => {
+<<<<<<< HEAD
     if (!monthlyData && !isPrincipal) return toast.error("Report data not loaded yet");
     setDownloading("excel");
     setTimeout(() => {
@@ -967,6 +1065,30 @@ function ReportsPage() {
       } finally { setDownloading(null); }
     }, 50);
   }, [selectedMonth, year, downloadLabel, filteredSummaries, displayWorkingDays, monthlyData, isPrincipal, principalDeptTab, filteredLeaves, data?.people]);
+=======
+    setDownloading("excel");
+    try {
+      if (isPrincipal) {
+        const deptTabLabel = principalDeptTab === "commerce_arts" ? "Commerce & Arts" : "Science & Technology";
+        exportPrincipalExcel(year, deptTabLabel, filteredLeaves, data?.people ?? {});
+      } else {
+        exportExcel(selectedMonth, year, downloadLabel, filteredSummaries, displayWorkingDays, monthlyData?.fixedLectures??[], monthlyData?.datedLectures??[], monthlyData?.proxies??[], monthlyData?.compensations??[]);
+      }
+    } finally { setDownloading(null); }
+  }, [selectedMonth, year, downloadLabel, filteredSummaries, displayWorkingDays, monthlyData, isPrincipal, principalDeptTab, filteredLeaves, data?.people]);
+
+  const handleDownloadPDF = useCallback(() => {
+    setDownloading("pdf");
+    try {
+      if (isPrincipal) {
+        const deptTabLabel = principalDeptTab === "commerce_arts" ? "Commerce & Arts" : "Science & Technology";
+        exportPrincipalPDF(year, deptTabLabel, filteredLeaves, data?.people ?? {});
+      } else {
+        exportPDF(selectedMonth, year, downloadLabel, filteredSummaries, displayWorkingDays);
+      }
+    } finally { setDownloading(null); }
+  }, [selectedMonth, year, downloadLabel, filteredSummaries, displayWorkingDays, isPrincipal, principalDeptTab, filteredLeaves, data?.people]);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   return (
     <AppShell
@@ -1030,6 +1152,7 @@ function ReportsPage() {
                 </p>
               </div>
               <div className="flex gap-2 shrink-0">
+<<<<<<< HEAD
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={handleDownloadExcel} disabled={!!downloading || monthLoading || !filteredSummaries.length}>
@@ -1048,6 +1171,16 @@ function ReportsPage() {
                   </TooltipTrigger>
                   <TooltipContent side="bottom">Download schedule as PDF</TooltipContent>
                 </Tooltip>
+=======
+                <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={handleDownloadExcel} disabled={!!downloading || monthLoading || !filteredSummaries.length}>
+                  <FileSpreadsheet className="size-4 text-emerald-600" />
+                  <span className="hidden xs:inline">{downloading === "excel" ? "…" : "Excel"}</span>
+                </Button>
+                <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={handleDownloadPDF} disabled={!!downloading || monthLoading || !filteredSummaries.length}>
+                  <FileText className="size-4 text-red-600" />
+                  <span className="hidden xs:inline">{downloading === "pdf" ? "…" : "PDF"}</span>
+                </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               </div>
             </div>
           </div>
@@ -1199,6 +1332,7 @@ function ReportsPage() {
               </div>
             )}
 
+<<<<<<< HEAD
             {/* Abbreviation legend — shows what each abbrev means */}
             {!monthLoading && filteredSummaries.length > 0 && _abbrevRegistry.size > 0 && (
               <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
@@ -1214,6 +1348,8 @@ function ReportsPage() {
               </div>
             )}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             {/* Department totals row */}
             {!monthLoading && filteredSummaries.length > 1 && (
               <DeptTotalsCard summaries={filteredSummaries} weeks={weeks} />
@@ -1247,8 +1383,11 @@ function TeacherScheduleCard({
   return (
     <div className={`rounded-xl border transition-all ${expanded ? "border-primary/40 shadow-sm" : "border-border hover:border-border/80"}`}>
       {/* Header — always visible */}
+<<<<<<< HEAD
       <Tooltip>
       <TooltipTrigger asChild>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <button onClick={onToggle} className="w-full text-left px-4 py-3 sm:px-5 sm:py-4">
         <div className="flex items-center gap-3">
           {/* Avatar */}
@@ -1281,9 +1420,12 @@ function TeacherScheduleCard({
           ))}
         </div>
       </button>
+<<<<<<< HEAD
       </TooltipTrigger>
       <TooltipContent side="top">{expanded ? "Collapse" : "Expand"} {summary.name}'s schedule</TooltipContent>
       </Tooltip>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
       {/* Expanded detail */}
       {expanded && (
@@ -1309,9 +1451,15 @@ function TeacherScheduleCard({
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-xs shrink-0">
+<<<<<<< HEAD
                     {weekOwn > 0   && <span className="text-blue-600 dark:text-blue-400 font-medium">{weekOwn} lec</span>}
                     {weekProxy > 0 && <span className="text-amber-600 dark:text-amber-400 font-medium">{weekProxy} proxy</span>}
                     {weekLeave > 0 && <span className="text-red-600 dark:text-red-400 font-medium">{weekLeave} leave</span>}
+=======
+                    {weekOwn > 0   && <span className="text-blue-600 font-medium">{weekOwn} lec</span>}
+                    {weekProxy > 0 && <span className="text-amber-600 font-medium">{weekProxy} proxy</span>}
+                    {weekLeave > 0 && <span className="text-red-600 font-medium">{weekLeave} leave</span>}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                   </div>
                 </div>
 
@@ -1395,7 +1543,11 @@ function TeacherScheduleCard({
               <div className="space-y-1.5">
                 {summary.myProxies.map((p: any, i: number) => (
                   <div key={i} className="flex flex-wrap items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 px-3 py-2 text-xs">
+<<<<<<< HEAD
                     <Clock className="size-3 text-amber-600 dark:text-amber-400 shrink-0" />
+=======
+                    <Clock className="size-3 text-amber-600 shrink-0" />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     <span className="font-medium">{p.subject} · {p.class_name}</span>
                     <span className="text-muted-foreground">·</span>
                     <span>{fmtDate(p.proxy_date)}</span>
@@ -1422,8 +1574,11 @@ function DayCard({ day, info }: { day: Date; info: DayInfo }) {
     <div className={`rounded-lg border p-1.5 sm:p-2 text-xs min-h-[72px] sm:min-h-[80px] flex flex-col ${
       info.isLeave
         ? "border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/30"
+<<<<<<< HEAD
         : info.isLeave && (info.unassignedLectures ?? []).length > 0
         ? "border-orange-200 bg-orange-50/50 dark:border-orange-900 dark:bg-orange-950/20"
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         : info.ownLectures.length + info.proxyLectures.length > 0
         ? "border-blue-100 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20"
         : "border-border bg-muted/20"
@@ -1435,6 +1590,7 @@ function DayCard({ day, info }: { day: Date; info: DayInfo }) {
       </div>
 
       {info.isLeave ? (
+<<<<<<< HEAD
         <div className="flex-1 flex flex-col items-center justify-center gap-0.5">
           <span className="font-bold text-red-600 dark:text-red-400 text-[9px] sm:text-[11px] text-center leading-tight">ON LEAVE</span>
           {(info.unassignedLectures ?? []).length > 0 && (
@@ -1447,6 +1603,10 @@ function DayCard({ day, info }: { day: Date; info: DayInfo }) {
               ))}
             </div>
           )}
+=======
+        <div className="flex-1 flex items-center justify-center">
+          <span className="font-bold text-red-600 text-[9px] sm:text-[11px] text-center leading-tight">ON LEAVE</span>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       ) : info.ownLectures.length === 0 && info.proxyLectures.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
@@ -1456,13 +1616,21 @@ function DayCard({ day, info }: { day: Date; info: DayInfo }) {
         <div className="space-y-0.5 flex-1 overflow-hidden">
           {info.ownLectures.map((l, i) => (
             <div key={i} className="rounded bg-blue-100 dark:bg-blue-900/40 px-1 py-0.5" title={`${l.subject} · ${l.class_name} · ${fmtTime(l.start_time)}–${fmtTime(l.end_time)}`}>
+<<<<<<< HEAD
               <p className="font-semibold text-blue-800 dark:text-blue-200 truncate leading-tight text-[9px] sm:text-[10px]">{toAbbrev(l.subject)}</p>
+=======
+              <p className="font-semibold text-blue-800 dark:text-blue-200 truncate leading-tight text-[9px] sm:text-[10px]">{l.subject}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <p className="text-blue-600 dark:text-blue-400 text-[8px] sm:text-[9px] leading-tight truncate">{l.class_name}</p>
             </div>
           ))}
           {info.proxyLectures.map((l, i) => (
             <div key={i} className="rounded bg-amber-100 dark:bg-amber-900/40 px-1 py-0.5" title={`PROXY: ${l.subject} · ${l.class_name} · ${fmtTime(l.start_time)}–${fmtTime(l.end_time)}`}>
+<<<<<<< HEAD
               <p className="font-semibold text-amber-800 dark:text-amber-200 truncate leading-tight text-[9px] sm:text-[10px]">P: {toAbbrev(l.subject)}</p>
+=======
+              <p className="font-semibold text-amber-800 dark:text-amber-200 truncate leading-tight text-[9px] sm:text-[10px]">P: {l.subject}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <p className="text-amber-600 dark:text-amber-400 text-[8px] sm:text-[9px] leading-tight truncate">{l.class_name}</p>
             </div>
           ))}
@@ -1490,7 +1658,11 @@ function DeptTotalsCard({ summaries, weeks }: { summaries: ReturnType<typeof bui
         </div>
         <div>
           <p className="text-xs text-muted-foreground">Proxy duties</p>
+<<<<<<< HEAD
           <p className="font-bold text-amber-600 dark:text-amber-400 text-base">{totalProxy}</p>
+=======
+          <p className="font-bold text-amber-600 text-base">{totalProxy}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
         <div>
           <p className="text-xs text-muted-foreground">Compensations</p>

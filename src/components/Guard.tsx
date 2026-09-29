@@ -1,6 +1,10 @@
 import { useEffect, type ReactNode } from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { Loader2, FileUp, LogOut, CheckCircle2 } from "lucide-react";
+=======
+import { Loader2, FileUp, LogOut } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useAuth, type AppRole } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -10,7 +14,11 @@ async function signOutAndRedirect(navigate: ReturnType<typeof useNavigate>) {
 }
 
 export function Guarded({ roles, children }: { roles?: AppRole[]; children: ReactNode }) {
+<<<<<<< HEAD
   const { session, role, profile, loading, refresh } = useAuth();
+=======
+  const { session, role, profile, loading } = useAuth();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +78,7 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
   // HOD and HR skip this entirely — only teachers need to upload documents
   if (role === "teacher" && profile.approved) {
 
+<<<<<<< HEAD
     // HR rejected — show reason + re-upload + request again
     if (profile.hr_approved === false) {
       async function requestAgain() {
@@ -80,6 +89,10 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
         await refresh();
       }
 
+=======
+    // HR rejected — show reason + re-upload
+    if (profile.hr_approved === false) {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       return (
         <div className="grid min-h-screen place-items-center px-6">
           <div className="max-w-sm space-y-4 text-center">
@@ -91,13 +104,21 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
               HR has reviewed your documents and requested changes.
             </p>
             {profile.hr_rejection_reason && (
+<<<<<<< HEAD
               <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive text-left">
                 <span className="font-semibold block mb-1">Reason from HR:</span>
+=======
+              <p className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 {profile.hr_rejection_reason}
               </p>
             )}
             <p className="text-xs text-muted-foreground">
+<<<<<<< HEAD
               Please go to the upload page, replace any rejected documents, then click "Request Again" to notify HR for re-review.
+=======
+              Please re-upload the correct documents to proceed.
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </p>
             <Link
               to="/onboarding"
@@ -106,20 +127,26 @@ export function Guarded({ roles, children }: { roles?: AppRole[]; children: Reac
               <FileUp className="size-4" /> Re-upload Documents
             </Link>
             <button
+<<<<<<< HEAD
               onClick={requestAgain}
               className="inline-flex items-center gap-2 rounded-lg border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 transition-colors w-full justify-center"
             >
               <CheckCircle2 className="size-4" /> Request Again (Submit for HR Re-review)
             </button>
             <button
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               onClick={() => signOutAndRedirect(navigate)}
               className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors w-full justify-center"
             >
               <LogOut className="size-4" /> Sign Out / Go Back to Login
             </button>
+<<<<<<< HEAD
             <p className="text-xs text-muted-foreground">
               Signed in as {profile.full_name} · {profile.user_id}
             </p>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </div>
         </div>
       );

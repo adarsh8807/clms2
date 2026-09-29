@@ -1,19 +1,32 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+<<<<<<< HEAD
 import { useState, useMemo, useEffect } from "react";
+=======
+import { useState, useMemo } from "react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { fetchPeople } from "@/lib/people";
+<<<<<<< HEAD
 import { firePush } from "@/lib/push.functions";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { Empty, ListSkeleton } from "@/components/ui-bits";
+=======
+import { AppShell } from "@/components/AppShell";
+import { Guarded } from "@/components/Guard";
+import { Empty } from "@/components/ui-bits";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+<<<<<<< HEAD
 import { GuardedInput } from "@/components/GuardedField";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   Select,
   SelectContent,
@@ -22,12 +35,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { fmtDate, fmtTime, todayISO } from "@/lib/leave";
+<<<<<<< HEAD
 import { BookOpen, CalendarClock, CheckCircle2, Clock3, Gift, Info, UserCheck, XCircle } from "lucide-react";
+=======
+import { CalendarClock, UserCheck, BookOpen, CheckCircle2, XCircle, Clock3, Gift } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export const Route = createFileRoute("/proxies")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Proxy Duties — CSC Leave Management" },
       { name: "description", content: "Accept or decline proxy lectures assigned to you by your head of department." },
       { property: "og:title", content: "Proxy Duties — CSC Leave Management" },
@@ -48,7 +68,11 @@ function ProxiesPage() {
   const qc = useQueryClient();
   const today = todayISO();
 
+<<<<<<< HEAD
   const { data: rows = [], isLoading: rowsLoading, isError: rowsError } = useQuery({
+=======
+  const { data: rows = [] } = useQuery({
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryKey: ["my-proxies", profile?.id],
     enabled: !!profile,
     queryFn: async () => {
@@ -60,6 +84,7 @@ function ProxiesPage() {
       if (error) throw error;
       const raw = data ?? [];
 
+<<<<<<< HEAD
       // Collect leave_request_ids that don't already have absentee info embedded,
       // then resolve them all in ONE query instead of one per row (#1 N+1 fix).
       const needsLookup = raw.filter(
@@ -82,6 +107,23 @@ function ProxiesPage() {
           null;
         return { ...r, absentee_id: absenteeId };
       });
+=======
+      const rowsWithIds = await Promise.all(
+        raw.map(async (r) => {
+          let absenteeId: string | null = (r as any).absentee_teacher_id ?? null;
+          if (!absenteeId) absenteeId = (r.leave_requests as any)?.teacher_id ?? null;
+          if (!absenteeId && r.leave_request_id) {
+            const { data: lr } = await supabase
+              .from("leave_requests")
+              .select("teacher_id")
+              .eq("id", r.leave_request_id)
+              .maybeSingle();
+            absenteeId = lr?.teacher_id ?? null;
+          }
+          return { ...r, absentee_id: absenteeId };
+        }),
+      );
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
       const absenteeIds = rowsWithIds.map((r) => r.absentee_id).filter(Boolean) as string[];
       const people = absenteeIds.length ? await fetchPeople([...new Set(absenteeIds)]) : {};
@@ -111,12 +153,19 @@ function ProxiesPage() {
   const { data: myCompOffers = [] } = useQuery({
     queryKey: ["my-comp-offers", profile?.id],
     enabled: !!profile,
+<<<<<<< HEAD
     refetchInterval: 8_000,
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("compensation_assignments")
         .select("id, from_teacher_id, to_teacher_id, compensation_date, note, status, lecture_id, created_at")
+=======
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("compensation_assignments")
+        .select("*")
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         .eq("from_teacher_id", profile!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -130,12 +179,19 @@ function ProxiesPage() {
   const { data: incomingOffers = [] } = useQuery({
     queryKey: ["incoming-comp-offers", profile?.id],
     enabled: !!profile,
+<<<<<<< HEAD
     refetchInterval: 8_000,
     refetchOnWindowFocus: true,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("compensation_assignments")
         .select("id, from_teacher_id, to_teacher_id, compensation_date, note, status, lecture_id, created_at")
+=======
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("compensation_assignments")
+        .select("*")
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         .eq("to_teacher_id", profile!.id)
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -150,6 +206,7 @@ function ProxiesPage() {
     const { error } = await supabase.from("proxy_assignments").update({ status }).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success(status === "accepted" ? "Proxy accepted" : "Proxy declined");
+<<<<<<< HEAD
 
     if (status === "rejected") {
       const row = rows.find((r) => r.id === id);
@@ -188,19 +245,28 @@ function ProxiesPage() {
       }
     }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
   }
 
   async function respondToComp(id: string, status: "accepted" | "rejected", offer?: any) {
+<<<<<<< HEAD
     // When teacher accepts, go to hod_pending — HOD must approve before lecture is applied
     const newStatus = status === "accepted" ? "hod_pending" : "rejected";
     const { error } = await supabase
       .from("compensation_assignments")
       .update({ status: newStatus })
+=======
+    const { error } = await supabase
+      .from("compensation_assignments")
+      .update({ status })
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       .eq("id", id);
     if (error) return toast.error(error.message);
 
     if (status === "accepted" && offer) {
+<<<<<<< HEAD
       // Notify HOD of the department
       firePush({
         userIds: [`__hod_dept_${profile!.department_id}__`],
@@ -212,6 +278,64 @@ function ProxiesPage() {
     } else {
       toast.success("Compensation declined");
     }
+=======
+      // Fetch the source lecture the proxy teacher is gifting
+      const { data: srcLecture } = await supabase
+        .from("lectures")
+        .select("id, subject, class_name, start_time, end_time, room, department_id, lecture_date, day_of_week")
+        .eq("id", offer.lecture_id)
+        .maybeSingle();
+
+      if (srcLecture) {
+        const compDate = offer.compensation_date;
+        const dow = new Date(compDate + "T00:00:00").getDay();
+        const dept = srcLecture.department_id ?? profile!.department_id;
+
+        if (srcLecture.lecture_date) {
+          // One-off dated lecture — reassign it directly to the leave-taker
+          await supabase
+            .from("lectures")
+            .update({ teacher_id: offer.to_teacher_id })
+            .eq("id", srcLecture.id);
+        } else {
+          // Recurring fixed lecture:
+          // 1. Give the leave-taker a dated copy of this lecture on compDate
+          await supabase.from("lectures").insert({
+            teacher_id: offer.to_teacher_id,
+            department_id: dept,
+            day_of_week: dow,
+            lecture_date: compDate,
+            start_time: srcLecture.start_time,
+            end_time: srcLecture.end_time,
+            subject: srcLecture.subject,
+            class_name: srcLecture.class_name,
+            room: srcLecture.room,
+          });
+
+          // 2. Insert a dated tombstone for the proxy teacher on compDate so their
+          //    fixed lecture is suppressed in schedule/reports on that specific day.
+          //    The subject prefix __COMP_GIVEN__ is filtered out in computeTeacherRow.
+          await supabase.from("lectures").insert({
+            teacher_id: offer.from_teacher_id,
+            department_id: dept,
+            day_of_week: dow,
+            lecture_date: compDate,
+            start_time: srcLecture.start_time,
+            end_time: srcLecture.end_time,
+            subject: `__COMP_GIVEN__${srcLecture.subject}`,
+            class_name: srcLecture.class_name,
+            room: srcLecture.room,
+          });
+        }
+      }
+    }
+
+    toast.success(
+      status === "accepted"
+        ? "Compensation accepted — lecture moved to your schedule"
+        : "Compensation declined",
+    );
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
   }
 
@@ -219,13 +343,17 @@ function ProxiesPage() {
   const accepted = rows.filter((r) => r.status === "accepted");
   const handled = rows.filter((r) => r.status !== "pending");
   const pendingIncoming = incomingOffers.filter((o) => o.status === "pending");
+<<<<<<< HEAD
   const hodPendingIncoming = incomingOffers.filter((o) => o.status === "hod_pending");
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Stats
   const totalAccepted = rows.filter((r) => r.status === "accepted").length;
   const totalDeclined = rows.filter((r) => r.status === "rejected").length;
   const totalPending = pending.length;
 
+<<<<<<< HEAD
   // Pagination for proxy history
   const PROXY_PAGE_SIZE = 10;
   const [proxyHistPage, setProxyHistPage] = useState(1);
@@ -286,22 +414,36 @@ function ProxiesPage() {
     );
   }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   return (
     <AppShell title="Proxy Duties" subtitle="Lectures your HOD has assigned you to cover">
       <div className="space-y-6">
 
         {/* Summary stats strip */}
+<<<<<<< HEAD
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
+=======
+        <div className="grid grid-cols-3 gap-3">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           {[
             { label: "Awaiting response", value: totalPending, icon: Clock3, color: "text-warning-foreground", bg: "bg-warning/10 border-warning/25" },
             { label: "Accepted this year", value: totalAccepted, icon: CheckCircle2, color: "text-success", bg: "bg-success/8 border-success/20" },
             { label: "Declined", value: totalDeclined, icon: XCircle, color: "text-muted-foreground", bg: "bg-muted/60 border-border" },
           ].map(({ label, value, icon: Icon, color, bg }) => (
+<<<<<<< HEAD
             <div key={label} className={`rounded-xl border p-3 sm:p-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3 ${bg}`}>
               <Icon className={`size-4 shrink-0 sm:size-5 ${color}`} />
               <div>
                 <p className={`text-xl font-bold sm:text-2xl ${color}`}>{value}</p>
                 <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">{label}</p>
+=======
+            <div key={label} className={`rounded-xl border p-4 flex items-center gap-3 ${bg}`}>
+              <Icon className={`size-5 shrink-0 ${color}`} />
+              <div>
+                <p className={`text-2xl font-bold ${color}`}>{value}</p>
+                <p className="text-xs text-muted-foreground leading-tight">{label}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               </div>
             </div>
           ))}
@@ -394,6 +536,7 @@ function ProxiesPage() {
           </div>
         )}
 
+<<<<<<< HEAD
         {/* Incoming compensation offers — awaiting HOD approval */}
         {hodPendingIncoming.length > 0 && (
           <div className="space-y-2">
@@ -423,6 +566,9 @@ function ProxiesPage() {
         )}
 
 
+=======
+        {/* Compensation offer form for accepted proxies */}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {accepted.length > 0 && (
           <div className="space-y-2">
             <div className="flex items-center gap-2 mb-3">
@@ -430,6 +576,7 @@ function ProxiesPage() {
               <h2 className="font-semibold text-sm">Offer compensation</h2>
             </div>
             <p className="text-xs text-muted-foreground -mt-1 mb-3">You've covered someone's leave — offer one of your lectures as compensation.</p>
+<<<<<<< HEAD
 
             {/* Filters */}
             <div className="rounded-xl border border-border bg-muted/30 p-3 mb-3 space-y-2">
@@ -536,6 +683,19 @@ function ProxiesPage() {
                 )}
               </>
             )}
+=======
+            <ul className="space-y-4">
+              {accepted.map((r) => (
+                <CompensationForm
+                  key={r.id}
+                  proxyRow={r}
+                  myLectures={myLectures}
+                  today={today}
+                  onDone={() => qc.invalidateQueries()}
+                />
+              ))}
+            </ul>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </div>
         )}
 
@@ -550,6 +710,7 @@ function ProxiesPage() {
               <p className="text-sm text-muted-foreground">Nothing here yet.</p>
             </div>
           ) : (
+<<<<<<< HEAD
             <>
               <div className="rounded-xl border border-border overflow-hidden overflow-x-auto">
                 <table className="w-full text-sm min-w-[480px]">
@@ -615,10 +776,44 @@ function ProxiesPage() {
                 </div>
               )}
             </>
+=======
+            <div className="rounded-xl border border-border overflow-hidden">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="px-4 py-2.5 text-left font-semibold">Date</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Subject · Class</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Time</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Covering</th>
+                    <th className="px-4 py-2.5 text-right font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {handled.map((r, i) => (
+                    <tr key={r.id} className={`border-t border-border ${i % 2 === 0 ? "" : "bg-muted/20"}`}>
+                      <td className="px-4 py-3 font-medium">{fmtDate(r.proxy_date)}</td>
+                      <td className="px-4 py-3">{r.subject} <span className="text-muted-foreground">· {r.class_name}</span></td>
+                      <td className="px-4 py-3 text-muted-foreground">{fmtTime(r.start_time)} – {fmtTime(r.end_time)}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{r.absentee?.full_name ?? "—"}</td>
+                      <td className="px-4 py-3 text-right">
+                        <Badge
+                          variant={r.status === "accepted" ? "default" : "secondary"}
+                          className={r.status === "accepted" ? "bg-success/15 text-success border-success/25" : ""}
+                        >
+                          {r.status === "accepted" ? "Accepted" : "Declined"}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           )}
         </div>
 
         {/* My outgoing compensation offers */}
+<<<<<<< HEAD
         {myCompOffers.length > 0 && (() => {
           const compTotalPages = Math.max(1, Math.ceil(myCompOffers.length / COMP_PAGE_SIZE));
           const pagedComp = myCompOffers.slice((compPage - 1) * COMP_PAGE_SIZE, compPage * COMP_PAGE_SIZE);
@@ -692,6 +887,45 @@ function ProxiesPage() {
             </div>
           );
         })()}
+=======
+        {myCompOffers.length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 mb-3">
+              <Gift className="size-4 text-muted-foreground" />
+              <h2 className="font-semibold text-sm">My compensation offers</h2>
+            </div>
+            <div className="rounded-xl border border-border overflow-hidden">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="px-4 py-2.5 text-left font-semibold">To</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Date</th>
+                    <th className="px-4 py-2.5 text-left font-semibold">Note</th>
+                    <th className="px-4 py-2.5 text-right font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {myCompOffers.map((o, i) => (
+                    <tr key={o.id} className={`border-t border-border ${i % 2 === 0 ? "" : "bg-muted/20"}`}>
+                      <td className="px-4 py-3 font-medium">{o.to_teacher?.full_name ?? "colleague"}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{fmtDate(o.compensation_date)}</td>
+                      <td className="px-4 py-3 text-muted-foreground italic">{o.note ? `"${o.note}"` : "—"}</td>
+                      <td className="px-4 py-3 text-right">
+                        <Badge
+                          variant={o.status === "accepted" ? "default" : o.status === "rejected" ? "destructive" : "secondary"}
+                          className={o.status === "accepted" ? "bg-success/15 text-success border-success/25" : ""}
+                        >
+                          {o.status === "accepted" ? "Accepted" : o.status === "rejected" ? "Declined" : "Pending"}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
     </AppShell>
   );
@@ -713,7 +947,10 @@ function CompensationForm({
   const [compDate, setCompDate] = useState("");
   const [lectureId, setLectureId] = useState("");
   const [note, setNote] = useState("");
+<<<<<<< HEAD
   const [noteError, setNoteError] = useState<string | null>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [busy, setBusy] = useState(false);
 
   const { data: existingOffer } = useQuery({
@@ -789,7 +1026,11 @@ function CompensationForm({
           You covered <span className="font-medium text-foreground">{absenteeName}</span>'s lecture
         </p>
         <p className="text-xs text-info mt-1">
+<<<<<<< HEAD
           <Info className="size-4 inline mr-1"/>The lecture you select below will be <strong>moved</strong> to {absenteeName}'s schedule on the chosen date — it will no longer appear in yours.
+=======
+          ℹ️ The lecture you select below will be <strong>moved</strong> to {absenteeName}'s schedule on the chosen date — it will no longer appear in yours.
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </p>
       </div>
 
@@ -828,7 +1069,11 @@ function CompensationForm({
       <div className="mt-3 flex flex-wrap items-end gap-3">
         <div className="flex-1 min-w-48 space-y-1.5">
           <Label className="text-xs text-muted-foreground">Note (optional)</Label>
+<<<<<<< HEAD
           <GuardedInput placeholder="Add a message…" value={note} onChange={setNote} onGuardError={setNoteError} fieldName="Message" className="h-9 text-sm" />
+=======
+          <Input placeholder="Add a message…" value={note} onChange={(e) => setNote(e.target.value)} className="h-9 text-sm" />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
         <Button size="sm" onClick={submit} disabled={busy || !compDate || !lectureId} className="gap-1.5">
           <Gift className="size-3.5" />
@@ -837,4 +1082,8 @@ function CompensationForm({
       </div>
     </li>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

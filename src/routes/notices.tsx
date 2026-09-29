@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+<<<<<<< HEAD
 
 // Lightweight markdown renderer for notice bodies:
 // **bold**, *italic*, - bullet lists, URLs auto-linked
@@ -56,19 +57,28 @@ function renderNoticeBody(text: string): React.ReactNode {
 }
 
 import { CalendarClock, CalendarDays, CheckCheck, ChevronDown, ChevronUp, ClipboardList, Trash2 } from "lucide-react";
+=======
+import { Trash2, CalendarClock, CalendarDays } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { validateMeaningfulText, liveTextHint } from "@/lib/validateText";
 import { GuardedInput, GuardedTextarea } from "@/components/GuardedField";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+<<<<<<< HEAD
 import { firePush } from "@/lib/push.functions";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { SectionCard, Empty } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -85,7 +95,10 @@ import { fmtDate, fmtTime } from "@/lib/leave";
 export const Route = createFileRoute("/notices")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Notices — CSC Leave Management" },
       {
         name: "description",
@@ -113,6 +126,7 @@ function NoticesPage() {
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
   const [busy, setBusy] = useState(false);
+<<<<<<< HEAD
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
 
   // Fetch which notices this user has already read from Supabase
@@ -129,6 +143,8 @@ function NoticesPage() {
       return data;
     },
   });
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const { data: departments = [] } = useQuery({
     queryKey: ["departments-list"],
@@ -143,6 +159,7 @@ function NoticesPage() {
   const { data: notices = [] } = useQuery({
     queryKey: ["notices"],
     queryFn: async () => {
+<<<<<<< HEAD
       const today = new Date().toISOString().slice(0, 10);
 
       // Auto-delete notices whose event_date has passed
@@ -152,6 +169,8 @@ function NoticesPage() {
         .not("event_date", "is", null)
         .lt("event_date", today);
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       const { data, error } = await supabase
         .from("notices")
         .select("id, title, body, department_id, created_by, created_at, event_date, event_time, departments(name)")
@@ -170,6 +189,7 @@ function NoticesPage() {
       const bodyCheck = validateMeaningfulText(body, "Details");
       if (!bodyCheck.valid) return toast.error(bodyCheck.error!);
     }
+<<<<<<< HEAD
     // Validate event date is not in the past
     if (eventDate) {
       const today = new Date();
@@ -177,6 +197,8 @@ function NoticesPage() {
       const chosen = new Date(eventDate);
       if (chosen < today) return toast.error("Event date cannot be in the past");
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const departmentId = isPrincipal
       ? scope === "all"
         ? null
@@ -195,6 +217,7 @@ function NoticesPage() {
     });
     setBusy(false);
     if (error) return toast.error(error.message);
+<<<<<<< HEAD
     // Notify recipients — exclude the poster themselves
     // departmentId = null means college-wide (principal posting to all)
     const recipientIds = departmentId
@@ -216,6 +239,8 @@ function NoticesPage() {
       targetUrl: "/notices",
       excludeUserIds: profile?.id ? [profile.id] : [],
     });
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setTitle("");
     setBody("");
     setEventDate("");
@@ -242,6 +267,7 @@ function NoticesPage() {
       }
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+<<<<<<< HEAD
         <SectionCard
           title="Published notices"
           subtitle={notices.length > 0 ? `${notices.length} active notice${notices.length !== 1 ? "s" : ""}` : "No active notices"}
@@ -262,10 +288,16 @@ function NoticesPage() {
                 <p>• Notices with past event dates are auto-removed</p>
               </div>
             </div>
+=======
+        <SectionCard title="Published notices">
+          {notices.length === 0 ? (
+            <Empty>No notices published yet.</Empty>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           ) : (
             <ul className="space-y-3">
               {notices.map((n) => {
                 const hasEvent = n.event_date;
+<<<<<<< HEAD
                 const isLong = (n.body?.length ?? 0) > 120;
                 return (
                   <NoticeCard
@@ -279,6 +311,37 @@ function NoticesPage() {
                     isRead={readIds.has(n.id)}
                     onAck={(id) => setReadIds(prev => new Set([...prev, id]))}
                   />
+=======
+                return (
+                  <li key={n.id} className={`rounded-lg border p-4 space-y-2 ${hasEvent ? "border-primary/30 bg-primary/4" : "border-border"}`}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold leading-snug">{n.title}</p>
+                        {n.body && <p className="mt-1 text-sm text-muted-foreground">{n.body}</p>}
+                      </div>
+                      {n.created_by === profile?.id && (
+                        <Button variant="ghost" size="icon" className="size-8 shrink-0" onClick={() => remove(n.id)}>
+                          <Trash2 className="size-4" />
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                      <span>Posted {fmtDate(new Date(n.created_at))}</span>
+                      <span>·</span>
+                      <span>{(n.departments as { name: string } | null)?.name ?? "All departments"}</span>
+                      {hasEvent && (
+                        <>
+                          <span>·</span>
+                          <span className="flex items-center gap-1 font-medium text-primary">
+                            <CalendarClock className="size-3" />
+                            Event: {fmtDate(n.event_date!)}
+                            {n.event_time && ` at ${fmtTime(n.event_time)}`}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </li>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 );
               })}
             </ul>
@@ -309,9 +372,12 @@ function NoticesPage() {
                 value={body}
                 onChange={setBody}
               />
+<<<<<<< HEAD
               <p className="text-[10px] text-muted-foreground">
                 Tip: Use <code className="bg-muted px-1 rounded">**bold**</code>, <code className="bg-muted px-1 rounded">*italic*</code>, or <code className="bg-muted px-1 rounded">- bullet</code> for formatting.
               </p>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </div>
 
             {/* Event date / time — optional */}
@@ -325,7 +391,10 @@ function NoticesPage() {
                   <Input
                     type="date"
                     value={eventDate}
+<<<<<<< HEAD
                     min={new Date().toISOString().slice(0, 10)}
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     onChange={(e) => setEventDate(e.target.value)}
                     className="h-8 text-sm"
                   />
@@ -375,6 +444,7 @@ function NoticesPage() {
     </AppShell>
   );
 }
+<<<<<<< HEAD
 
 type NoticeRow = { id: string; title: string; body: string | null; event_date: string | null; event_time: string | null; created_at: string; created_by: string | null; departments: { name: string } | null };
 
@@ -458,3 +528,5 @@ function NoticeCard({ notice: n, hasEvent, isLong, canDelete, onDelete, userId, 
     </li>
   );
 }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

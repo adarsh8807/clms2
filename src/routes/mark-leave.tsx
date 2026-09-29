@@ -25,7 +25,10 @@ import { LEAVE_TYPES, todayISO, type LeaveType } from "@/lib/leave";
 export const Route = createFileRoute("/mark-leave")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Mark Leave for a Teacher — CSC Leave Management" },
       {
         name: "description",
@@ -68,9 +71,13 @@ function MarkLeavePage() {
         .eq("role", "admin");
       const adminIds = new Set((adminRoles ?? []).map((r) => r.user_id));
 
+<<<<<<< HEAD
       let q = supabase.from("profiles").select("id, full_name, designation, department_id")
         .eq("approved", true)   // Fix: only show fully approved teachers
         .eq("hr_approved", true); // Fix: exclude teachers pending HR onboarding
+=======
+      let q = supabase.from("profiles").select("id, full_name, designation, department_id");
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       if (!isPrincipal) q = q.eq("department_id", profile!.department_id ?? "");
       const { data, error } = await q.neq("id", profile!.id).order("full_name");
       if (error) throw error;
@@ -88,12 +95,15 @@ function MarkLeavePage() {
     if (reason.trim().length < 5) return toast.error("Please give a reason");
 
     setBusy(true);
+<<<<<<< HEAD
     // Insert the leave. total_days is computed by the DB trigger (apply_leave_accounting).
     // We also explicitly set paid_days / unpaid_days so the payment_decision is honoured
     // regardless of what the trigger would derive from quota — the trigger runs BEFORE INSERT
     // and sets these fields, but the explicit values here will be written by the AFTER INSERT path
     // or overridden by the ON CONFLICT update if we upsert. Since this is a manual admin/HOD record,
     // we set them directly so payroll deductions are always correct.
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const { error } = await supabase.from("leave_requests").insert({
       teacher_id: teacherId,
       leave_type: leaveType,

@@ -6,8 +6,12 @@ export type LeaveStatus =
   | "pending_principal"
   | "hod_approved"
   | "approved"
+<<<<<<< HEAD
   | "rejected"
   | "cancelled";
+=======
+  | "rejected";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export type DocStatus = "required" | "uploaded" | "verified";
 
@@ -78,6 +82,7 @@ export const SESSION_LABEL: Record<LeaveSession, string> = {
 };
 
 export const STATUS_LABEL: Record<LeaveStatus, string> = {
+<<<<<<< HEAD
   pending_hod:       "Awaiting HOD",
   hod_recommended:   "HOD Recommended",
   pending_principal: "With Principal",
@@ -85,6 +90,14 @@ export const STATUS_LABEL: Record<LeaveStatus, string> = {
   approved:          "Approved",
   rejected:          "Rejected",
   cancelled:         "Withdrawn",
+=======
+  pending_hod: "Pending with HOD",
+  hod_recommended: "HOD Recommended",
+  pending_principal: "Pending with Principal",
+  hod_approved: "Approved",
+  approved: "Approved",
+  rejected: "Rejected",
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 };
 
 export function statusClasses(status: LeaveStatus) {
@@ -93,6 +106,7 @@ export function statusClasses(status: LeaveStatus) {
     case "hod_approved":
       return "bg-success/12 text-success border-success/25";
     case "hod_recommended":
+<<<<<<< HEAD
       // HOD has reviewed & recommended — teal, distinct from plain pending
       return "bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-500/25";
     case "pending_principal":
@@ -104,6 +118,13 @@ export function statusClasses(status: LeaveStatus) {
       return "bg-muted text-muted-foreground border-muted";
     default:
       // pending_hod — amber, first stage
+=======
+    case "pending_principal":
+      return "bg-info/12 text-info border-info/25";
+    case "rejected":
+      return "bg-destructive/12 text-destructive border-destructive/25";
+    default:
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       return "bg-warning/18 text-warning-foreground border-warning/35";
   }
 }

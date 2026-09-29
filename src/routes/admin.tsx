@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useRef, useState, useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -7,6 +8,15 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { adminCreateStaff, adminDeleteStaff, directPasswordReset, unlockAccount, fetchPasswordResetRequests, completePasswordResetRequest } from "@/lib/admin.functions";
 import { firePush } from "@/lib/push.functions";
+=======
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Loader2, Trash2, Check, FileText, Download, BarChart2, ChevronRight } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { adminCreateStaff, adminDeleteStaff, directPasswordReset, unlockAccount } from "@/lib/admin.functions";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { SectionCard, StatCard, Empty } from "@/components/ui-bits";
@@ -15,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+<<<<<<< HEAD
 import { GuardedInput, type GuardHandle } from "@/components/GuardedField";
 import { groqModerationCheck, localBlocklistCheck } from "@/lib/textGuard";
 import {
@@ -34,6 +45,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   Select,
   SelectContent,
@@ -45,7 +58,10 @@ import {
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Admin Panel — CSC Leave Management" },
       {
         name: "description",
@@ -71,7 +87,10 @@ type ProfilePatch = {
   designation?: string;
   department_id?: string | null;
   monthly_salary?: number;
+<<<<<<< HEAD
   cl_quota?: number;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 };
 
 type StaffRow = {
@@ -85,7 +104,10 @@ type StaffRow = {
   account_locked: boolean;
   role: "teacher" | "hod" | "principal" | "admin" | null;
   deptName: string;
+<<<<<<< HEAD
   cl_quota: number | null;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 };
 
 function AdminPage() {
@@ -104,18 +126,31 @@ function AdminPage() {
     queryKey: ["admin-staff"],
     queryFn: async () => {
       const [{ data: profiles, error }, { data: roles }, { data: depts }] = await Promise.all([
+<<<<<<< HEAD
         (supabase as any)
           .from("profiles")
           .select("id, full_name, user_id, designation, department_id, monthly_salary, approved, account_locked, cl_quota, hr_approved")
+=======
+        supabase
+          .from("profiles")
+          .select("id, full_name, user_id, designation, department_id, monthly_salary, approved, account_locked")
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           .order("full_name"),
         supabase.from("user_roles").select("user_id, role"),
         supabase.from("departments").select("id, name"),
       ]);
       if (error) throw error;
+<<<<<<< HEAD
       return ((profiles ?? []) as any[]).map((p: any) => ({
         ...p,
         monthly_salary: Number(p.monthly_salary ?? 0),
         account_locked: Boolean(p.account_locked),
+=======
+      return (profiles ?? []).map((p) => ({
+        ...p,
+        monthly_salary: Number(p.monthly_salary ?? 0),
+        account_locked: Boolean((p as any).account_locked),
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         role: ((roles ?? []).find((r) => r.user_id === p.id)?.role ?? null) as StaffRow["role"],
         deptName: (depts ?? []).find((d) => d.id === p.department_id)?.name ?? "—",
       }));
@@ -146,6 +181,7 @@ function AdminPage() {
     },
   });
 
+<<<<<<< HEAD
   // Delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
 
@@ -173,6 +209,11 @@ function AdminPage() {
     patch.mutate({ id: approvalDialog.id, values: { approved: true, monthly_salary: salary, cl_quota: clQuota } });
   }
 
+=======
+  const pending = staff.filter((s) => !s.approved);
+  const payroll = staff.filter((s) => s.role !== "admin").reduce((s, r) => s + r.monthly_salary, 0);
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin-staff"] });
     qc.invalidateQueries({ queryKey: ["admin-stats"] });
@@ -189,6 +230,7 @@ function AdminPage() {
       if (error) throw error;
       return { collegeId: data?.user_id as string | undefined, approved: values.approved };
     },
+<<<<<<< HEAD
     onSuccess: (result, { id }) => {
       invalidate();
       setApprovalDialog(null);
@@ -200,6 +242,12 @@ function AdminPage() {
           body: `Your registration has been approved. Your college ID is ${result.collegeId}`,
           targetUrl: "/dashboard",
         });
+=======
+    onSuccess: (result) => {
+      invalidate();
+      if (result?.approved && result.collegeId) {
+        toast.success(`Approved — college ID ${result.collegeId}`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       } else {
         toast.success("Saved");
       }
@@ -286,14 +334,22 @@ function AdminPage() {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
+<<<<<<< HEAD
                       onClick={() => openApprovalDialog(p)}
+=======
+                      onClick={() => patch.mutate({ id: p.id, values: { approved: true } })}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     >
                       <Check className="size-4" /> Approve
                     </Button>
                     <Button
                       size="sm"
                       variant="destructive"
+<<<<<<< HEAD
                       onClick={() => setDeleteConfirm({ id: p.id, name: p.full_name })}
+=======
+                      onClick={() => removeStaff.mutate(p.id)}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                       disabled={removeStaff.isPending}
                     >
                       Reject
@@ -305,6 +361,7 @@ function AdminPage() {
           )}
         </SectionCard>
 
+<<<<<<< HEAD
         {/* Approval dialog */}
         <Dialog open={!!approvalDialog} onOpenChange={(v) => !v && setApprovalDialog(null)}>
           <DialogContent className="w-[calc(100vw-32px)] max-w-md">
@@ -496,10 +553,33 @@ function AllStaffCard({
                   onChangeRole={(role, deptId) => onChangeRole(s.id, role, deptId)}
                   onRemove={() => onRemove(s.id, s.full_name)}
                   onInvalidate={onInvalidate}
+=======
+        <AddStaffCard departments={departments} onDone={invalidate} />
+
+        <SectionCard title="All staff" subtitle="Edit salary, role, department or remove an account">
+          {isLoading ? (
+            <Empty>Loading…</Empty>
+          ) : staff.length === 0 ? (
+            <Empty>No staff yet.</Empty>
+          ) : (
+            <div className="space-y-3">
+              {staff.map((s) => (
+                <StaffRowCard
+                  key={s.id}
+                  row={s}
+                  departments={departments}
+                  onSaveProfile={(values) => patch.mutate({ id: s.id, values })}
+                  onChangeRole={(role, departmentId) =>
+                    changeRole.mutate({ id: s.id, role, departmentId })
+                  }
+                  onRemove={() => removeStaff.mutate(s.id)}
+                  onInvalidate={invalidate}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 />
               ))}
             </div>
           )}
+<<<<<<< HEAD
 
           {/* Pagination */}
           {totalPages > 1 && (
@@ -569,6 +649,13 @@ function CollapsibleStaffRow({
         </div>
       )}
     </div>
+=======
+        </SectionCard>
+
+        <DepartmentsCard departments={departments} />
+      </div>
+    </AppShell>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   );
 }
 
@@ -591,7 +678,10 @@ function StaffRowCard({
   const [designation, setDesignation] = useState(row.designation);
   const [dept, setDept] = useState(row.department_id ?? "none");
   const [role, setRole] = useState<StaffRow["role"]>(row.role);
+<<<<<<< HEAD
   const [clQuota, setClQuota] = useState<string>(row.cl_quota != null ? String(row.cl_quota) : "12");
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [resetPw, setResetPw] = useState("");
   const [resetBusy, setResetBusy] = useState(false);
   const resetFn = useServerFn(directPasswordReset);
@@ -623,6 +713,7 @@ function StaffRowCard({
   }
 
   const departmentId = dept === "none" ? null : dept;
+<<<<<<< HEAD
   // CL quota only applies to teachers and HODs — principals and admins don't have leave quotas
   const isTeacherOrHod = row.role === "teacher" || row.role === "hod" || row.role === null;
   const originalClQuota = row.cl_quota != null ? String(row.cl_quota) : "12";
@@ -637,11 +728,44 @@ function StaffRowCard({
     <div className="p-4 space-y-3">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {isTeacherOrHod && (
+=======
+  const dirtyProfile =
+    Number(salary) !== row.monthly_salary ||
+    designation !== row.designation ||
+    departmentId !== row.department_id;
+  const dirtyRole = role !== row.role;
+
+  return (
+    <div className="rounded-lg border border-border p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="text-sm font-semibold">{row.full_name}</p>
+          <p className="text-xs text-muted-foreground">{row.user_id}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          {row.account_locked && (
+            <Badge variant="destructive">Locked</Badge>
+          )}
+          {row.approved ? (
+            <Badge variant="secondary">Approved</Badge>
+          ) : (
+            <Badge variant="destructive">Pending</Badge>
+          )}
+          <Button size="icon" variant="ghost" onClick={onRemove} aria-label="Remove staff member">
+            <Trash2 className="size-4 text-destructive" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {row.role !== "principal" && (
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <div className="space-y-1.5">
           <Label className="text-xs">Monthly salary</Label>
           <Input type="number" min={0} value={salary} onChange={(e) => setSalary(e.target.value)} />
         </div>
         )}
+<<<<<<< HEAD
         {isTeacherOrHod && (
         <div className="space-y-1.5">
           <Label className="text-xs">Casual leave quota (days/yr)</Label>
@@ -656,6 +780,8 @@ function StaffRowCard({
           />
         </div>
         )}
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <div className="space-y-1.5">
           <Label className="text-xs">Designation</Label>
           <Select value={designation} onValueChange={setDesignation}>
@@ -703,16 +829,25 @@ function StaffRowCard({
         <Button
           size="sm"
           disabled={!dirtyProfile}
+<<<<<<< HEAD
           onClick={async () => {
             const quota = Number(clQuota);
             if (isTeacherOrHod && (isNaN(quota) || quota < 0 || quota > 365)) return toast.error("Casual leave quota must be between 0 and 365");
+=======
+          onClick={() =>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             onSaveProfile({
               monthly_salary: Number(salary) || 0,
               designation,
               department_id: departmentId,
+<<<<<<< HEAD
               ...(isTeacherOrHod ? { cl_quota: quota } : {}),
             });
           }}
+=======
+            })
+          }
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         >
           Save details
         </Button>
@@ -724,14 +859,25 @@ function StaffRowCard({
         >
           Update role
         </Button>
+<<<<<<< HEAD
+=======
+        {!row.approved && (
+          <Button size="sm" variant="secondary" onClick={() => onSaveProfile({ approved: true })}>
+            Approve
+          </Button>
+        )}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {row.account_locked && row.role !== "admin" && (
           <Button size="sm" variant="outline" onClick={handleUnlock}>
             Unlock account
           </Button>
         )}
+<<<<<<< HEAD
         <Button size="sm" variant="ghost" className="text-destructive hover:bg-destructive/10 ml-auto" onClick={onRemove}>
           <Trash2 className="size-3.5 mr-1" /> Remove
         </Button>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
 
       {/* Direct password reset — admin only, not for other admins */}
@@ -769,7 +915,10 @@ function AddStaffCard({
   onDone: () => void;
 }) {
   const createFn = useServerFn(adminCreateStaff);
+<<<<<<< HEAD
   const fullNameGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -810,21 +959,33 @@ function AddStaffCard({
     >
       <form
         className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
+<<<<<<< HEAD
         onSubmit={async (e) => {
           e.preventDefault();
           const guardErr = await fullNameGuardRef.current?.validateNow();
           if (guardErr) return;
+=======
+        onSubmit={(e) => {
+          e.preventDefault();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           create.mutate();
         }}
       >
         <div className="space-y-1.5">
           <Label>Full name</Label>
+<<<<<<< HEAD
           <GuardedInput
             ref={fullNameGuardRef}
             fieldName="Full name"
             required
             value={form.fullName}
             onChange={(v) => setForm({ ...form, fullName: v })}
+=======
+          <Input
+            required
+            value={form.fullName}
+            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           />
         </div>
         <div className="space-y-1.5">
@@ -1078,7 +1239,10 @@ function ExportsCard() {
           .select("id, teacher_id, leave_type, from_date, to_date, session, total_days, paid_days, unpaid_days, status, reason")
           .gte("from_date", `${year}-01-01`)
           .lte("from_date", `${year}-12-31`)
+<<<<<<< HEAD
           .in("status", ["approved", "hod_approved"])  // Fix: exclude pending/rejected/cancelled from analytics
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           .order("from_date"),
         supabase
           .from("profiles")
@@ -1158,21 +1322,32 @@ function ExportsCard() {
       const mod = REPORT_MODULES.find((m) => m.key === activeModule)!;
       const headers = Object.keys(rows[0]);
 
+<<<<<<< HEAD
       // HTML escape to prevent XSS in print export
       const escHtml = (s: unknown) => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       // Build a printable HTML table and open in new window
       const tableRows = rows
         .map(
           (r) =>
+<<<<<<< HEAD
             `<tr>${headers.map((h) => `<td style="border:1px solid #ddd;padding:6px 10px;font-size:12px">${escHtml(r[h])}</td>`).join("")}</tr>`,
+=======
+            `<tr>${headers.map((h) => `<td style="border:1px solid #ddd;padding:6px 10px;font-size:12px">${r[h] ?? ""}</td>`).join("")}</tr>`,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         )
         .join("");
       const html = `
         <html><head><title>${mod.label} — ${year}</title>
         <style>body{font-family:sans-serif;margin:24px}h1{font-size:18px;margin-bottom:4px}p{color:#666;font-size:13px;margin-bottom:16px}table{border-collapse:collapse;width:100%}th{background:#4f46e5;color:#fff;padding:7px 10px;font-size:12px;text-align:left}tr:nth-child(even){background:#f5f5f5}@media print{button{display:none}}</style>
         </head><body>
+<<<<<<< HEAD
         <h1>${escHtml(mod.label)}</h1><p>${escHtml(mod.description)} · ${year}</p>
+=======
+        <h1>${mod.label}</h1><p>${mod.description} · ${year}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
         <tbody>${tableRows}</tbody></table>
         <br/><button onclick="window.print()">Print / Save as PDF</button>
@@ -1222,7 +1397,11 @@ function ExportsCard() {
             <button
               type="button"
               onClick={() => setActiveModule(m.key)}
+<<<<<<< HEAD
               className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60 ${activeModule === m.key ? "bg-primary/10" : ""}`}
+=======
+              className={`flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/60 ${activeModule === m.key ? "bg-primary/8" : ""}`}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             >
               <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl ${activeModule === m.key ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
                 <FileText className="size-4" />
@@ -1268,8 +1447,11 @@ function ExportsCard() {
 function DepartmentsCard({ departments }: { departments: { id: string; name: string }[] }) {
   const qc = useQueryClient();
   const [name, setName] = useState("");
+<<<<<<< HEAD
   const deptNameGuardRef = useRef<GuardHandle>(null);
   const [deptDeleteConfirm, setDeptDeleteConfirm] = useState<{ id: string; name: string } | null>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const add = useMutation({
     mutationFn: async () => {
@@ -1300,6 +1482,7 @@ function DepartmentsCard({ departments }: { departments: { id: string; name: str
     <SectionCard title="Departments" subtitle="Add or remove departments">
       <form
         className="mb-4 flex gap-2"
+<<<<<<< HEAD
         onSubmit={async (e) => {
           e.preventDefault();
           if (!name.trim()) return;
@@ -1314,6 +1497,17 @@ function DepartmentsCard({ departments }: { departments: { id: string; name: str
           placeholder="New department name"
           value={name}
           onChange={setName}
+=======
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (name.trim()) add.mutate();
+        }}
+      >
+        <Input
+          placeholder="New department name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         />
         <Button type="submit" disabled={add.isPending}>
           Add
@@ -1329,7 +1523,11 @@ function DepartmentsCard({ departments }: { departments: { id: string; name: str
               <Button
                 size="icon"
                 variant="ghost"
+<<<<<<< HEAD
                 onClick={() => setDeptDeleteConfirm({ id: d.id, name: d.name })}
+=======
+                onClick={() => remove.mutate(d.id)}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 aria-label={`Remove ${d.name}`}
               >
                 <Trash2 className="size-4 text-destructive" />
@@ -1338,6 +1536,7 @@ function DepartmentsCard({ departments }: { departments: { id: string; name: str
           ))}
         </ul>
       )}
+<<<<<<< HEAD
       <AlertDialog open={!!deptDeleteConfirm} onOpenChange={(v) => !v && setDeptDeleteConfirm(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -1447,3 +1646,8 @@ function PasswordResetRequests() {
     </SectionCard>
   );
 }
+=======
+    </SectionCard>
+  );
+}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

@@ -9,17 +9,24 @@ import { SectionCard, StatCard, StatusBadge, Empty } from "@/components/ui-bits"
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { fmtDate, leaveTypeLabel, money, perDaySalary, LEAVE_TYPES, type LeaveStatus, type LeaveType } from "@/lib/leave";
+<<<<<<< HEAD
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, Download } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import { savePDF, saveXLSX } from "../lib/download";
 import { toast } from "sonner";
+=======
+import { ChevronLeft, ChevronRight } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export const Route = createFileRoute("/payroll")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Payroll — CSC Leave Management" },
       {
         name: "description",
@@ -40,6 +47,7 @@ const iso = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 const CURRENT_YEAR = new Date().getFullYear();
+<<<<<<< HEAD
 const MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const YEARS = Array.from({ length: 5 }, (_, i) => String(CURRENT_YEAR - i));
 
@@ -70,6 +78,21 @@ function PayrollPage() {
       return data ?? [];
     },
   });
+=======
+const YEARS = Array.from({ length: 5 }, (_, i) => String(CURRENT_YEAR - i));
+
+function PayrollPage() {
+  const { profile } = useAuth();
+  const [month, setMonth] = useState(() => new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+  const [filterYear, setFilterYear] = useState(String(CURRENT_YEAR));
+  const [filterType, setFilterType] = useState("all");
+
+  const fromISO = iso(new Date(Number(filterYear), month.getMonth(), 1));
+  const toISO   = iso(new Date(Number(filterYear), month.getMonth() + 1, 0));
+
+  // Sync month year with filterYear
+  const effectiveMonth = new Date(Number(filterYear), month.getMonth(), 1);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const { data: allLeaves = [] } = useQuery({
     queryKey: ["payroll-leaves", profile?.id, fromISO],
@@ -96,6 +119,7 @@ function PayrollPage() {
   const salary = Number(profile?.monthly_salary ?? 0);
   const dayRate = perDaySalary(salary);
 
+<<<<<<< HEAD
   // YTD month-by-month breakdown
   const ytdRows = useMemo(() => {
     if (!salary) return [];
@@ -117,6 +141,8 @@ function PayrollPage() {
     });
   }, [yearlyLeaves, salary, filterYear, dayRate]);
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const totals = useMemo(() => {
     // Only deduct for leaves that have BOTH HOD and Principal approval
 
@@ -133,6 +159,7 @@ function PayrollPage() {
     return { unpaid, paid, deduction, net: Math.max(salary - deduction, 0), fullyApproved };
   }, [leaves, dayRate, salary]);
 
+<<<<<<< HEAD
   const chartData = [
     { name: "Net Pay", value: totals.net, color: "#22c55e" },
     { name: "Deduction", value: totals.deduction, color: "#ef4444" },
@@ -360,10 +387,13 @@ function PayrollPage() {
     deduction:   Math.round(yearlyLeaves.reduce((s, l) => s + Number(l.unpaid_days), 0) * dayRate),
   };
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   return (
     <AppShell title="Payroll" subtitle="Salary and leave deductions">
       <div className="space-y-6">
 
+<<<<<<< HEAD
         {/* Year-to-date month-by-month breakdown — collapsible */}
         {salary > 0 && ytdRows.length > 0 && (
           <div className="rounded-xl border border-border bg-card overflow-hidden">
@@ -467,11 +497,19 @@ function PayrollPage() {
         <div className="flex flex-wrap items-center gap-2">
           <Select value={filterYear} onValueChange={setFilterYear}>
             <SelectTrigger className="w-24 h-9 text-sm"><SelectValue /></SelectTrigger>
+=======
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Year */}
+          <Select value={filterYear} onValueChange={setFilterYear}>
+            <SelectTrigger className="w-28 h-9"><SelectValue /></SelectTrigger>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             <SelectContent>
               {YEARS.map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}
             </SelectContent>
           </Select>
 
+<<<<<<< HEAD
           <div className="flex items-center gap-0.5 rounded-lg border border-border px-1 h-9">
             <Button variant="ghost" size="icon" className="h-7 w-7"
               onClick={() => {
@@ -491,17 +529,37 @@ function PayrollPage() {
                 setMonth(next);
                 if (next.getFullYear() !== Number(filterYear)) setFilterYear(String(next.getFullYear()));
               }}>
+=======
+          {/* Month nav */}
+          <div className="flex items-center gap-1 rounded-lg border border-border px-1">
+            <Button variant="ghost" size="icon" className="h-7 w-7"
+              onClick={() => setMonth(new Date(effectiveMonth.getFullYear(), effectiveMonth.getMonth() - 1, 1))}>
+              <ChevronLeft className="size-3.5" />
+            </Button>
+            <span className="text-sm font-medium w-24 text-center">
+              {effectiveMonth.toLocaleDateString("en-GB", { month: "short", year: "numeric" })}
+            </span>
+            <Button variant="ghost" size="icon" className="h-7 w-7"
+              onClick={() => setMonth(new Date(effectiveMonth.getFullYear(), effectiveMonth.getMonth() + 1, 1))}>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <ChevronRight className="size-3.5" />
             </Button>
           </div>
 
+<<<<<<< HEAD
           <Select value={filterType} onValueChange={setFilterType}>
             <SelectTrigger className="flex-1 min-w-[140px] h-9 text-sm"><SelectValue placeholder="All types" /></SelectTrigger>
+=======
+          {/* Leave type */}
+          <Select value={filterType} onValueChange={setFilterType}>
+            <SelectTrigger className="w-44 h-9"><SelectValue placeholder="All leave types" /></SelectTrigger>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             <SelectContent>
               <SelectItem value="all">All leave types</SelectItem>
               {LEAVE_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
             </SelectContent>
           </Select>
+<<<<<<< HEAD
           <Button variant="outline" size="sm" className="ml-auto flex items-center gap-1.5" onClick={downloadPayslip}>
             <Download className="size-4" /> Download Payslip
           </Button>
@@ -511,10 +569,19 @@ function PayrollPage() {
           <StatCard label="Monthly Salary" value={money(salary)} hint={`${money(dayRate)}/day`} />
           <StatCard label="Paid Days" value={totals.paid} tone="success" hint="no deduction" />
           <StatCard label="Unpaid Days" value={totals.unpaid} tone={totals.unpaid > 0 ? "destructive" : "success"} hint="salary cut" />
+=======
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <StatCard label="Monthly Salary" value={money(salary)} hint={`${money(dayRate)} per day`} />
+          <StatCard label="Paid Leave Days" value={totals.paid} tone="success" hint="no deduction" />
+          <StatCard label="Unpaid Leave Days" value={totals.unpaid} tone="destructive" hint="salary is cut" />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           <StatCard
             label="Net Pay"
             value={money(totals.net)}
             tone={totals.deduction > 0 ? "warning" : "success"}
+<<<<<<< HEAD
             hint={totals.deduction > 0 ? `−${money(totals.deduction)}` : "full salary"}
           />
         </div>
@@ -537,6 +604,12 @@ function PayrollPage() {
           </SectionCard>
         )}
 
+=======
+            hint={totals.deduction > 0 ? `− ${money(totals.deduction)} deducted` : "full salary"}
+          />
+        </div>
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <SectionCard
           title="Salary breakdown"
           subtitle={effectiveMonth.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
@@ -566,6 +639,7 @@ function PayrollPage() {
           {leaves.length === 0 ? (
             <Empty>No leaves this month — full salary payable.</Empty>
           ) : (
+<<<<<<< HEAD
             <div className="space-y-3">
               {leaves.map((l) => {
                 const isAwaitingDecision =
@@ -610,6 +684,52 @@ function PayrollPage() {
                   </div>
                 );
               })}
+=======
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="pb-2 font-semibold">Type</th>
+                    <th className="pb-2 font-semibold">Dates</th>
+                    <th className="pb-2 font-semibold">Days</th>
+                    <th className="pb-2 font-semibold">Paid / Unpaid</th>
+                    <th className="pb-2 font-semibold">Deduction</th>
+                    <th className="pb-2 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaves.map((l) => (
+                    <tr key={l.id} className="border-t border-border">
+                      <td className="py-3 font-medium">{leaveTypeLabel(l.leave_type as LeaveType)}</td>
+                      <td className="py-3">
+                        {fmtDate(l.from_date)} – {fmtDate(l.to_date)}
+                      </td>
+                      <td className="py-3">{Number(l.total_days)}</td>
+                      <td className="py-3">
+                        {l.payment_decision === null && l.leave_type !== "casual" ? (
+                          <span className="text-muted-foreground">
+                            {l.leave_type === "medical" || l.leave_type === "duty"
+                              ? "Awaiting principal document verification"
+                              : "Awaiting principal approval"}
+                          </span>
+                        ) : (
+                          <>
+                            <span className="text-success">{Number(l.paid_days)} paid</span> ·{" "}
+                            <span className="text-destructive">{Number(l.unpaid_days)} unpaid</span>
+                          </>
+                        )}
+                      </td>
+                      <td className="py-3 font-semibold text-destructive">
+                        {Number(l.unpaid_days) > 0 ? `− ${money(Number(l.unpaid_days) * dayRate)}` : "—"}
+                      </td>
+                      <td className="py-3">
+                        <StatusBadge status={l.status as LeaveStatus} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </div>
           )}
         </SectionCard>

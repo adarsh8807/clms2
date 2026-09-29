@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -12,6 +13,15 @@ import { Tooltip as UITooltip, TooltipContent as _UITooltipContent, TooltipTrigg
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const UITooltipContent = (IS_NATIVE_APP ? () => null : _UITooltipContent) as typeof _UITooltipContent;
+=======
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import * as XLSX from "xlsx";
+import { jsPDF } from "jspdf";
+import { autoTable } from "jspdf-autotable";
+import { supabase } from "@/integrations/supabase/client";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
@@ -22,8 +32,11 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { LEAVE_TYPES, leaveTypeLabel, fmtDate, type LeaveType } from "@/lib/leave";
+<<<<<<< HEAD
 
 const MONTHS_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   FileText, BarChart2, ChevronDown,
   User, Building2, ClipboardList, CalendarDays, Wallet, IndianRupee,
@@ -33,7 +46,10 @@ import {
 export const Route = createFileRoute("/admin-reports")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Reports — CSC Leave Management" },
       { name: "description", content: "College-wide leave analytics and exports." },
     ],
@@ -259,6 +275,7 @@ const REPORT_MODULES: {
       );
     },
   },
+<<<<<<< HEAD
   {
     key: "balances",
     label: "Leave Balances",
@@ -273,13 +290,19 @@ const REPORT_MODULES: {
         "Note": "Sync from leave_balances view",
       })),
   },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 ];
 
 function AdminReportsPage() {
   const { role } = useAuth();
+<<<<<<< HEAD
   const isPrincipal  = role === "principal";
   const isAdmin      = role === "admin";
   const showDeptTabs = isPrincipal || isAdmin; // both see department group tabs
+=======
+  const isPrincipal = role === "principal";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const [activeModule, setActiveModule] = useState("teacher");
   const [filterYear,   setFilterYear]   = useState(String(CURRENT_YEAR));
@@ -296,13 +319,21 @@ function AdminReportsPage() {
   const COMMERCE_ARTS_KEYWORDS = ["commerce", "arts", "economics", "history", "english", "sociology", "philosophy", "political", "geography", "hindi", "marathi"];
   const SCIENCE_TECH_KEYWORDS  = ["science", "technology", "physics", "chemistry", "biology", "maths", "mathematics", "computer", "it", "information", "botany", "zoology", "microbiology"];
 
+<<<<<<< HEAD
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getDeptGroup = useCallback((deptName: string): "commerce_arts" | "science_tech" | "other" => {
+=======
+  function getDeptGroup(deptName: string): "commerce_arts" | "science_tech" | "other" {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const n = (deptName ?? "").toLowerCase();
     if (SCIENCE_TECH_KEYWORDS.some((k) => n.includes(k))) return "science_tech";
     if (COMMERCE_ARTS_KEYWORDS.some((k) => n.includes(k))) return "commerce_arts";
     return "other";
+<<<<<<< HEAD
   }, []); // stable — depends only on module-level constants
+=======
+  }
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Departments
   const { data: departments = [] } = useQuery({
@@ -316,7 +347,10 @@ function AdminReportsPage() {
   // Raw leave + salary data
   const { data: reportData, isLoading } = useQuery({
     queryKey: ["admin-report-data", filterYear],
+<<<<<<< HEAD
     staleTime: 60_000,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryFn: async () => {
       const { data: leaves, error } = await supabase
         .from("leave_requests")
@@ -355,8 +389,13 @@ function AdminReportsPage() {
     },
   });
 
+<<<<<<< HEAD
   const allLeaves = useMemo(() => reportData?.leaves ?? [], [reportData]);
   const people    = useMemo(() => reportData?.people ?? {}, [reportData]);
+=======
+  const allLeaves = reportData?.leaves ?? [];
+  const people    = reportData?.people ?? {};
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Apply filters
   const filteredLeaves = useMemo(() => allLeaves.filter((l) => {
@@ -369,15 +408,25 @@ function AdminReportsPage() {
 
   // For principal: further filter by dept group tab
   const principalFilteredLeaves = useMemo(() => {
+<<<<<<< HEAD
     if (!showDeptTabs) return filteredLeaves;
+=======
+    if (!isPrincipal) return filteredLeaves;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     return filteredLeaves.filter((l) => {
       const deptName = people[l.teacher_id]?.department_name ?? "";
       const grp = getDeptGroup(deptName);
       return grp === principalDeptTab || grp === "other";
     });
+<<<<<<< HEAD
   }, [filteredLeaves, showDeptTabs, principalDeptTab, people, getDeptGroup]);
 
   const effectiveLeaves = showDeptTabs ? principalFilteredLeaves : filteredLeaves;
+=======
+  }, [filteredLeaves, isPrincipal, principalDeptTab, people]);
+
+  const effectiveLeaves = isPrincipal ? principalFilteredLeaves : filteredLeaves;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Filter people by department too (for payroll/salary modules)
   const filteredPeople = useMemo(() => {
@@ -413,7 +462,11 @@ function AdminReportsPage() {
   const monthLabel = filterMonth !== "all" ? MONTH_NAMES[Number(filterMonth) - 1] : "All Months";
 
   // ── Excel export ─────────────────────────────────────────────────────────────
+<<<<<<< HEAD
   async function exportExcel() {
+=======
+  function exportExcel() {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     if (rows.length === 0) return toast.error("No data to export");
     const mod      = activeModInfo;
     const subtitle = `${deptLabel} · ${monthLabel} · ${filterYear}`;
@@ -442,12 +495,20 @@ function AdminReportsPage() {
     ws["!freeze"] = { xSplit: 0, ySplit: 1 };
     XLSX.utils.book_append_sheet(wb, ws, mod.label.slice(0, 31));
     const filename = `${mod.label.replace(/[^a-zA-Z0-9 _-]/g, "_")}_${filterYear}${filterDept !== "all" ? `_${deptLabel}` : ""}${filterMonth !== "all" ? `_${monthLabel}` : ""}.xlsx`;
+<<<<<<< HEAD
     await saveXLSX(XLSX, wb, filename);
+=======
+    XLSX.writeFile(wb, filename);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     toast.success(`Excel exported — ${rows.length} rows`);
   }
 
   // ── PDF export ── uses jsPDF autoTable for professional output ───────────────
+<<<<<<< HEAD
   async function exportPDF() {
+=======
+  function exportPDF() {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     if (rows.length === 0) return toast.error("No data to export");
     setExporting(true);
     try {
@@ -517,7 +578,11 @@ function AdminReportsPage() {
       });
 
       const filename = `${mod.label.replace(/[^a-zA-Z0-9 _-]/g, "_")}_${filterYear}${filterDept !== "all" ? `_${deptLabel}` : ""}${filterMonth !== "all" ? `_${monthLabel}` : ""}.pdf`;
+<<<<<<< HEAD
       await savePDF(doc, filename);
+=======
+      doc.save(filename);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       toast.success(`PDF exported — ${rows.length} rows`);
     } finally { setExporting(false); }
   }
@@ -526,8 +591,13 @@ function AdminReportsPage() {
     <AppShell title="Reports" subtitle="College-wide leave analytics and exports">
       <div className="space-y-4">
 
+<<<<<<< HEAD
         {/* ── Principal + Admin: Department group tabs (above everything) ── */}
         {showDeptTabs && (
+=======
+        {/* ── Principal: Department group tabs (above everything) ─────────── */}
+        {isPrincipal && (
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           <div className="rounded-xl border border-border overflow-hidden">
             <div className="flex">
               {([
@@ -539,7 +609,11 @@ function AdminReportsPage() {
                   onClick={() => setPrincipalDeptTab(id)}
                   className={`flex-1 flex items-center justify-center gap-2.5 px-5 py-3.5 text-sm font-semibold border-b-2 transition-all ${
                     principalDeptTab === id
+<<<<<<< HEAD
                       ? "border-primary bg-primary/10 text-primary"
+=======
+                      ? "border-primary bg-primary/8 text-primary"
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                       : "border-transparent bg-muted/30 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   }`}
                 >
@@ -668,7 +742,11 @@ function AdminReportsPage() {
                 <div className="space-y-1 col-span-2 sm:col-span-1">
                   <label className="text-xs text-muted-foreground">Department</label>
                   <Select value={filterDept} onValueChange={setFilterDept}>
+<<<<<<< HEAD
                     <SelectTrigger className="h-8 text-xs w-full min-w-[130px]"><SelectValue /></SelectTrigger>
+=======
+                    <SelectTrigger className="h-8 text-xs w-full"><SelectValue /></SelectTrigger>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     <SelectContent>
                       <SelectItem value="all">All departments</SelectItem>
                       {departments.map((d) => (
@@ -747,6 +825,7 @@ function AdminReportsPage() {
               )}
             </div>
 
+<<<<<<< HEAD
             {/* Department-wise leave bar chart */}
             {(() => {
               const deptCounts: Record<string, number> = {};
@@ -781,6 +860,8 @@ function AdminReportsPage() {
               );
             })()}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             {/* Data preview */}
             <SectionCard
               title={activeModInfo.label}
@@ -852,6 +933,7 @@ function AdminReportsPage() {
 
               {/* Export buttons */}
               <div className="flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t border-border">
+<<<<<<< HEAD
                 <UITooltip>
                   <UITooltipTrigger asChild>
                     <Button variant="outline" className="gap-2 flex-1" onClick={exportPDF} disabled={exporting || rows.length === 0}>
@@ -870,19 +952,33 @@ function AdminReportsPage() {
                   </UITooltipTrigger>
                   <UITooltipContent side="bottom">Export this report as an Excel spreadsheet</UITooltipContent>
                 </UITooltip>
+=======
+                <Button variant="outline" className="gap-2 flex-1" onClick={exportPDF} disabled={exporting || rows.length === 0}>
+                  <FileText className="size-4 text-red-600 shrink-0" />
+                  {exporting ? "Preparing…" : "Download PDF"}
+                </Button>
+                <Button variant="outline" className="gap-2 flex-1" onClick={exportExcel} disabled={rows.length === 0}>
+                  <BarChart2 className="size-4 text-emerald-600 shrink-0" />
+                  Download Excel
+                </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               </div>
             </SectionCard>
           </div>
         </div>
+<<<<<<< HEAD
 
         {/* Leave balances overview (if balances module active) */}
         {activeModule === "balances" && (
           <LeaveBalancesOverview people={filteredPeople} filterYear={filterYear} />
         )}
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
     </AppShell>
   );
 }
+<<<<<<< HEAD
 
 function LeaveBalancesOverview({ people, filterYear }: { people: PeopleMap; filterYear: string }) {
   const year = Number(filterYear);
@@ -949,3 +1045,5 @@ function LeaveBalancesOverview({ people, filterYear }: { people: PeopleMap; filt
     </SectionCard>
   );
 }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

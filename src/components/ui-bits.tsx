@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 import { memo, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { statusClasses, STATUS_LABEL, type LeaveStatus } from "@/lib/leave";
 import { CheckCircle2, Clock, XCircle, ChevronRight } from "lucide-react";
+=======
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { statusClasses, STATUS_LABEL, type LeaveStatus } from "@/lib/leave";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 export function SectionCard({
   title,
@@ -17,12 +23,21 @@ export function SectionCard({
   className?: string;
 }) {
   return (
+<<<<<<< HEAD
     <section className={cn("surface p-5 sm:p-6", className)}>
       {(title || action) && (
         <header className="mb-5 flex items-start justify-between gap-3">
           <div>
             {title && <h2 className="text-base font-bold tracking-tight">{title}</h2>}
             {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
+=======
+    <section className={cn("surface p-5", className)}>
+      {(title || action) && (
+        <header className="mb-4 flex items-start justify-between gap-3">
+          <div>
+            {title && <h2 className="text-base font-bold tracking-tight">{title}</h2>}
+            {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </div>
           {action}
         </header>
@@ -32,23 +47,34 @@ export function SectionCard({
   );
 }
 
+<<<<<<< HEAD
 export const StatCard = memo(function StatCard({
+=======
+export function StatCard({
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   label,
   value,
   hint,
   tone = "default",
+<<<<<<< HEAD
   onClick,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }: {
   label: string;
   value: ReactNode;
   hint?: string;
   tone?: "default" | "success" | "destructive" | "warning";
+<<<<<<< HEAD
   onClick?: () => void;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }) {
   const toneClass = {
     default: "text-foreground",
     success: "text-success",
     destructive: "text-destructive",
+<<<<<<< HEAD
     warning: "text-warning",
   }[tone];
   return (
@@ -59,11 +85,18 @@ export const StatCard = memo(function StatCard({
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => { if (e.key === "Enter") onClick(); } : undefined}
     >
+=======
+    warning: "text-warning-foreground",
+  }[tone];
+  return (
+    <div className="surface p-4">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <p className="text-xs font-medium text-muted-foreground">{label}</p>
       <p className={cn("mt-1 text-2xl font-extrabold tracking-tight", toneClass)}>{value}</p>
       {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
+<<<<<<< HEAD
 });
 
 export function StatCardSkeleton() {
@@ -99,20 +132,32 @@ const STATUS_ICON: Record<LeaveStatus, React.ReactNode> = {
   cancelled:         <XCircle      className="size-3 shrink-0" />,
 };
 
+=======
+}
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 export function StatusBadge({ status }: { status: LeaveStatus }) {
   return (
     <span
       className={cn(
+<<<<<<< HEAD
         "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
         statusClasses(status),
       )}
     >
       {STATUS_ICON[status]}
+=======
+        "inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold",
+        statusClasses(status),
+      )}
+    >
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       {STATUS_LABEL[status]}
     </span>
   );
 }
 
+<<<<<<< HEAD
 export function Empty({ children, illustration = "inbox" }: { children: ReactNode; illustration?: "inbox" | "calendar" | "check" | "search" }) {
   const svgs: Record<string, ReactNode> = {
     inbox: (
@@ -152,4 +197,8 @@ export function Empty({ children, illustration = "inbox" }: { children: ReactNod
       <p>{children}</p>
     </div>
   );
+=======
+export function Empty({ children }: { children: ReactNode }) {
+  return <p className="py-8 text-center text-sm text-muted-foreground">{children}</p>;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }

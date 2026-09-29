@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useEffect, useMemo, useRef, useState } from "react";
+=======
+import { useMemo, useState } from "react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +11,11 @@ import { useAuth } from "@/lib/auth";
 import { fetchPeople } from "@/lib/people";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
+<<<<<<< HEAD
 import { SectionCard, StatusBadge, Empty, ListSkeleton } from "@/components/ui-bits";
+=======
+import { SectionCard, StatusBadge, Empty } from "@/components/ui-bits";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -39,6 +47,7 @@ import {
   type LeaveType,
   type DocStatus,
 } from "@/lib/leave";
+<<<<<<< HEAD
 import { AlertCircle, Check, CheckCircle2, ChevronRight, Clock, FileText, Gift, Lightbulb, LockKeyhole, Loader2, MessageCircle } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { GuardedInput, GuardedTextarea, type GuardHandle } from "@/components/GuardedField";
@@ -46,12 +55,21 @@ import { groqModerationCheck, localBlocklistCheck } from "@/lib/textGuard";
 import { useServerFn } from "@tanstack/react-start";
 import { firePush } from "@/lib/push.functions";
 import { directPasswordReset, fetchHodPasswordResetRequests, completeHodPasswordResetRequest } from "@/lib/admin.functions";
+=======
+import { AlertCircle, LockKeyhole, Lightbulb, FileText, CheckCircle2, Clock, ChevronRight } from "lucide-react";
+import { validateMeaningfulText, liveTextHint } from "@/lib/validateText";
+import { GuardedInput, GuardedTextarea } from "@/components/GuardedField";
+import { useServerFn } from "@tanstack/react-start";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { unlockAccount } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/requests")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Leave Requests — CSC Leave Management" },
       { name: "description", content: "Review staff leave requests, assign proxy teachers and approve or reject." },
       { property: "og:title", content: "Leave Requests — CSC Leave Management" },
@@ -78,7 +96,10 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
   const [toDate, setToDate] = useState(today);
   const [session, setSession] = useState<LeaveSession>("full_day");
   const [reason, setReason] = useState("");
+<<<<<<< HEAD
   const reasonGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -102,7 +123,10 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
         .select("id, full_name")
         .eq("department_id", deptId)
         .eq("approved", true)
+<<<<<<< HEAD
         .eq("hr_approved", true)
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         .order("full_name");
       if (error) throw error;
       return (data ?? []).filter((p) => !excludedIds.has(p.id));
@@ -154,7 +178,11 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
   });
 
   const { data: deptPeople = [] } = useQuery({
+<<<<<<< HEAD
     queryKey: ["dept-all-for-proxy", deptId, teacherId, fromDate, toDate],
+=======
+    queryKey: ["dept-all-for-proxy", deptId, teacherId],
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     enabled: !!deptId,
     queryFn: async () => {
       const { data: excludedRoles } = await supabase.from("user_roles").select("user_id")
@@ -162,6 +190,7 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
       const excludedIds = new Set((excludedRoles ?? []).map((r) => r.user_id));
 
       const { data } = await supabase.from("profiles").select("id, full_name")
+<<<<<<< HEAD
         .eq("department_id", deptId).eq("approved", true).eq("hr_approved", true).order("full_name");
 
       const candidates = (data ?? []).filter((p) => p.id !== teacherId && !excludedIds.has(p.id));
@@ -178,6 +207,10 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
       const teachersOnLeave = new Set((activeLeaves ?? []).map((l: any) => l.teacher_id));
 
       return candidates.filter((p) => !teachersOnLeave.has(p.id));
+=======
+        .eq("department_id", deptId).eq("approved", true).order("full_name");
+      return (data ?? []).filter((p) => p.id !== teacherId && !excludedIds.has(p.id));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     },
   });
 
@@ -186,6 +219,7 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
     ...manualSlots.map((s) => ({ ...s, lecture_id: "", isManual: true })),
   ], [autoSlots, manualSlots]);
 
+<<<<<<< HEAD
   function addManualSlot(_date?: string) {
     const slotDate = _date ?? fromDate;
     setManualSlots((m) => [...m, { key: `manual-${Date.now()}`, date: slotDate, start_time: "09:00", end_time: "10:00", subject: "", class_name: "" }]);
@@ -196,6 +230,10 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
     // Use holidaySet if provided (populated at submit time from the DB)
     if (holidaySet && holidaySet.has(date)) return true;
     return false;
+=======
+  function addManualSlot() {
+    setManualSlots((m) => [...m, { key: `manual-${Date.now()}`, date: fromDate, start_time: "09:00", end_time: "10:00", subject: "", class_name: "" }]);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   async function submit() {
@@ -205,6 +243,7 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
     if (overlap) return toast.error(`This teacher already has an active leave from ${fmtDate(overlap.from_date)} to ${fmtDate(overlap.to_date)}`);
     if (session !== "full_day" && fromDate !== toDate) return toast.error("Half-day leave must be a single date");
     if (reason.trim()) {
+<<<<<<< HEAD
       const guardErr = await reasonGuardRef.current?.validateNow();
       if (guardErr) return; // error already shown inline
     }
@@ -224,6 +263,17 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
       if (abusive) { toast.error("Please use appropriate language in subject and class fields"); return; }
     }
 
+=======
+      const check = validateMeaningfulText(reason, "Reason");
+      if (!check.valid) return toast.error(check.error!);
+    }
+
+    const missingProxy = allProxySlots.filter((s) => !choices[s.key]);
+    if (missingProxy.length > 0) return toast.error("Assign a proxy for every lecture before submitting");
+    const incompleteManual = manualSlots.some((s) => !s.subject.trim() || !s.class_name.trim());
+    if (incompleteManual) return toast.error("Fill subject and class for every manual proxy slot");
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setBusy(true);
 
     // 1. Count working days
@@ -279,10 +329,14 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
     }
 
     setBusy(false);
+<<<<<<< HEAD
     const unassigned = allProxySlots.filter((s) => !choices[s.key]).length;
     const teacherName = teachers.find((t) => t.id === teacherId)?.full_name;
     toast.success(`Leave marked for ${teacherName} — sent to principal for approval`);
     if (unassigned > 0) toast.info(`${unassigned} lecture${unassigned > 1 ? "s" : ""} left unassigned — will appear as empty class in reports`);
+=======
+    toast.success(`Leave marked for ${teachers.find((t) => t.id === teacherId)?.full_name} — sent to principal for approval`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setTeacherId("");
     setFromDate(today);
     setToDate(today);
@@ -348,7 +402,11 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
         </div>
         <div className="space-y-1 sm:col-span-2">
           <label className="text-xs font-medium text-muted-foreground">Reason (optional)</label>
+<<<<<<< HEAD
           <GuardedInput ref={reasonGuardRef} fieldName="Reason" className="h-9 text-sm" placeholder="Reason for leave…" value={reason} onChange={setReason} maxLength={200} />
+=======
+          <GuardedInput fieldName="Reason" className="h-9 text-sm" placeholder="Reason for leave…" value={reason} onChange={setReason} />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       </div>
 
@@ -373,6 +431,7 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
           )}
           <ul className="space-y-2">
             {allProxySlots.map((s) => (
+<<<<<<< HEAD
               <li key={s.key} className="rounded-lg border border-border bg-background p-3 space-y-2 text-sm">
                 {s.isManual ? (
                   <>
@@ -411,11 +470,40 @@ function HodMarkLeavePanel({ deptId }: { deptId: string }) {
                       </SelectContent>
                     </Select>
                   </div>
+=======
+              <li key={s.key} className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm">
+                {s.isManual ? (
+                  <div className="grid w-full gap-2 sm:grid-cols-5">
+                    <Input type="date" value={s.date} min={fromDate} max={toDate} onChange={(e) => setManualSlots((m) => m.map((x) => x.key === s.key ? { ...x, date: e.target.value } : x))} className="h-8 text-xs" />
+                    <Input type="time" value={s.start_time} onChange={(e) => setManualSlots((m) => m.map((x) => x.key === s.key ? { ...x, start_time: e.target.value } : x))} className="h-8 text-xs" />
+                    <Input type="time" value={s.end_time} onChange={(e) => setManualSlots((m) => m.map((x) => x.key === s.key ? { ...x, end_time: e.target.value } : x))} className="h-8 text-xs" />
+                    <Input placeholder="Subject" value={s.subject} onChange={(e) => setManualSlots((m) => m.map((x) => x.key === s.key ? { ...x, subject: e.target.value } : x))} className="h-8 text-xs" />
+                    <Input placeholder="Class" value={s.class_name} onChange={(e) => setManualSlots((m) => m.map((x) => x.key === s.key ? { ...x, class_name: e.target.value } : x))} className="h-8 text-xs" />
+                  </div>
+                ) : (
+                  <div className="min-w-40">
+                    <p className="font-semibold text-xs">{s.subject} · {s.class_name}</p>
+                    <p className="text-xs text-muted-foreground">{fmtDate(s.date)} · {fmtTime(s.start_time)} – {fmtTime(s.end_time)}</p>
+                  </div>
+                )}
+                <Select value={choices[s.key] ?? ""} onValueChange={(v) => setChoices((c) => ({ ...c, [s.key]: v }))}>
+                  <SelectTrigger className="w-52 h-8 text-xs"><SelectValue placeholder="Select proxy…" /></SelectTrigger>
+                  <SelectContent>
+                    {deptPeople.map((p) => <SelectItem key={p.id} value={p.id}>{p.full_name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+                {s.isManual && (
+                  <Button type="button" variant="ghost" size="sm" className="h-8 text-xs px-2" onClick={() => setManualSlots((m) => m.filter((x) => x.key !== s.key))}>Remove</Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 )}
               </li>
             ))}
           </ul>
+<<<<<<< HEAD
           <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={() => addManualSlot()}>+ Add proxy lecture</Button>
+=======
+          <Button type="button" variant="outline" size="sm" className="h-8 text-xs" onClick={addManualSlot}>+ Add proxy lecture</Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       )}
 
@@ -444,7 +532,11 @@ function LockedAccountsPanel({ role, deptId }: { role: "hod" | "principal"; dept
     queryKey: ["locked-accounts", role, deptId],
     enabled: role === "principal", // HODs never manage locked accounts
     queryFn: async () => {
+<<<<<<< HEAD
       const targetRoles = ["teacher", "hod"] as const; // principal can unlock teachers & HODs
+=======
+      const targetRoles = ["teacher", "hod"]; // principal can unlock teachers & HODs
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       const { data: roleRows } = await supabase
         .from("user_roles")
         .select("user_id, department_id, role")
@@ -545,6 +637,7 @@ function LockedAccountsPanel({ role, deptId }: { role: "hod" | "principal"; dept
 }
 
 // ── Requests page ─────────────────────────────────────────────────────────────
+<<<<<<< HEAD
 // ── HOD: Password Reset Requests Panel ───────────────────────────────────────
 function HodPasswordResetRequests({ deptId }: { deptId: string }) {
   const qc = useQueryClient();
@@ -861,6 +954,15 @@ function RequestsPage() {
     staleTime: 5_000,
     refetchInterval: 8_000,
     refetchOnWindowFocus: true,
+=======
+function RequestsPage() {
+  const { profile, role } = useAuth();
+  const isHod = role === "hod";
+
+  const { data: requests = [], isLoading } = useQuery({
+    queryKey: ["review-requests", role, profile?.id],
+    enabled: !!profile,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryFn: async () => {
       const { data: adminRoles } = await supabase.from("user_roles").select("user_id, role")
         .in("role", ["admin", "principal"]);
@@ -869,6 +971,13 @@ function RequestsPage() {
       if (isHod) {
         q = q.eq("department_id", profile!.department_id ?? "");
       } else {
+<<<<<<< HEAD
+=======
+        // Principal sees leaves that:
+        // 1. Are in the principal's workflow (recommended/pending/hod_approved/approved)
+        // 2. Were rejected BUT by the principal themselves (principal_acted_at is set)
+        // HOD-rejected leaves (rejected + hod_acted_at set + principal_acted_at null) stay with HOD only
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         q = q.or(
           "status.in.(hod_recommended,pending_principal,hod_approved,approved)," +
           "and(status.eq.rejected,principal_acted_at.not.is.null)"
@@ -876,6 +985,7 @@ function RequestsPage() {
       }
       const { data, error } = await q;
       if (error) throw error;
+<<<<<<< HEAD
       const filtered = (data ?? []).filter((r) =>
         !excludedIds.has(r.teacher_id) &&
         // HOD must not see or approve their own leave request
@@ -885,6 +995,10 @@ function RequestsPage() {
       // preventing duplicate cache misses when the leave list comes back in different order
       const sortedIds = [...new Set(filtered.map((r) => r.teacher_id))].sort();
       const people = await fetchPeople(sortedIds);
+=======
+      const filtered = (data ?? []).filter((r) => !excludedIds.has(r.teacher_id));
+      const people = await fetchPeople(filtered.map((r) => r.teacher_id));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       return filtered.map((r) => ({ ...r, teacher: people[r.teacher_id] }));
     },
   });
@@ -896,6 +1010,7 @@ function RequestsPage() {
   const docPending = isHod ? [] : requests.filter((r) => r.status === "hod_approved" && r.doc_status !== "verified");
   const rest = requests.filter((r) => !actionable.includes(r) && !docPending.includes(r));
 
+<<<<<<< HEAD
   const [searchQ, setSearchQ] = useState("");
   const [allReqPage, setAllReqPage] = useState(1);
   const ALL_REQ_PAGE_SIZE = 10;
@@ -1052,12 +1167,15 @@ function RequestsPage() {
     }
   }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   return (
     <AppShell
       title="Leave Requests"
       subtitle={isHod ? "Review and approve teacher leave requests" : "Final approval for HOD-recommended requests"}
     >
       <div className="space-y-6">
+<<<<<<< HEAD
         {/* HOD: Password Reset Requests from dept teachers */}
         {isHod && profile?.department_id && (
           <HodPasswordResetRequests deptId={profile.department_id} />
@@ -1177,6 +1295,8 @@ function RequestsPage() {
           </SectionCard>
         )}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {/* HOD: Mark leave on behalf of teacher */}
         {isHod && profile?.department_id && (
           <SectionCard title="Mark Leave" subtitle="Mark leave for a teacher on their behalf">
@@ -1184,11 +1304,14 @@ function RequestsPage() {
           </SectionCard>
         )}
 
+<<<<<<< HEAD
         {/* HOD: Dept leave calendar — who's on leave today */}
         {isHod && profile?.department_id && (
           <DeptLeaveToday deptId={profile.department_id} />
         )}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {/* Locked accounts — Principal sees locked teachers + HODs; HOD sees nothing (admin/principal handles it) */}
         {(isHod || role === "principal") && (
           <LockedAccountsPanel
@@ -1197,6 +1320,7 @@ function RequestsPage() {
           />
         )}
 
+<<<<<<< HEAD
         <SectionCard
           title="Needs your action"
           subtitle={`${actionable.length} request(s)`}
@@ -1236,6 +1360,12 @@ function RequestsPage() {
                   <RequestCard request={r} isHod={isHod} />
                 </div>
               ))}</div>}
+=======
+        <SectionCard title="Needs your action" subtitle={`${actionable.length} request(s)`}>
+          {isLoading ? <Empty>Loading…</Empty>
+            : actionable.length === 0 ? <Empty>Nothing waiting on you right now.</Empty>
+            : <div className="space-y-4">{actionable.map((r) => <RequestCard key={r.id} request={r} isHod={isHod} />)}</div>}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </SectionCard>
 
         {!isHod && docPending.length > 0 && (
@@ -1244,6 +1374,7 @@ function RequestsPage() {
           </SectionCard>
         )}
 
+<<<<<<< HEAD
         <SectionCard
           title="All requests"
           action={
@@ -1341,6 +1472,36 @@ function RequestsPage() {
                 </div>
               )}
             </>
+=======
+        <SectionCard title="All requests">
+          {rest.length === 0 ? <Empty>No other requests.</Empty> : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wide text-muted-foreground">
+                    <th className="pb-2 font-semibold">Teacher</th>
+                    <th className="pb-2 font-semibold">Type</th>
+                    <th className="pb-2 font-semibold">Dates</th>
+                    <th className="pb-2 font-semibold">Days</th>
+                    <th className="pb-2 font-semibold">Pay cut</th>
+                    <th className="pb-2 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rest.map((r) => (
+                    <tr key={r.id} className="border-t border-border">
+                      <td className="py-3 font-medium">{r.teacher?.full_name}</td>
+                      <td className="py-3">{leaveTypeLabel(r.leave_type as LeaveType)}</td>
+                      <td className="py-3">{fmtDate(r.from_date)} – {fmtDate(r.to_date)}</td>
+                      <td className="py-3">{Number(r.total_days)}</td>
+                      <td className="py-3">{Number(r.unpaid_days)}</td>
+                      <td className="py-3"><StatusBadge status={r.status as LeaveStatus} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           )}
         </SectionCard>
       </div>
@@ -1362,7 +1523,10 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
   const qc = useQueryClient();
   const { profile } = useAuth();
   const [note, setNote] = useState("");
+<<<<<<< HEAD
   const noteGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [busy, setBusy] = useState(false);
   const [choices, setChoices] = useState<Record<string, string>>({});
   const isHodFinal = isHodFinalLeave(request.leave_type as LeaveType);
@@ -1394,7 +1558,11 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     queryKey: ["leave-lectures", request.id, request.session],
     enabled: isHod,
     queryFn: async () => {
+<<<<<<< HEAD
       const { data, error } = await supabase.from("lectures").select("id, teacher_id, day_of_week, lecture_date, start_time, end_time, subject, class_name, room, department_id").eq("teacher_id", request.teacher_id);
+=======
+      const { data, error } = await supabase.from("lectures").select("*").eq("teacher_id", request.teacher_id);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       if (error) throw error;
       const out: { key: string; date: string; lecture: (typeof data)[number] }[] = [];
       for (const date of dates) {
@@ -1411,6 +1579,7 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     },
   });
 
+<<<<<<< HEAD
   // Rejected proxy slots — HOD needs to reassign these (only future/today — past ones are empty classes)
   const { data: rejectedProxies = [] } = useQuery({
     queryKey: ["rejected-proxies", request.id],
@@ -1433,6 +1602,13 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
   const allSlots = useMemo(() => [
     ...slots.map((s) => ({ key: s.key, date: s.date, start_time: s.lecture.start_time, end_time: s.lecture.end_time, subject: s.lecture.subject, class_name: s.lecture.class_name, lecture_id: s.lecture.id as string | null, isManual: false })),
     ...manual.map((m) => ({ ...m, lecture_id: null as string | null, isManual: true })),
+=======
+  const [manual, setManual] = useState<{ key: string; date: string; start_time: string; end_time: string; subject: string; class_name: string }[]>([]);
+
+  const allSlots = useMemo(() => [
+    ...slots.map((s) => ({ key: s.key, date: s.date, start_time: s.lecture.start_time, end_time: s.lecture.end_time, subject: s.lecture.subject, class_name: s.lecture.class_name, lecture_id: s.lecture.id as string | null })),
+    ...manual.map((m) => ({ ...m, lecture_id: null as string | null })),
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   ], [slots, manual]);
 
   const { data: dept } = useQuery({
@@ -1444,15 +1620,20 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
         .in("role", ["admin", "principal"]);
       const excludedIds = new Set((excludedRoles ?? []).map((r) => r.user_id));
 
+<<<<<<< HEAD
       let pq = supabase.from("profiles").select("id, full_name, designation")
         .eq("approved", true)
         .eq("hr_approved", true);
+=======
+      let pq = supabase.from("profiles").select("id, full_name, designation").eq("approved", true);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       if (request.department_id) pq = pq.eq("department_id", request.department_id);
       const { data: people, error } = await pq.neq("id", request.teacher_id).order("full_name");
       if (error) throw error;
 
       const filteredPeople = (people ?? []).filter((p) => !excludedIds.has(p.id));
       const teacherIds = filteredPeople.map((p) => p.id);
+<<<<<<< HEAD
 
       const { data: lectures } = teacherIds.length
         ? await supabase.from("lectures").select("teacher_id, day_of_week, start_time, end_time, class_name").in("teacher_id", teacherIds).is("lecture_date", null)
@@ -1549,11 +1730,26 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     }).sort((a, b) => {
       const score = (o: typeof a) => (o.free ? 2 : 0) + (o.teachesClass ? 1 : 0);
       return score(b) - score(a);
+=======
+      const { data: lectures } = teacherIds.length ? await supabase.from("lectures").select("teacher_id, day_of_week, start_time, end_time").in("teacher_id", teacherIds).is("lecture_date", null) : { data: [] };
+      const { data: existingProxies } = teacherIds.length ? await supabase.from("proxy_assignments").select("proxy_teacher_id, proxy_date, start_time, end_time").in("proxy_teacher_id", teacherIds).in("status", ["pending", "accepted"]).gte("proxy_date", request.from_date).lte("proxy_date", request.to_date) : { data: [] };
+      return { people: filteredPeople, lectures: lectures ?? [], existingProxies: existingProxies ?? [] };
+    },
+  });
+
+  function candidates(date: string, start: string, end: string) {
+    const dow = new Date(date + "T00:00:00").getDay();
+    return (dept?.people ?? []).map((p) => {
+      const busyFixed = (dept?.lectures ?? []).some((l) => l.teacher_id === p.id && l.day_of_week === dow && l.start_time < end && l.end_time > start);
+      const busyProxy = (dept?.existingProxies ?? []).some((p2) => p2.proxy_teacher_id === p.id && p2.proxy_date === date && p2.start_time < end && p2.end_time > start);
+      return { ...p, free: !busyFixed && !busyProxy };
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     });
   }
 
   async function saveProxies() {
     if (allSlots.length === 0) return true;
+<<<<<<< HEAD
     const incomplete = allSlots.some((s) => s.isManual && (!s.subject.trim() || !s.class_name.trim()));
     if (incomplete) { toast.error("Add subject and class for every manual proxy lecture"); return false; }
 
@@ -1574,11 +1770,20 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
 
     const { error: pErr } = await supabase.from("proxy_assignments").insert(
       assignedSlots.map((s) => {
+=======
+    const missing = allSlots.filter((s) => !choices[s.key]);
+    if (missing.length > 0) { toast.error("Assign a proxy teacher for every lecture"); return false; }
+    const incomplete = allSlots.some((s) => !s.subject.trim() || !s.class_name.trim());
+    if (incomplete) { toast.error("Add subject and class for every proxy lecture"); return false; }
+    const { error: pErr } = await supabase.from("proxy_assignments").insert(
+      allSlots.map((s) => {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         const isHodSelf = profile?.id && choices[s.key] === profile.id;
         return { leave_request_id: request.id, lecture_id: s.lecture_id, proxy_teacher_id: choices[s.key], absentee_teacher_id: request.teacher_id, proxy_date: s.date, start_time: s.start_time, end_time: s.end_time, subject: s.subject, class_name: s.class_name, status: (isHodSelf ? "accepted" : "pending") as "accepted" | "pending" };
       }),
     );
     if (pErr) { toast.error(pErr.message); return false; }
+<<<<<<< HEAD
 
     // Notify each unique proxy teacher (fire-and-forget)
     const uniqueProxyTeachers = [...new Set(assignedSlots.map((s) => choices[s.key]).filter(Boolean))];
@@ -1601,6 +1806,16 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     if (!note.trim()) return true; // notes are optional — only validate if filled
     const guardErr = await noteGuardRef.current?.validateNow();
     return !guardErr;
+=======
+    return true;
+  }
+
+  function checkNote(): boolean {
+    if (!note.trim()) return true; // notes are optional — only validate if filled
+    const r = validateMeaningfulText(note, "Note");
+    if (!r.valid) { toast.error(r.error!); return false; }
+    return true;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   async function hodRecommend() {
@@ -1612,11 +1827,14 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Recommended to the principal");
+<<<<<<< HEAD
     // Notify principal a leave is awaiting their approval
     if (profile?.department_id) {
       // Notify principal (fire-and-forget) — they need to find principal by role server-side
       firePush({ userIds: ["__principal__"], title: "Leave Awaiting Your Approval", body: `${request.teacher?.full_name ?? "A teacher"}'s ${request.leave_type} leave has been approved by HOD`, targetUrl: "/requests" });
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
   }
 
@@ -1629,11 +1847,15 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success(`Leave approved — teacher must upload ${requiredDoc}`);
+<<<<<<< HEAD
     // Notify teacher their leave was approved
     firePush({ userIds: [request.teacher_id], title: "Leave Approved", body: `Your ${request.leave_type} leave for ${request.total_days} day(s) has been approved`, targetUrl: "/leaves" });
     // Notify principal — they need to verify the document once the teacher uploads it
     firePush({ userIds: ["__principal__"], title: "Document Verification Pending", body: `${request.teacher?.full_name ?? "A teacher"}'s ${request.leave_type} leave was approved by HOD — awaiting document upload`, targetUrl: "/requests" });
     qc.invalidateQueries({ queryKey: ["leave-requests"] });
+=======
+    qc.invalidateQueries();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   async function reject() {
@@ -1656,8 +1878,11 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Leave rejected");
+<<<<<<< HEAD
     // Notify teacher their leave was rejected
     firePush({ userIds: [request.teacher_id], title: "Leave Rejected", body: note.trim() ? `Your ${request.leave_type} leave was rejected: ${note.trim()}` : `Your ${request.leave_type} leave request has been rejected`, targetUrl: "/leaves" });
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
   }
 
@@ -1686,15 +1911,20 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Leave approved");
+<<<<<<< HEAD
     // Notify teacher their leave was approved by principal
     firePush({ userIds: [request.teacher_id], title: "Leave Approved", body: `Your ${request.leave_type} leave for ${request.total_days} day(s) has been approved`, targetUrl: "/leaves" });
     qc.invalidateQueries({ queryKey: ["leave-requests"] });
+=======
+    qc.invalidateQueries();
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   const sessionLabel = SESSION_LABEL[request.session as LeaveSession] ?? request.session;
 
   return (
     <div className="rounded-xl border border-border p-4">
+<<<<<<< HEAD
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div className="min-w-0">
           <p className="font-bold">{request.teacher?.full_name}</p>
@@ -1705,6 +1935,18 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
         <div className="flex flex-row items-center justify-between gap-3 sm:flex-col sm:items-end sm:text-right sm:text-sm">
           <StatusBadge status={request.status as LeaveStatus} />
           <p className="text-xs sm:text-sm text-muted-foreground sm:mt-2">Paid {Number(request.paid_days)} · <span className="font-semibold text-destructive">Pay cut {Number(request.unpaid_days)}</span></p>
+=======
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-bold">{request.teacher?.full_name}</p>
+          <p className="text-sm text-muted-foreground">{leaveTypeLabel(request.leave_type as LeaveType)} · {sessionLabel}</p>
+          <p className="text-sm text-muted-foreground">{fmtDate(request.from_date)} – {fmtDate(request.to_date)} · {Number(request.total_days)} day(s)</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Dates: {dates.map(fmtDate).join(", ")}</p>
+        </div>
+        <div className="text-right text-sm">
+          <StatusBadge status={request.status as LeaveStatus} />
+          <p className="mt-2 text-muted-foreground">Paid {Number(request.paid_days)} · <span className="font-semibold text-destructive">Pay cut {Number(request.unpaid_days)}</span></p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       </div>
 
@@ -1718,6 +1960,7 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
             Proxy assignment
             {request.session !== "full_day" && <span className="ml-2 text-info normal-case">({sessionLabel} only)</span>}
           </p>
+<<<<<<< HEAD
 
           {/* Rejected proxy slots — need reassignment */}
           {rejectedProxies.length > 0 && (
@@ -1883,6 +2126,42 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
                         )}
                       </div>
                     </div>
+=======
+          {allSlots.length === 0 && (
+            <p className="text-sm text-muted-foreground">No lectures found for these dates{request.session !== "full_day" ? ` (${sessionLabel})` : ""}.</p>
+          )}
+          <ul className="space-y-2">
+            {allSlots.map((s) => {
+              const options = candidates(s.date, s.start_time, s.end_time);
+              const isManual = s.lecture_id === null;
+              return (
+                <li key={s.key} className="flex flex-wrap items-center gap-3 rounded-lg border border-border p-3 text-sm">
+                  {isManual ? (
+                    <div className="grid w-full gap-2 sm:w-auto sm:grid-cols-5">
+                      <Input type="date" value={s.date} min={request.from_date} max={request.to_date} onChange={(e) => setManual((m) => m.map((x) => x.key === s.key ? { ...x, date: e.target.value } : x))} />
+                      <Input type="time" value={s.start_time} onChange={(e) => setManual((m) => m.map((x) => x.key === s.key ? { ...x, start_time: e.target.value } : x))} />
+                      <Input type="time" value={s.end_time} onChange={(e) => setManual((m) => m.map((x) => x.key === s.key ? { ...x, end_time: e.target.value } : x))} />
+                      <Input placeholder="Subject" value={s.subject} onChange={(e) => setManual((m) => m.map((x) => x.key === s.key ? { ...x, subject: e.target.value } : x))} />
+                      <Input placeholder="Class" value={s.class_name} onChange={(e) => setManual((m) => m.map((x) => x.key === s.key ? { ...x, class_name: e.target.value } : x))} />
+                    </div>
+                  ) : (
+                    <div className="min-w-52">
+                      <p className="font-semibold">{s.subject} · {s.class_name}</p>
+                      <p className="text-xs text-muted-foreground">{fmtDate(s.date)} · {fmtTime(s.start_time)} – {fmtTime(s.end_time)}</p>
+                    </div>
+                  )}
+                  <Select value={choices[s.key] ?? ""} onValueChange={(v) => setChoices((c) => ({ ...c, [s.key]: v }))}>
+                    <SelectTrigger className="w-64"><SelectValue placeholder="Select proxy teacher" /></SelectTrigger>
+                    <SelectContent>
+                      {options.map((o) => <SelectItem key={o.id} value={o.id}>{o.full_name} {o.free ? "· Free" : "· Busy"}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                  {choices[s.key] && (
+                    <Badge variant="secondary">{options.find((o) => o.id === choices[s.key])?.free ? "Available" : "Has a lecture"}</Badge>
+                  )}
+                  {isManual && (
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setManual((m) => m.filter((x) => x.key !== s.key))}>Remove</Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                   )}
                 </li>
               );
@@ -1904,7 +2183,11 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
                 This request: <strong>{requestDays}</strong> day(s) — <span className="text-success font-medium">{medicalSplit.withinQuota} within quota</span>
                 {medicalSplit.overQuota > 0 && <span className="text-destructive font-medium"> · {medicalSplit.overQuota} over quota</span>}
               </p>
+<<<<<<< HEAD
               {!medicalRequiresDecision && <p className="text-success font-medium flex items-center gap-1"><Check className="size-4"/>All days within paid quota.</p>}
+=======
+              {!medicalRequiresDecision && <p className="text-success font-medium">✓ All days within paid quota.</p>}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </div>
           )}
           {(!isMedical || medicalRequiresDecision) && (
@@ -1927,12 +2210,18 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
         <p className="mt-3 text-xs text-muted-foreground rounded-lg bg-info/8 border border-info/30 p-2 flex items-center gap-1.5"><FileText className="size-3 shrink-0" /> Approving will require the teacher to upload a <strong>{requiredDoc}</strong>.</p>
       )}
 
+<<<<<<< HEAD
       <GuardedTextarea ref={noteGuardRef} fieldName="Note" className="mt-4" rows={2} maxLength={300} placeholder="Add a note (optional)" value={note} onChange={setNote} />
       <p className="text-right text-xs text-muted-foreground mt-1">{note.length}/300</p>
+=======
+      <GuardedTextarea fieldName="Note" className="mt-4" rows={2} maxLength={300} placeholder="Add a note (optional)" value={note} onChange={setNote} />
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className="mt-3 flex flex-wrap gap-2">
         {isHod && isHodFinal && <Button onClick={hodDirectApprove} disabled={busy}>Approve Leave</Button>}
         {isHod && !isHodFinal && <Button onClick={hodRecommend} disabled={busy}>Approve &amp; send to principal</Button>}
         {!isHod && <Button onClick={principalApprove} disabled={busy}>Approve Leave</Button>}
+<<<<<<< HEAD
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" disabled={busy}>Reject</Button>
@@ -1952,22 +2241,35 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+=======
+        <Button variant="outline" onClick={reject} disabled={busy}>Reject</Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         {isHodFinal ? (
           <>
             <span className="rounded bg-muted px-2 py-0.5">Submitted</span><ChevronRight className="size-3" />
+<<<<<<< HEAD
             <span className={`rounded px-2 py-0.5 ${request.status === "pending_hod" ? "bg-warning/20 font-semibold text-warning" : "bg-success/15 text-success"}`}>HOD Approval</span>
+=======
+            <span className={`rounded px-2 py-0.5 ${request.status === "pending_hod" ? "bg-warning/20 font-semibold text-warning-foreground" : "bg-success/15 text-success"}`}>HOD Approval</span>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             <ChevronRight className="size-3" /><span className="rounded bg-muted px-2 py-0.5 inline-flex items-center gap-1"><CheckCircle2 className="size-3 text-success" /> Approved</span>
             <span>+</span><span className="rounded bg-muted px-2 py-0.5">Upload {requiredDoc}</span>
           </>
         ) : (
           <>
             <span className="rounded bg-muted px-2 py-0.5">Submitted</span><ChevronRight className="size-3" />
+<<<<<<< HEAD
             <span className={`rounded px-2 py-0.5 ${request.status === "pending_hod" ? "bg-warning/20 font-semibold text-warning" : "bg-muted"}`}>HOD</span>
             <ChevronRight className="size-3" />
             <span className={`rounded px-2 py-0.5 ${request.status === "pending_principal" ? "bg-warning/20 font-semibold text-warning" : "bg-muted"}`}>Principal</span>
+=======
+            <span className={`rounded px-2 py-0.5 ${request.status === "pending_hod" ? "bg-warning/20 font-semibold text-warning-foreground" : "bg-muted"}`}>HOD</span>
+            <ChevronRight className="size-3" />
+            <span className={`rounded px-2 py-0.5 ${request.status === "pending_principal" ? "bg-warning/20 font-semibold text-warning-foreground" : "bg-muted"}`}>Principal</span>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </>
         )}
       </div>
@@ -1979,7 +2281,10 @@ function RequestCard({ request, isHod }: { request: RequestRow; isHod: boolean }
 function DocCard({ request }: { request: RequestRow }) {
   const qc = useQueryClient();
   const [note, setNote] = useState("");
+<<<<<<< HEAD
   const docNoteGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const [payment, setPayment] = useState<"paid" | "unpaid">("paid");
   const [busy, setBusy] = useState(false);
   const requiredDoc = docLabel(request.leave_type as LeaveType) ?? "Document";
@@ -1987,10 +2292,13 @@ function DocCard({ request }: { request: RequestRow }) {
   const dates = useMemo(() => eachDate(request.from_date, request.to_date), [request.from_date, request.to_date]);
 
   async function verifyAndApprove() {
+<<<<<<< HEAD
     if (note.trim()) {
       const guardErr = await docNoteGuardRef.current?.validateNow();
       if (guardErr) return;
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setBusy(true);
     const total = Number(request.total_days);
     const { error } = await supabase.from("leave_requests").update({
@@ -2005,10 +2313,13 @@ function DocCard({ request }: { request: RequestRow }) {
   }
 
   async function rejectDoc() {
+<<<<<<< HEAD
     if (note.trim()) {
       const guardErr = await docNoteGuardRef.current?.validateNow();
       if (guardErr) return;
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setBusy(true);
     const { error } = await supabase.from("leave_requests").update({
       doc_status: "required", doc_note: note.trim() || null, doc_url: null,
@@ -2022,6 +2333,7 @@ function DocCard({ request }: { request: RequestRow }) {
 
   return (
     <div className="rounded-xl border border-border p-4">
+<<<<<<< HEAD
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div className="min-w-0">
           <p className="font-bold">{request.teacher?.full_name}</p>
@@ -2031,13 +2343,28 @@ function DocCard({ request }: { request: RequestRow }) {
         </div>
         <div className="flex flex-row items-center justify-between sm:flex-col sm:items-end gap-1">
           <Badge variant={docUploaded ? "default" : "secondary"} className={docUploaded ? "bg-info text-info" : ""}>{docUploaded ? "Document Uploaded" : "Awaiting Upload"}</Badge>
+=======
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="font-bold">{request.teacher?.full_name}</p>
+          <p className="text-sm text-muted-foreground">{leaveTypeLabel(request.leave_type as LeaveType)} · {SESSION_LABEL[request.session as LeaveSession]}</p>
+          <p className="text-sm text-muted-foreground">{fmtDate(request.from_date)} – {fmtDate(request.to_date)} · {Number(request.total_days)} day(s)</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Dates: {dates.map(fmtDate).join(", ")}</p>
+        </div>
+        <div className="flex flex-col items-end gap-1">
+          <Badge variant={docUploaded ? "default" : "secondary"} className={docUploaded ? "bg-info text-info-foreground" : ""}>{docUploaded ? "Document Uploaded" : "Awaiting Upload"}</Badge>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           <span className="text-xs text-muted-foreground">HOD approved</span>
         </div>
       </div>
       {request.reason && <p className="mt-3 rounded-lg bg-muted p-3 text-sm">{request.reason}</p>}
       {request.hod_note && <p className="mt-2 text-xs text-muted-foreground">HOD note: {request.hod_note}</p>}
       <div className={`mt-3 rounded-lg border p-3 text-sm ${docUploaded ? "border-info/30 bg-info/8" : "border-warning/30 bg-warning/10"}`}>
+<<<<<<< HEAD
         <p className="font-semibold flex items-center gap-1.5">{docUploaded ? <><CheckCircle2 className="size-4 text-info" /> {requiredDoc} uploaded</> : <><Clock className="size-4 text-warning" /> Waiting for {requiredDoc} upload</>}</p>
+=======
+        <p className="font-semibold flex items-center gap-1.5">{docUploaded ? <><CheckCircle2 className="size-4 text-info" /> {requiredDoc} uploaded</> : <><Clock className="size-4 text-warning-foreground" /> Waiting for {requiredDoc} upload</>}</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {docUploaded && request.doc_url && <ViewDocButton path={request.doc_url} />}
         {!docUploaded && <p className="mt-1 text-xs text-muted-foreground">Leave is approved. This section is for document verification only.</p>}
       </div>
@@ -2050,8 +2377,12 @@ function DocCard({ request }: { request: RequestRow }) {
           </div>
         </div>
       )}
+<<<<<<< HEAD
       <GuardedTextarea ref={docNoteGuardRef} fieldName="Note" className="mt-4" rows={2} maxLength={300} placeholder="Add a note (optional)" value={note} onChange={setNote} />
       <p className="text-right text-xs text-muted-foreground mt-1">{note.length}/300</p>
+=======
+      <GuardedTextarea fieldName="Note" className="mt-4" rows={2} maxLength={300} placeholder="Add a note (optional)" value={note} onChange={setNote} />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className="mt-3 flex flex-wrap gap-2">
         {docUploaded && <Button onClick={verifyAndApprove} disabled={busy}>Verify Document</Button>}
         <Button variant="outline" onClick={rejectDoc} disabled={busy || !docUploaded}>Reject Document</Button>
@@ -2073,6 +2404,7 @@ function ViewDocButton({ path }: { path: string }) {
   }
   return <button onClick={open} disabled={loading} className="mt-1 inline-block text-xs underline text-info disabled:opacity-50">{loading ? "Opening…" : "View document ↗"}</button>;
 }
+<<<<<<< HEAD
 
 function DeptLeaveToday({ deptId }: { deptId: string }) {
   const today = new Date().toISOString().slice(0, 10);
@@ -2129,3 +2461,5 @@ function DeptLeaveToday({ deptId }: { deptId: string }) {
     </SectionCard>
   );
 }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

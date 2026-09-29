@@ -256,6 +256,7 @@ export type Database = {
           },
         ]
       }
+<<<<<<< HEAD
       password_reset_requests: {
         Row: {
           id: string
@@ -293,10 +294,17 @@ export type Database = {
           cl_quota: number | null
           created_at: string
           date_of_birth: string | null
+=======
+      profiles: {
+        Row: {
+          approved: boolean
+          created_at: string
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           date_of_joining: string | null
           department_id: string | null
           designation: string
           experience_years: number | null
+<<<<<<< HEAD
           failed_login_attempts: number
           full_name: string
           gender: "female" | "male" | "other" | null
@@ -306,19 +314,30 @@ export type Database = {
           monthly_salary: number
           password_changed_at: string | null
           phone: string | null
+=======
+          full_name: string
+          id: string
+          monthly_salary: number
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           subjects_taught: string | null
           user_id: string
         }
         Insert: {
+<<<<<<< HEAD
           account_locked?: boolean
           approved?: boolean
           cl_quota?: number | null
           created_at?: string
           date_of_birth?: string | null
+=======
+          approved?: boolean
+          created_at?: string
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           date_of_joining?: string | null
           department_id?: string | null
           designation?: string
           experience_years?: number | null
+<<<<<<< HEAD
           failed_login_attempts?: number
           full_name: string
           gender?: "female" | "male" | "other" | null
@@ -328,19 +347,30 @@ export type Database = {
           monthly_salary?: number
           password_changed_at?: string | null
           phone?: string | null
+=======
+          full_name: string
+          id: string
+          monthly_salary?: number
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           subjects_taught?: string | null
           user_id: string
         }
         Update: {
+<<<<<<< HEAD
           account_locked?: boolean
           approved?: boolean
           cl_quota?: number | null
           created_at?: string
           date_of_birth?: string | null
+=======
+          approved?: boolean
+          created_at?: string
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           date_of_joining?: string | null
           department_id?: string | null
           designation?: string
           experience_years?: number | null
+<<<<<<< HEAD
           failed_login_attempts?: number
           full_name?: string
           gender?: "female" | "male" | "other" | null
@@ -350,6 +380,11 @@ export type Database = {
           monthly_salary?: number
           password_changed_at?: string | null
           phone?: string | null
+=======
+          full_name?: string
+          id?: string
+          monthly_salary?: number
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           subjects_taught?: string | null
           user_id?: string
         }
@@ -492,6 +527,7 @@ export type Database = {
         }
         Relationships: []
       }
+<<<<<<< HEAD
       teacher_documents: {
         Row: {
           doc_type: "degree" | "marksheet" | "salary_slip" | "experience_letter"
@@ -579,6 +615,8 @@ export type Database = {
         }
         Relationships: []
       }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       user_roles: {
         Row: {
           department_id: string | null
@@ -610,6 +648,7 @@ export type Database = {
       }
     }
     Views: {
+<<<<<<< HEAD
       leave_balances: {
         Row: {
           id: string | null
@@ -621,6 +660,9 @@ export type Database = {
         }
         Relationships: []
       }
+=======
+      [_ in never]: never
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     }
     Functions: {
       cleanup_expired_dated_lectures: {
@@ -653,9 +695,15 @@ export type Database = {
       }
     }
     Enums: {
+<<<<<<< HEAD
       app_role: "teacher" | "hod" | "principal" | "admin" | "hr"
       leave_session: "full_day" | "forenoon" | "afternoon"
       leave_status: "pending_hod" | "hod_recommended" | "pending_principal" | "hod_approved" | "approved" | "rejected" | "cancelled"
+=======
+      app_role: "teacher" | "hod" | "principal" | "admin"
+      leave_session: "full_day" | "forenoon" | "afternoon"
+      leave_status: "pending_hod" | "hod_recommended" | "pending_principal" | "hod_approved" | "approved" | "rejected"
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       leave_type: "casual" | "maternity" | "bereavement" | "medical" | "duty"
       proxy_status: "pending" | "accepted" | "rejected"
     }
@@ -785,9 +833,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+<<<<<<< HEAD
       app_role: ["teacher", "hod", "principal", "admin", "hr"],
       leave_session: ["full_day", "forenoon", "afternoon"],
       leave_status: ["pending_hod", "hod_recommended", "pending_principal", "hod_approved", "approved", "rejected", "cancelled"],
+=======
+      app_role: ["teacher", "hod", "principal", "admin"],
+      leave_session: ["full_day", "forenoon", "afternoon"],
+      leave_status: ["pending_hod", "hod_recommended", "pending_principal", "hod_approved", "approved", "rejected"],
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       leave_type: ["casual", "maternity", "bereavement", "medical", "duty"],
       proxy_status: ["pending", "accepted", "rejected"],
     },

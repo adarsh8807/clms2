@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useRef, useState, useMemo } from "react";
+=======
+import { useState, useMemo } from "react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -10,18 +14,25 @@ import {
 } from "lucide-react";
 import JSZip from "jszip";
 import * as XLSX from "xlsx";
+<<<<<<< HEAD
 import { savePDF, saveXLSX } from "../lib/download";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { StatusBadge, Empty } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
 import { GuardedInput, GuardedTextarea, type GuardHandle } from "@/components/GuardedField";
+=======
+import { Textarea } from "@/components/ui/textarea";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Badge } from "@/components/ui/badge";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -113,8 +124,12 @@ async function downloadAllDocs(teacher: TeacherProfile, setBusy: (v: boolean) =>
   setBusy(true);
   try {
     const zip = new JSZip();
+<<<<<<< HEAD
     const safeName = teacher.full_name.replace(/\s+/g, "_");
     const folder = zip.folder(safeName) ?? zip;
+=======
+    const folder = zip.folder(teacher.full_name.replace(/\s+/g, "_")) ?? zip;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     await Promise.all(teacher.docs.map(async (doc) => {
       const url = await signedUrl(doc.file_path);
       if (!url) return;
@@ -125,7 +140,11 @@ async function downloadAllDocs(teacher: TeacherProfile, setBusy: (v: boolean) =>
     const content = await zip.generateAsync({ type: "blob" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(content);
+<<<<<<< HEAD
     a.download = safeName + "_documents.zip";
+=======
+    a.download = `${teacher.full_name.replace(/\s+/g, "_")}_documents.zip`;
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     a.click(); URL.revokeObjectURL(a.href);
     toast.success("All documents downloaded");
   } catch { toast.error("Download failed"); }
@@ -138,7 +157,10 @@ function DocRow({ doc, onApprove, onReject, busy }: {
 }) {
   const [note, setNote] = useState(doc.hr_note ?? "");
   const [dl, setDl] = useState(false);
+<<<<<<< HEAD
   const noteGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   return (
     <div className={cn("rounded-lg border p-3 space-y-2",
       doc.status === "approved" && "border-success/30 bg-success/5",
@@ -154,6 +176,7 @@ function DocRow({ doc, onApprove, onReject, busy }: {
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <DocPill s={doc.status} />
+<<<<<<< HEAD
           <Tooltip>
             <TooltipTrigger asChild>
               <Button size="sm" variant="ghost" className="h-7 w-7 p-0"
@@ -196,6 +219,28 @@ function DocRow({ doc, onApprove, onReject, busy }: {
               <XCircle className="size-3.5" />
             </Button>
           </div>
+=======
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="View"
+            onClick={async () => { const u = await signedUrl(doc.file_path); if (u) window.open(u, "_blank"); else toast.error("Could not open"); }}>
+            <Eye className="size-3.5" />
+          </Button>
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" title="Download" disabled={dl}
+            onClick={async () => { setDl(true); await downloadDoc(doc); setDl(false); }}>
+            {dl ? <Loader2 className="size-3.5 animate-spin" /> : <Download className="size-3.5" />}
+          </Button>
+        </div>
+      </div>
+      {doc.status !== "approved" && (
+        <div className="flex gap-2 items-start">
+          <input className="flex-1 text-xs rounded border border-border px-2 py-1.5 bg-background placeholder:text-muted-foreground"
+            placeholder="Rejection note (required to reject)…" value={note} onChange={(e) => setNote(e.target.value)} />
+          <Button size="sm" variant="outline" className="h-7 shrink-0 text-success border-success/40 hover:bg-success/10" disabled={busy} onClick={onApprove}>
+            <CheckCircle2 className="size-3.5" />
+          </Button>
+          <Button size="sm" variant="outline" className="h-7 shrink-0 text-destructive border-destructive/40 hover:bg-destructive/10" disabled={busy} onClick={() => onReject(note)}>
+            <XCircle className="size-3.5" />
+          </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       )}
     </div>
@@ -213,14 +258,21 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
   const [busy,   setBusy]   = useState(false);
   const [zipBusy,setZipBusy]= useState(false);
   const [note,   setNote]   = useState(teacher.hr_rejection_reason ?? "");
+<<<<<<< HEAD
   const noteGuardRef = useRef<GuardHandle>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Month / year filters (Leaves + Salary tabs)
   const [filterYear,  setFilterYear]  = useState(String(CURRENT_YEAR));
   const [filterMonth, setFilterMonth] = useState<number | "all">("all");
   const [filterType,  setFilterType]  = useState("all");
 
+<<<<<<< HEAD
   // All leaves for this teacher matching year/month/type filters
+=======
+  // Filter leaves for this teacher
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const myLeaves = useMemo(() => {
     return leaves
       .filter((l) => l.teacher_id === teacher.id)
@@ -234,14 +286,20 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
       });
   }, [leaves, teacher.id, filterYear, filterMonth, filterType]);
 
+<<<<<<< HEAD
   // Only fully approved leaves count for payroll / the Leaves tab
   const approvedLeaves = myLeaves.filter((l) => ["approved", "hod_approved"].includes(l.status));
 
   // Salary always uses approved leaves only (for deduction calc)
+=======
+  const approvedLeaves  = myLeaves.filter((l) => ["approved","hod_approved"].includes(l.status));
+  const pendingLeaves   = myLeaves.filter((l) => ["pending_hod","hod_recommended","pending_principal"].includes(l.status));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const totalUnpaid     = approvedLeaves.reduce((s, l) => s + Number(l.unpaid_days), 0);
   const deduction       = (teacher.monthly_salary / 30) * totalUnpaid;
   const net             = teacher.monthly_salary - deduction;
 
+<<<<<<< HEAD
   // Required docs must be APPROVED (not just uploaded) to unlock
   const hasRequired = REQUIRED_DOCS.every((t) =>
     teacher.docs.some((d) => d.doc_type === t && d.status === "approved"),
@@ -364,6 +422,51 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
     ), "Approved Leaves");
     const fileName = teacher.full_name.replace(/\s+/g, "_") + "_HR_" + filterYear + ".xlsx";
     await saveXLSX(XLSX, wb, fileName);
+=======
+  const hasRequired = REQUIRED_DOCS.every((t) => teacher.docs.some((d) => d.doc_type === t));
+
+  async function approveDoc(id: string) {
+    setBusy(true);
+    const { error } = await supabase.from("teacher_documents").update({ status: "approved", hr_note: null }).eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("Approved"); onRefresh(); }
+    setBusy(false);
+  }
+  async function rejectDoc(id: string, n: string) {
+    if (!n.trim()) { toast.error("Add a rejection note"); return; }
+    setBusy(true);
+    const { error } = await supabase.from("teacher_documents").update({ status: "rejected", hr_note: n }).eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("Rejected"); onRefresh(); }
+    setBusy(false);
+  }
+  async function approveTeacher() {
+    if (!hasRequired) { toast.error("Required docs not uploaded yet"); return; }
+    setBusy(true);
+    const { error } = await supabase.from("profiles").update({ hr_approved: true, hr_rejection_reason: null }).eq("id", teacher.id);
+    if (error) toast.error(error.message); else { toast.success(`${teacher.full_name} unlocked`); onRefresh(); }
+    setBusy(false);
+  }
+  async function rejectTeacher() {
+    if (!note.trim()) { toast.error("Add a rejection reason"); return; }
+    setBusy(true);
+    const { error } = await supabase.from("profiles").update({ hr_approved: false, hr_rejection_reason: note }).eq("id", teacher.id);
+    if (error) toast.error(error.message); else { toast.success("Teacher notified"); onRefresh(); }
+    setBusy(false);
+  }
+
+  function downloadReport() {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([{
+      Teacher: teacher.full_name, Department: teacher.department_name ?? "—",
+      "Monthly Salary": teacher.monthly_salary, "Unpaid Days": totalUnpaid,
+      "Deduction (₹)": Math.round(deduction), "Net Payable (₹)": Math.round(net),
+    }]), "Salary");
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(myLeaves.map((l) => ({
+      Type: leaveTypeLabel(l.leave_type as LeaveType), From: l.from_date, To: l.to_date,
+      Days: l.total_days, Paid: l.paid_days, Unpaid: l.unpaid_days,
+      Status: l.status.replace(/_/g, " "),
+    }))), "Leaves");
+    XLSX.writeFile(wb, `${teacher.full_name.replace(/\s+/g, "_")}_HR.xlsx`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   const TABS: { id: CardTab; label: string; Icon: any }[] = [
@@ -429,7 +532,11 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
             ))}
           </div>
 
+<<<<<<< HEAD
           <div className="px-4 py-4 space-y-4 overflow-y-auto max-h-[60vh]">
+=======
+          <div className="px-4 py-4 space-y-4">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
             {/* ── PROFILE TAB ─────────────────────────────────────────────── */}
             {tab === "profile" && (
@@ -461,6 +568,7 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
                           onReject={(n) => rejectDoc(d.id, n)} />
                       ))}</div>
                   }
+<<<<<<< HEAD
                   {!hasRequired && <p className="mt-1.5 text-xs text-warning">Required docs (Degree, Marksheet) not uploaded yet.</p>}
                 </div>
 
@@ -523,16 +631,38 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
                         onChange={setNote}
                       />
                     </div>
+=======
+                  {!hasRequired && <p className="mt-1.5 text-xs text-warning-foreground">Required docs (Degree, Marksheet) not uploaded yet.</p>}
+                </div>
+
+                {/* HR decision */}
+                {teacher.hr_approved !== true ? (
+                  <div className="space-y-2 pt-2 border-t border-border">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">HR Decision</p>
+                    <Textarea rows={2} placeholder="Rejection reason (required to reject)…" value={note} onChange={(e) => setNote(e.target.value)} />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                     <div className="flex gap-2">
                       <Button size="sm" className="flex-1" disabled={busy || !hasRequired} onClick={approveTeacher}>
                         <CheckCircle2 className="size-3.5 mr-1.5" /> Approve & Unlock
                       </Button>
+<<<<<<< HEAD
                       <Button size="sm" variant="destructive" className="flex-1"
                         disabled={busy} onClick={rejectTeacher}>
                         <XCircle className="size-3.5 mr-1.5" /> Reject & Reset Docs
                       </Button>
                     </div>
                   </div>
+=======
+                      <Button size="sm" variant="destructive" className="flex-1" disabled={busy} onClick={rejectTeacher}>
+                        <XCircle className="size-3.5 mr-1.5" /> Reject
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-success/10 border border-success/30 px-4 py-3 text-sm text-success flex items-center gap-2">
+                    <CheckCircle2 className="size-4 shrink-0" /> Fully onboarded — all features unlocked.
+                  </div>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 )}
               </>
             )}
@@ -542,6 +672,7 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
               <>
                 <FilterBar />
                 <p className="text-xs text-muted-foreground mb-3">
+<<<<<<< HEAD
                   Showing approved leaves only (HOD / Principal approved).
                 </p>
                 {approvedLeaves.length === 0 ? (
@@ -549,6 +680,15 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
                 ) : (
                   <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
                     <table className="w-full text-xs min-w-[400px]">
+=======
+                  Showing only leaves approved by HOD / Principal.
+                </p>
+                {approvedLeaves.length === 0 ? (
+                  <p className="text-sm text-muted-foreground italic text-center py-4">No approved leaves found for this period.</p>
+                ) : (
+                  <div className="rounded-lg border border-border overflow-hidden">
+                    <table className="w-full text-xs">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                       <thead className="bg-muted/50">
                         <tr>
                           <th className="px-3 py-2 text-left font-semibold">Type</th>
@@ -611,6 +751,38 @@ function TeacherCard({ teacher, leaves, onRefresh }: {
   );
 }
 
+<<<<<<< HEAD
+=======
+function LeaveTable({ rows }: { rows: LeaveRow[] }) {
+  return (
+    <div className="rounded-lg border border-border overflow-hidden mb-3">
+      <table className="w-full text-xs">
+        <thead className="bg-muted/50">
+          <tr>
+            <th className="px-3 py-2 text-left font-semibold">Type</th>
+            <th className="px-3 py-2 text-left font-semibold">From</th>
+            <th className="px-3 py-2 text-left font-semibold">To</th>
+            <th className="px-3 py-2 text-left font-semibold">Days</th>
+            <th className="px-3 py-2 text-left font-semibold">Status</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border">
+          {rows.map((l) => (
+            <tr key={l.id} className="hover:bg-muted/20">
+              <td className="px-3 py-2">{leaveTypeLabel(l.leave_type as LeaveType)}</td>
+              <td className="px-3 py-2">{fmtDate(l.from_date)}</td>
+              <td className="px-3 py-2">{fmtDate(l.to_date)}</td>
+              <td className="px-3 py-2">{l.total_days}</td>
+              <td className="px-3 py-2"><StatusBadge status={l.status as any} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 // ── Main page ─────────────────────────────────────────────────────────────────
 function HrPage() {
   const { profile } = useAuth();
@@ -621,7 +793,10 @@ function HrPage() {
   // ── Fetch teachers + their docs ───────────────────────────────────────────
   const { data: teachers = [], isLoading: tLoading } = useQuery({
     queryKey: ["hr-teachers"],
+<<<<<<< HEAD
     staleTime: 30_000,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryFn: async () => {
       const { data: profiles, error } = await supabase
         .from("profiles")
@@ -667,7 +842,10 @@ function HrPage() {
   const { data: allLeaves = [], isLoading: lLoading } = useQuery({
     queryKey: ["hr-all-leaves", teacherIds.join(",")],
     enabled: teacherIds.length > 0,
+<<<<<<< HEAD
     staleTime: 30_000,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryFn: async () => {
       const { data, error } = await supabase
         .from("leave_requests")
@@ -680,6 +858,7 @@ function HrPage() {
   });
 
   function refresh() {
+<<<<<<< HEAD
     // Invalidate with exact:false so it matches all variants of the key
     qc.invalidateQueries({ queryKey: ["hr-teachers"], exact: false });
     qc.invalidateQueries({ queryKey: ["hr-all-leaves"], exact: false });
@@ -687,6 +866,14 @@ function HrPage() {
 
   // Full payroll report — all teachers, current year approved leaves
   async function downloadFullReport() {
+=======
+    qc.invalidateQueries({ queryKey: ["hr-teachers"] });
+    qc.invalidateQueries({ queryKey: ["hr-all-leaves"] });
+  }
+
+  // Full payroll report — all teachers, current year approved leaves
+  function downloadFullReport() {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     const year = String(CURRENT_YEAR);
     const rows = teachers.map((t) => {
       const tLeaves = allLeaves.filter((l) =>
@@ -708,7 +895,11 @@ function HrPage() {
     });
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "HR Payroll");
+<<<<<<< HEAD
     await saveXLSX(XLSX, wb, `HR_Full_Report_${new Date().toISOString().slice(0,10)}.xlsx`);
+=======
+    XLSX.writeFile(wb, `HR_Full_Report_${new Date().toISOString().slice(0,10)}.xlsx`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     toast.success("Full report downloaded");
   }
 
@@ -729,6 +920,7 @@ function HrPage() {
 
   const isLoading = tLoading || (teacherIds.length > 0 && lLoading);
 
+<<<<<<< HEAD
   const totalPayroll = teachers.reduce((s, t) => s + Number(t.monthly_salary), 0);
   const fmtINR2 = (n: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Math.round(n));
 
@@ -761,6 +953,11 @@ function HrPage() {
           </div>
         )}
 
+=======
+  return (
+    <Guarded roles={["hr"]}>
+      <AppShell title="HR Panel" subtitle="Teacher onboarding, documents, payroll & leave records">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {/* Toolbar */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
           <div className="flex flex-wrap gap-2">
@@ -786,7 +983,11 @@ function HrPage() {
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="size-6 animate-spin text-primary" /></div>
         ) : filtered.length === 0 ? (
+<<<<<<< HEAD
           <Empty>{hrFilter === "all" ? "No teachers found" : `No ${hrFilter} teachers found`}</Empty>
+=======
+          <Empty message={`No ${hrFilter === "all" ? "" : hrFilter} teachers found`} />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         ) : (
           <div className="space-y-2">
             {filtered.map((t) => (
@@ -797,4 +998,8 @@ function HrPage() {
       </AppShell>
     </Guarded>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

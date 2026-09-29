@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
+<<<<<<< HEAD
 const BASE_URL = "https://csc-clms2.vercel.app";
+=======
+// TODO: replace with your project URL once a project name or custom domain is set.
+const BASE_URL = "";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 interface SitemapEntry {
   path: string;
@@ -14,6 +19,7 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+<<<<<<< HEAD
         const today = new Date().toISOString().split("T")[0];
 
         const entries: SitemapEntry[] = [
@@ -33,14 +39,23 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/payroll",        changefreq: "monthly", priority: "0.4", lastmod: today },
           { path: "/admin-reports",  changefreq: "weekly",  priority: "0.4", lastmod: today },
         ];
+=======
+        const entries: SitemapEntry[] = [{ path: "/", changefreq: "weekly", priority: "1.0" }];
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
         const urls = entries.map((e) =>
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+<<<<<<< HEAD
             e.lastmod    ? `    <lastmod>${e.lastmod}</lastmod>`         : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority   ? `    <priority>${e.priority}</priority>`       : null,
+=======
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
+            e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
+            e.priority ? `    <priority>${e.priority}</priority>` : null,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             `  </url>`,
           ]
             .filter(Boolean)

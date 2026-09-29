@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     tailwindcss(),
+<<<<<<< HEAD
     tanstackStart({ server: { entry: "server" } }),
     nitro(),
     react(),
@@ -77,3 +78,21 @@ export default defineConfig({
     ],
   },
 });
+=======
+
+    tanstackStart({
+      server: {
+        entry: "server",
+      },
+    }),
+
+    nitro(),
+
+    react(),
+  ],
+
+  server: {
+    port: 3000,
+  },
+});
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

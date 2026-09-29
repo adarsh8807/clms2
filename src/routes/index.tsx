@@ -2,12 +2,20 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+<<<<<<< HEAD
 import { signInWithIdentifier, registerStaff, resolvePreviewUserId, verifyCollegeId, submitForgotPasswordRequest } from "@/lib/login.functions";
 import { Check, Eye, EyeOff, Loader2, Moon, Sun, UserRound, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useTheme } from "@/lib/theme";
+=======
+import { signInWithIdentifier, registerStaff, resolvePreviewUserId } from "@/lib/login.functions";
+import { Eye, EyeOff, Loader2, UserRound } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +29,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+<<<<<<< HEAD
 export const Route = createFileRoute("/")(({
+=======
+export const Route = createFileRoute("/")({
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   head: () => ({
     meta: [
       { title: "Sign In — CSC Leave Management System" },
@@ -31,6 +43,7 @@ export const Route = createFileRoute("/")(({
     ],
   }),
   component: SignInPage,
+<<<<<<< HEAD
 }));
 
 const SALUTATIONS = [
@@ -46,28 +59,100 @@ const GENDERS: { value: string; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
+=======
+});
+
+const SALUTATIONS = [
+  "Mr.",
+  "Mrs.",
+  "Ms.",
+  "Miss",
+  "Master",
+  "Shri",
+  "Smt.",
+  "Kumari",
+  "Sushri",
+  "M/S",
+  "Dr.",
+  "Prof.",
+  "Er.",
+  "Adv.",
+  "CA",
+  "Ar.",
+  "CS",
+  "Hon'ble",
+  "Justice",
+  "Excellency",
+  "Gen.",
+  "Lt. Gen.",
+  "Maj. Gen.",
+  "Brig.",
+  "Col.",
+  "Lt. Col.",
+  "Maj.",
+  "Capt.",
+  "Lt.",
+  "Adm.",
+  "Cdr.",
+  "ACM",
+  "Air Mshl",
+  "Wg. Cdr.",
+  "Sqn. Ldr.",
+];
+const GENDERS: { value: string; label: string }[] = [
+  { value: "male",   label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other",  label: "Other" },
+];
+
+// ── DOB helpers ───────────────────────────────────────────────────────────────
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 const MONTHS = [
   "January","February","March","April","May","June",
   "July","August","September","October","November","December",
 ];
 const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
 
+<<<<<<< HEAD
 function parseDob(val: string): { day: string; month: string; year: string } {
   if (!val) return { day: "", month: "", year: "" };
   const parts = val.split("-");
   return { day: parts[0] ?? "", month: parts[1] ?? "", year: parts[2] ?? "" };
 }
 
+=======
+/** Parses stored "DD-MM" or "DD-MM-YYYY" back into parts */
+function parseDob(val: string): { day: string; month: string; year: string } {
+  if (!val) return { day: "", month: "", year: "" };
+  const parts = val.split("-");
+  return {
+    day:   parts[0] ?? "",
+    month: parts[1] ?? "",
+    year:  parts[2] ?? "",
+  };
+}
+
+/** Builds "DD-MM" or "DD-MM-YYYY" from parts */
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function buildDob(day: string, month: string, year: string): string {
   if (!day || !month) return "";
   return year ? `${day}-${month}-${year}` : `${day}-${month}`;
 }
 
+<<<<<<< HEAD
 function DobPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const parsed = parseDob(value);
   const [day, setDay] = useState(parsed.day);
   const [month, setMonth] = useState(parsed.month);
   const [year, setYear] = useState(parsed.year);
+=======
+/** Day/Month picker with optional year for DOB entry */
+function DobPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const parsed = parseDob(value);
+  const [day,   setDay]   = useState(parsed.day);
+  const [month, setMonth] = useState(parsed.month);
+  const [year,  setYear]  = useState(parsed.year);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   function update(d: string, m: string, y: string) {
     setDay(d); setMonth(m); setYear(y);
@@ -77,11 +162,23 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
   return (
     <div className="space-y-2">
       <Label>Date of Birth <span className="text-muted-foreground text-xs">(optional — year is optional)</span></Label>
+<<<<<<< HEAD
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-[80px_1fr_100px]">
         <Select value={day} onValueChange={(v) => update(v, month, year)}>
           <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
           <SelectContent>{DAYS.map((d) => <SelectItem key={d} value={d}>{parseInt(d)}</SelectItem>)}</SelectContent>
         </Select>
+=======
+      <div className="grid grid-cols-[80px_1fr_100px] gap-2">
+        {/* Day */}
+        <Select value={day} onValueChange={(v) => update(v, month, year)}>
+          <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
+          <SelectContent>
+            {DAYS.map((d) => <SelectItem key={d} value={d}>{parseInt(d)}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        {/* Month */}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <Select value={month} onValueChange={(v) => update(day, v, year)}>
           <SelectTrigger><SelectValue placeholder="Month" /></SelectTrigger>
           <SelectContent>
@@ -90,12 +187,23 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
             ))}
           </SelectContent>
         </Select>
+<<<<<<< HEAD
+=======
+        {/* Year — optional free text */}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <Input
           placeholder="Year (opt.)"
           value={year}
           maxLength={4}
           inputMode="numeric"
+<<<<<<< HEAD
           onChange={(e) => update(day, month, e.target.value.replace(/\D/g, ""))}
+=======
+          onChange={(e) => {
+            const y = e.target.value.replace(/\D/g, "");
+            update(day, month, y);
+          }}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         />
       </div>
       {day && month && (
@@ -108,6 +216,10 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
   );
 }
 
+<<<<<<< HEAD
+=======
+// 12-char minimum + all complexity rules
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 const PW_RULES = [
   { re: /.{12,}/, label: "At least 12 characters" },
   { re: /[A-Z]/, label: "At least 1 uppercase letter" },
@@ -131,7 +243,11 @@ function PasswordStrength({ password }: { password: string }) {
       <ul className="space-y-0.5">
         {results.map((r) => (
           <li key={r.label} className={`flex items-center gap-1.5 text-xs ${r.ok ? "text-success" : "text-muted-foreground"}`}>
+<<<<<<< HEAD
             <span>{r.ok ? <Check className="size-3"/> : <span>·</span>}</span> {r.label}
+=======
+            <span>{r.ok ? "✓" : "·"}</span> {r.label}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </li>
         ))}
       </ul>
@@ -139,6 +255,7 @@ function PasswordStrength({ password }: { password: string }) {
   );
 }
 
+<<<<<<< HEAD
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
   return (
@@ -152,10 +269,13 @@ function ThemeToggle() {
   );
 }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function SignInPage() {
   const navigate = useNavigate();
   const { session, role, loading } = useAuth();
   const [mode, setMode] = useState<"signin" | "register">("signin");
+<<<<<<< HEAD
   const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
@@ -236,6 +356,43 @@ function SignInPage() {
                   <span className="text-foreground/80">{item}</span>
                 </li>
               ))}
+=======
+
+  useEffect(() => {
+    if (!loading && session) {
+      navigate({ to: role === "admin" ? "/admin" : "/dashboard", replace: true });
+    }
+  }, [loading, session, role, navigate]);
+
+  return (
+    <div className="grid min-h-screen lg:grid-cols-[minmax(0,480px)_1fr]">
+      <div className="flex flex-col justify-center px-6 py-12 sm:px-12 overflow-y-auto">
+        <Logo />
+        <h1 className="mt-10 text-2xl font-extrabold tracking-tight">Leave Management System</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {mode === "signin" ? "Sign in to continue" : "Register your staff account"}
+        </p>
+        <div className="mt-8">{mode === "signin" ? <SignInForm /> : <RegisterForm onBackToSignIn={() => setMode("signin")} />}</div>
+        <button
+          className="mt-6 text-sm font-medium text-primary hover:underline"
+          onClick={() => setMode(mode === "signin" ? "register" : "signin")}
+        >
+          {mode === "signin" ? "New staff member? Register an account" : "Already registered? Sign in"}
+        </button>
+      </div>
+
+      <div className="relative hidden overflow-hidden bg-accent/40 lg:block">
+        <div className="absolute inset-0 grid place-items-center p-16">
+          <div className="max-w-md">
+            <p className="text-3xl font-extrabold leading-tight tracking-tight text-accent-foreground">
+              Casual, maternity, bereavement and half-day leave — tracked, approved and proxy-covered.
+            </p>
+            <ul className="mt-8 space-y-3 text-sm text-foreground/70">
+              <li>· 2 casual leaves a month, 12 a year — paid.</li>
+              <li>· 10 paid medical leaves per year; beyond that principal decides.</li>
+              <li>· HOD assigns proxy lectures, principal gives final approval.</li>
+              <li>· Sundays and national holidays are never counted.</li>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </ul>
           </div>
         </div>
@@ -249,11 +406,15 @@ function SignInForm() {
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
+<<<<<<< HEAD
   const [authError, setAuthError] = useState<string | null>(null);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   const signIn = useServerFn(signInWithIdentifier);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+<<<<<<< HEAD
     setAuthError(null);
     setBusy(true);
     try {
@@ -266,6 +427,16 @@ function SignInForm() {
       if (error) throw error;
     } catch (err) {
       setAuthError(err instanceof Error ? err.message : "Invalid user ID or password");
+=======
+    setBusy(true);
+    try {
+      const result = await signIn({ data: { identifier: email.trim(), password } });
+      if ("error" in result && result.error) { toast.error(result.error); return; }
+      const { error } = await supabase.auth.setSession(result);
+      if (error) throw error;
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Invalid user ID or password");
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     } finally {
       setBusy(false);
     }
@@ -280,11 +451,18 @@ function SignInForm() {
             id="userid"
             type="text"
             required
+<<<<<<< HEAD
             autoComplete="username"
             placeholder="firstname@CSC.COM"
             value={email}
             onChange={(e) => { setEmail(e.target.value); setAuthError(null); }}
             className={authError ? "pr-10 border-destructive focus-visible:ring-destructive" : "pr-10"}
+=======
+            placeholder="firstname@CSC.COM or email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pr-10"
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           />
           <UserRound className="pointer-events-none absolute right-3 top-2.5 size-4 text-muted-foreground" />
         </div>
@@ -296,6 +474,7 @@ function SignInForm() {
             id="password"
             type={show ? "text" : "password"}
             required
+<<<<<<< HEAD
             autoComplete="current-password"
             placeholder="Enter your password"
             value={password}
@@ -317,15 +496,30 @@ function SignInForm() {
             {authError}
           </p>
         )}
+=======
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="pr-10"
+          />
+          <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-2.5 text-muted-foreground" aria-label="Toggle password visibility">
+            {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
       <Button type="submit" className="w-full" disabled={busy}>
         {busy && <Loader2 className="size-4 animate-spin" />} Sign In
       </Button>
+<<<<<<< HEAD
       <ForgotPasswordDialog />
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     </form>
   );
 }
 
+<<<<<<< HEAD
 function ForgotPasswordDialog() {
   const [open, setOpen] = useState(false);
   const [collegeId, setCollegeId] = useState("");
@@ -463,6 +657,17 @@ const REGISTER_ROLES = [
 function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
   const register = useServerFn(registerStaff);
   const resolveId = useServerFn(resolvePreviewUserId);
+=======
+const REGISTER_ROLES = [
+  { value: "teacher", label: "Teacher",   desc: "Apply for leaves, view schedule, payroll" },
+  { value: "hod",     label: "HOD",       desc: "Head of Department — approve department leaves" },
+  { value: "hr",      label: "HR Admin",  desc: "Manage teacher onboarding and documents" },
+] as const;
+
+function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
+  const { refresh } = useAuth();
+  const register = useServerFn(registerStaff);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const [registerRole, setRegisterRole] = useState<"teacher" | "hod" | "hr">("teacher");
   const [salutation, setSalutation] = useState("");
@@ -476,6 +681,7 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
   const [departmentId, setDepartmentId] = useState("");
   const [pending, setPending] = useState(false);
   const [busy, setBusy] = useState(false);
+<<<<<<< HEAD
   const [previewUserId, setPreviewUserId] = useState("");
   const [idChecking, setIdChecking] = useState(false);
   const [phone, setPhone] = useState("");
@@ -485,6 +691,16 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
   const pwValid = PW_RULES.every((r) => r.re.test(password));
   const fullName = [salutation, firstName.trim(), lastName.trim()].filter(Boolean).join(" ");
 
+=======
+
+  const isHR = registerRole === "hr";
+  const needsDept = registerRole === "teacher" || registerRole === "hod";
+
+  // Live uniqueness check: preview the actual ID that will be assigned (server-side, bypasses RLS)
+  const [previewUserId, setPreviewUserId] = useState("");
+  const [idChecking, setIdChecking] = useState(false);
+  const resolveId = useServerFn(resolvePreviewUserId);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   useEffect(() => {
     const clean = firstName.trim();
     if (!clean) { setPreviewUserId(""); return; }
@@ -500,7 +716,11 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
       }
     }, 400);
     return () => clearTimeout(t);
+<<<<<<< HEAD
   }, [firstName, resolveId]);
+=======
+  }, [firstName]);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const { data: departments = [] } = useQuery({
     queryKey: ["departments-public"],
@@ -511,12 +731,22 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
     },
   });
 
+<<<<<<< HEAD
+=======
+  // Derived full name
+  const fullName = [salutation, firstName.trim(), lastName.trim()].filter(Boolean).join(" ");
+
+  // Password validation — 12-char minimum
+  const pwValid = PW_RULES.every((r) => r.re.test(password));
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!salutation) return toast.error("Please select a salutation");
     if (!firstName.trim()) return toast.error("Please enter your first name");
     if (!gender) return toast.error("Please select a gender");
     if (needsDept && !departmentId) return toast.error("Please select a department");
+<<<<<<< HEAD
     if (!phone.trim()) return toast.error("Please enter your mobile number");
     if (!/^[6-9]\d{9}$/.test(phone.trim())) return toast.error("Enter a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9");
     if (!pwValid) return toast.error("Password does not meet the requirements");
@@ -526,6 +756,25 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
     try {
       const result = await register({
         data: { email, password, fullName, designation, departmentId: needsDept ? departmentId : null, role: registerRole, gender, dob: dob || null, phone: phone.trim() },
+=======
+    if (!pwValid) return toast.error("Password does not meet the requirements");
+
+    const email = `${firstName.trim().toLowerCase()}.csc@csc.edu`;
+
+    setBusy(true);
+    try {
+      const result = await register({
+        data: {
+          email,
+          password,
+          fullName,
+          designation,
+          departmentId: needsDept ? departmentId : null,
+          role: registerRole,
+          gender,
+          dob: dob || null,
+        },
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       });
       if ("error" in result && result.error) return toast.error(result.error);
       setPending(true);
@@ -552,17 +801,31 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
             </p>
           )}
         </div>
+<<<<<<< HEAD
         <Button variant="outline" className="w-full" onClick={onBackToSignIn}>← Back to Sign In</Button>
+=======
+        <Button variant="outline" className="w-full" onClick={onBackToSignIn}>
+          ← Back to Sign In
+        </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
     );
   }
 
   return (
     <form onSubmit={submit} className="space-y-4">
+<<<<<<< HEAD
       {/* Role selection */}
       <div className="space-y-2">
         <Label>Registering as</Label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+=======
+
+      {/* Role selection */}
+      <div className="space-y-2">
+        <Label>Registering as</Label>
+        <div className="grid grid-cols-3 gap-2">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           {REGISTER_ROLES.map((r) => (
             <button
               key={r.value}
@@ -570,7 +833,11 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
               onClick={() => setRegisterRole(r.value)}
               className={`rounded-lg border px-3 py-2.5 text-left transition-all ${
                 registerRole === r.value
+<<<<<<< HEAD
                   ? "border-primary bg-primary/10 text-primary ring-1 ring-primary"
+=======
+                  ? "border-primary bg-primary/8 text-primary ring-1 ring-primary"
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                   : "border-border bg-muted/30 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
               }`}
             >
@@ -581,6 +848,7 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* Name */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-[130px_1fr_1fr]">
         <Select value={salutation} onValueChange={setSalutation}>
@@ -591,6 +859,33 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
         </Select>
         <GuardedInput required fieldName="First name" placeholder="First name" value={firstName} onChange={setFirstName} />
         <GuardedInput fieldName="Last name" placeholder="Last name" value={lastName} onChange={setLastName} />
+=======
+      {/* Salutation + First name + Last name */}
+      <div className="grid grid-cols-[130px_1fr_1fr] gap-2">
+        <Select value={salutation} onValueChange={setSalutation}>
+          <SelectTrigger>
+            <SelectValue placeholder="Salutation" />
+          </SelectTrigger>
+          <SelectContent>
+            {SALUTATIONS.map((s) => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <GuardedInput
+          required
+          fieldName="First name"
+          placeholder="First name"
+          value={firstName}
+          onChange={setFirstName}
+        />
+        <GuardedInput
+          fieldName="Last name"
+          placeholder="Last name"
+          value={lastName}
+          onChange={setLastName}
+        />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
       {fullName && (
         <p className="text-xs text-muted-foreground">Full name: <span className="font-medium text-foreground">{fullName}</span></p>
@@ -600,13 +895,24 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
       <div className="space-y-2">
         <Label>Gender</Label>
         <Select value={gender} onValueChange={setGender}>
+<<<<<<< HEAD
           <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
           <SelectContent>
             {GENDERS.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
+=======
+          <SelectTrigger>
+            <SelectValue placeholder="Select gender" />
+          </SelectTrigger>
+          <SelectContent>
+            {GENDERS.map((g) => (
+              <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>
+            ))}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </SelectContent>
         </Select>
       </div>
 
+<<<<<<< HEAD
       <DobPicker value={dob} onChange={setDob} />
 
       {/* Mobile number — required for password reset via HOD */}
@@ -632,6 +938,12 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
           : <p className="text-xs text-muted-foreground">10-digit Indian mobile number (starts with 6–9). Used by your HOD for password reset. Not shared publicly.</p>
         }
       </div>
+=======
+      {/* Date of Birth (optional) */}
+      <DobPicker value={dob} onChange={setDob} />
+
+      {/* Auto-generated User ID */}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className="space-y-2">
         <Label htmlFor="userid-preview">User ID (auto-generated)</Label>
         <div className="flex items-center gap-2">
@@ -657,7 +969,10 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
             id="reg-pass"
             type={showPw ? "text" : "password"}
             required
+<<<<<<< HEAD
             autoComplete="new-password"
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             placeholder="Create a strong password (min 12 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -670,15 +985,29 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
         <PasswordStrength password={password} />
       </div>
 
+<<<<<<< HEAD
       {/* Department + Designation */}
+=======
+      {/* Department + Designation — department hidden for HR */}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className={`grid gap-4 ${needsDept ? "sm:grid-cols-2" : "grid-cols-1"}`}>
         {needsDept && (
           <div className="space-y-2">
             <Label>Department</Label>
             <Select value={departmentId} onValueChange={setDepartmentId}>
+<<<<<<< HEAD
               <SelectTrigger><SelectValue placeholder="Select department" /></SelectTrigger>
               <SelectContent>
                 {departments.map((d) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
+=======
+              <SelectTrigger>
+                <SelectValue placeholder="Select department" />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.map((d) => (
+                  <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                ))}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               </SelectContent>
             </Select>
           </div>
@@ -686,6 +1015,7 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
         <div className="space-y-2">
           <Label htmlFor="desig">Designation</Label>
           <Select value={designation} onValueChange={setDesignation}>
+<<<<<<< HEAD
             <SelectTrigger id="desig"><SelectValue placeholder="Select designation" /></SelectTrigger>
             <SelectContent>
               {[
@@ -693,6 +1023,30 @@ function RegisterForm({ onBackToSignIn }: { onBackToSignIn: () => void }) {
                 "Head of Department","Principal","Vice Principal","Lecturer","Senior Lecturer",
                 "Lab Assistant","Teaching Assistant","HR Manager","HR Executive","HR Officer",
               ].map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
+=======
+            <SelectTrigger id="desig">
+              <SelectValue placeholder="Select designation" />
+            </SelectTrigger>
+            <SelectContent>
+              {[
+                "Assistant Professor",
+                "Associate Professor",
+                "Professor",
+                "Senior Professor",
+                "Head of Department",
+                "Principal",
+                "Vice Principal",
+                "Lecturer",
+                "Senior Lecturer",
+                "Lab Assistant",
+                "Teaching Assistant",
+                "HR Manager",
+                "HR Executive",
+                "HR Officer",
+              ].map((d) => (
+                <SelectItem key={d} value={d}>{d}</SelectItem>
+              ))}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </SelectContent>
           </Select>
         </div>

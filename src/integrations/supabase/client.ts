@@ -17,6 +17,7 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
     }
 
     // New Supabase API keys are opaque strings, not bearer JWTs.
+<<<<<<< HEAD
     // Strip the anon key from Authorization ONLY on non-auth endpoints (REST/Storage/etc).
     // Auth endpoints (/auth/v1/token, /auth/v1/logout, etc.) must keep their own
     // Authorization header intact — stripping it there causes 400s on token refresh.
@@ -27,6 +28,9 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
       isNewSupabaseApiKey(supabaseKey) &&
       headers.get('Authorization') === `Bearer ${supabaseKey}`
     ) {
+=======
+    if (isNewSupabaseApiKey(supabaseKey) && headers.get('Authorization') === `Bearer ${supabaseKey}`) {
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       headers.delete('Authorization');
     }
 

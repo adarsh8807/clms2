@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/lib/auth";
+<<<<<<< HEAD
 import { ThemeProvider } from "@/lib/theme";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -84,6 +85,10 @@ const STRUCTURED_DATA = {
   ]
 };
 
+=======
+import { Toaster } from "@/components/ui/sonner";
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -148,13 +153,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
+<<<<<<< HEAD
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" },
       // Lock to portrait — the app layout is portrait-only, landscape breaks bottom nav
       { name: "screen-orientation", content: "portrait" },
+=======
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "CSC Leave Management System" },
       {
         name: "description",
         content:
+<<<<<<< HEAD
           "Official leave management portal for Chandrabhan Sharma College. Teachers can apply for leave, track approvals, view proxy assignments and payroll deductions. HODs and the Principal manage and approve requests online.",
       },
       // Open Graph — controls previews in WhatsApp, Teams, social media
@@ -169,6 +179,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: "Official leave portal for Chandrabhan Sharma College — apply, track, and approve leaves online." },
       // Public pages (login) are indexable; authenticated routes override with noindex
       { name: "robots", content: "index, follow" },
+=======
+          "Leave management for Chandrabhan Sharma College — teacher, HOD and principal panels.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -179,7 +195,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+<<<<<<< HEAD
       { rel: "manifest", href: "/manifest.json" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     ],
   }),
   shellComponent: RootShell,
@@ -193,6 +212,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+<<<<<<< HEAD
         {/* Blocking script — applies dark class before paint to prevent flash */}
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();` }} />
         {/* Lock orientation to portrait — prevents layout breaking on phone rotation */}
@@ -204,6 +224,8 @@ function RootShell({ children }: { children: ReactNode }) {
         />  
         <meta name="google-site-verification" content="Gappp0r5rWLgFoGflSVQiC2TQ0LFrjSutMFGJtimN-M" />
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </head>
       <body>
         {children}
@@ -218,6 +240,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+<<<<<<< HEAD
       <ThemeProvider>
         <AuthProvider>
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
@@ -225,6 +248,13 @@ function RootComponent() {
           <Toaster richColors position="top-right" />
         </AuthProvider>
       </ThemeProvider>
+=======
+      <AuthProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Toaster richColors position="top-right" />
+      </AuthProvider>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     </QueryClientProvider>
   );
 }

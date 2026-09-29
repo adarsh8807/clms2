@@ -18,6 +18,7 @@ import {
   Wallet,
   Megaphone,
   ShieldCheck,
+<<<<<<< HEAD
   Moon,
   Sun,
   Settings2,
@@ -48,12 +49,22 @@ const IS_NATIVE_APP = typeof navigator !== "undefined" &&
 // When running inside Median, suppress all tooltip popups (touch devices can't hover)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
+=======
+} from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth, type AppRole } from "@/lib/auth";
+import { Logo } from "@/components/Logo";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { NoticeBell } from "@/components/NoticeBell";
 import { LeaveBot } from "@/components/LeaveBot";
 
 type NavItem = {
   to: string;
   label: string;
+<<<<<<< HEAD
   mobileLabel?: string; // shorter label for bottom nav if label truncates
   icon: typeof LayoutDashboard;
   roles: AppRole[];
@@ -87,6 +98,13 @@ function OfflineBanner({ onToggle }: { onToggle: (v: boolean) => void }) {
   );
 }
 
+=======
+  icon: typeof LayoutDashboard;
+  roles: AppRole[];
+  badge?: number;
+};
+
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 export function AppShell({
   title,
   subtitle,
@@ -100,6 +118,7 @@ export function AppShell({
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+<<<<<<< HEAD
   const [offline, setOffline] = useState(false);
   const [customizeOpen, setCustomizeOpen] = useState(false);
 
@@ -184,6 +203,8 @@ export function AppShell({
     pinnedTabsDirty.current = true;
     setPinnedTabs(tabs);
   }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   const { data: pendingProxies = 0 } = useQuery({
     queryKey: ["pending-proxy-count", profile?.id],
@@ -214,6 +235,7 @@ export function AppShell({
   const items: NavItem[] = [
     { to: "/admin",         label: "Admin Panel",       icon: ShieldCheck,    roles: ["admin"] },
     { to: "/hr",            label: "HR Panel",          icon: Briefcase,      roles: ["hr"], badge: pendingHR },
+<<<<<<< HEAD
     { to: "/admin-reports", label: "Reports",           mobileLabel: "Reports",  icon: BarChart3,      roles: ["admin", "principal"] },
     { to: "/dashboard",     label: "Dashboard",         icon: LayoutDashboard,roles: ["teacher", "hod", "principal", "hr"] },
     { to: "/apply",         label: "Apply Leave",       icon: CalendarPlus,   roles: ["teacher", "hod"] },
@@ -226,12 +248,27 @@ export function AppShell({
     { to: "/teachers",      label: "Teachers",          icon: Users,          roles: ["hod", "principal", "admin", "hr"] },
     { to: "/departments",   label: "Departments",       icon: Building2,      roles: ["principal", "admin"] },
     { to: "/holidays",      label: "Holidays",          icon: PartyPopper,    roles: ["teacher", "hod", "principal", "admin", "hr"] },
+=======
+    { to: "/admin-reports", label: "Reports",           icon: BarChart3,      roles: ["admin", "principal"] },
+    { to: "/dashboard",     label: "Dashboard",         icon: LayoutDashboard,roles: ["teacher", "hod", "principal"] },
+    { to: "/apply",         label: "Apply Leave",       icon: CalendarPlus,   roles: ["teacher", "hod"] },
+    { to: "/leaves",        label: "My Leaves",         icon: FileText,       roles: ["teacher", "hod"] },
+    { to: "/schedule",      label: "My Schedule",       icon: CalendarDays,   roles: ["teacher", "hod"] },
+    { to: "/proxies",       label: "Proxy Assignments", icon: Repeat,         roles: ["teacher", "hod"], badge: pendingProxies },
+    { to: "/payroll",       label: "Payroll",           icon: Wallet,         roles: ["teacher", "hod"] },
+    { to: "/requests",      label: "Leave Requests",    icon: ClipboardCheck, roles: ["hod", "principal", "admin"] },
+    { to: "/notices",       label: "Notices",           icon: Megaphone,      roles: ["hod", "principal", "admin"] },
+    { to: "/teachers",      label: "Teachers",          icon: Users,          roles: ["hod", "principal", "admin"] },
+    { to: "/departments",   label: "Departments",       icon: Building2,      roles: ["principal", "admin"] },
+    { to: "/holidays",      label: "Holidays",          icon: PartyPopper,    roles: ["teacher", "hod", "principal", "admin"] },
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     { to: "/reports",       label: "Reports",           icon: BarChart3,      roles: ["hod"] },
     { to: "/profile",       label: "Profile",           icon: UserRound,      roles: ["teacher", "hod", "principal", "admin", "hr"] },
   ];
 
   const visible = items.filter((i) => (role ? i.roles.includes(role) : false));
 
+<<<<<<< HEAD
   // Derive the 5 tabs to show in the mobile bottom nav
   const MAX_MOBILE_TABS = 5;
   const mobileNavItems = (() => {
@@ -260,6 +297,8 @@ export function AppShell({
     });
   }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   async function handleSignOut() {
     await signOut();
     navigate({ to: "/", replace: true });
@@ -274,6 +313,7 @@ export function AppShell({
           <Link
             key={item.to}
             to={item.to}
+<<<<<<< HEAD
             search={item.search as any}
             onClick={() => setOpen(false)}
             aria-current={active ? "page" : undefined}
@@ -282,6 +322,14 @@ export function AppShell({
               active
                 ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-0.5 before:rounded-r before:bg-primary"
                 : "text-sidebar-foreground hover:bg-muted/60",
+=======
+            onClick={() => setOpen(false)}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+              active
+                ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                : "text-sidebar-foreground hover:bg-muted",
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             )}
           >
             <Icon className="size-4.5 shrink-0" />
@@ -294,6 +342,7 @@ export function AppShell({
           </Link>
         );
       })}
+<<<<<<< HEAD
       <Tooltip>
         <TooltipTrigger asChild>
           <button
@@ -306,10 +355,20 @@ export function AppShell({
         </TooltipTrigger>
         <TooltipContent side="right">Sign out of your account</TooltipContent>
       </Tooltip>
+=======
+      <button
+        onClick={handleSignOut}
+        className="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-muted"
+      >
+        <LogOut className="size-4.5" />
+        Logout
+      </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     </nav>
   );
 
   return (
+<<<<<<< HEAD
     <TooltipProvider delayDuration={300}>
     <div className="flex min-h-screen bg-background">
       {/* Android double-back-to-exit toast */}
@@ -328,11 +387,20 @@ export function AppShell({
         <div className="flex-1 overflow-y-auto">
           {nav}
         </div>
+=======
+    <div className="flex min-h-screen bg-background">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-sidebar-border bg-sidebar py-6 lg:flex">
+        <div className="px-5 pb-6">
+          <Logo />
+        </div>
+        {nav}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </aside>
 
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-foreground/30" onClick={() => setOpen(false)} />
+<<<<<<< HEAD
           <aside className="absolute inset-y-0 left-0 flex w-64 flex-col bg-sidebar py-6 overflow-hidden shadow-xl">
             <div className="flex items-center justify-between px-5 pb-6 shrink-0">
               <Logo />
@@ -352,11 +420,19 @@ export function AppShell({
             <div className="flex-1 overflow-y-auto">
               {nav}
             </div>
+=======
+          <aside className="absolute inset-y-0 left-0 flex w-64 flex-col bg-sidebar py-6">
+            <div className="px-5 pb-6">
+              <Logo />
+            </div>
+            {nav}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </aside>
         </div>
       )}
 
       <div className="flex min-w-0 flex-1 flex-col lg:pl-64">
+<<<<<<< HEAD
         <header
           className="sticky z-20 flex items-center gap-2 border-b border-border bg-background/90 px-3 py-3 backdrop-blur-md shadow-sm sm:gap-3 sm:px-6 sm:py-4"
           style={{ top: offline ? BANNER_H : 0 }}
@@ -622,3 +698,38 @@ function AvatarCircle({ name, userId }: { name?: string; userId?: string }) {
     </span>
   );
 }
+=======
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background/85 px-4 py-4 backdrop-blur sm:px-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="size-5" />
+          </Button>
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-lg font-bold tracking-tight sm:text-xl">{title}</h1>
+            {subtitle && <p className="truncate text-xs text-muted-foreground sm:text-sm">{subtitle}</p>}
+          </div>
+          <NoticeBell role={role} />
+          <div className="hidden items-center gap-3 sm:flex">
+            <div className="text-right">
+              <p className="text-sm font-semibold">{profile?.full_name}</p>
+              <p className="text-xs capitalize text-muted-foreground">
+                {role === "hod" ? "HOD" : role} · {profile?.department_name ?? "College"}
+              </p>
+            </div>
+            <div className="grid size-10 place-items-center rounded-full bg-accent text-sm font-bold text-accent-foreground">
+              {profile?.full_name?.slice(0, 2).toUpperCase()}
+            </div>
+          </div>
+        </header>
+        <main className="flex-1 px-4 py-6 sm:px-6">{children}</main>
+      </div>
+      <LeaveBot />
+    </div>
+  );
+}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8

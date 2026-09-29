@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+<<<<<<< HEAD
 import { createPortal } from "react-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -7,16 +8,24 @@ import { ChevronLeft, ChevronRight, Gift, LayoutGrid, Printer, Trash2, Upload, X
 import { jsPDF } from "jspdf";
 import { autoTable } from "jspdf-autotable";
 import * as XLSX from "xlsx";
+=======
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Trash2, LayoutGrid, X, ChevronLeft, ChevronRight } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { SectionCard, Empty } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof _TooltipContent;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +38,10 @@ import {
 } from "@/components/ui/select";
 import { DAYS, fmtDate, fmtTime, todayISO } from "@/lib/leave";
 import { cn } from "@/lib/utils";
+<<<<<<< HEAD
 import { savePDF, saveXLSX } from "../lib/download";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 // ── Common subjects list ──────────────────────────────────────────────────────
 const COMMON_SUBJECTS = [
@@ -188,7 +200,11 @@ function SubjectCombobox({
             <button
               key={s}
               type="button"
+<<<<<<< HEAD
               className={`w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors ${s === value ? "bg-primary/10 text-primary font-medium" : ""}`}
+=======
+              className={`w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors ${s === value ? "bg-primary/8 text-primary font-medium" : ""}`}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               onMouseDown={() => select(s)}
             >
               {s}
@@ -203,7 +219,10 @@ function SubjectCombobox({
 export const Route = createFileRoute("/schedule")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "My Schedule — CSC Leave Management" },
       {
         name: "description",
@@ -289,6 +308,7 @@ function TimetableModal({
   const WEEKDAYS_LIST = [1, 2, 3, 4, 5, 6];
   const [mobileDay, setMobileDay] = useState(1);
 
+<<<<<<< HEAD
   async function downloadPDF() {
     const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
     const PW = doc.internal.pageSize.getWidth();   // 297
@@ -442,6 +462,11 @@ function TimetableModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="w-full sm:max-w-5xl rounded-2xl bg-[#111] text-white shadow-2xl overflow-hidden flex flex-col max-h-[92dvh]">
+=======
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 p-0 sm:p-4">
+      <div className="w-full sm:max-w-5xl rounded-t-2xl sm:rounded-2xl bg-[#111] text-white shadow-2xl overflow-hidden flex flex-col max-h-[92dvh]">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
         {/* Header */}
         <div className="flex items-center justify-between bg-[#0a0a0a] px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10 shrink-0">
@@ -449,6 +474,7 @@ function TimetableModal({
             <h2 className="text-base sm:text-lg font-bold">Weekly Timetable</h2>
             <p className="text-xs sm:text-sm text-white/50">{teacherName}</p>
           </div>
+<<<<<<< HEAD
           <div className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -467,6 +493,11 @@ function TimetableModal({
               <TooltipContent side="bottom">Close</TooltipContent>
             </Tooltip>
           </div>
+=======
+          <button type="button" onClick={onClose} className="rounded-lg p-2 hover:bg-white/10 transition-colors">
+            <X className="size-5" />
+          </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
 
         {/* Mobile: day tab strip */}
@@ -526,7 +557,11 @@ function TimetableModal({
               <tr>
                 <th className="w-28 pb-2 text-left text-xs text-white/40 font-normal" />
                 {DAY_NAMES_SHORT.map((d) => (
+<<<<<<< HEAD
                   <th key={d} className="pb-2 text-center text-xs font-semibold text-white/70 min-w-[100px]">{d}</th>
+=======
+                  <th key={d} className="pb-2 text-center text-xs font-semibold text-white/70 min-w-[90px]">{d}</th>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 ))}
               </tr>
             </thead>
@@ -547,10 +582,17 @@ function TimetableModal({
                       const cell = fixed.find(
                         (l) => l.day_of_week === dow && l.start_time === slot.start && l.end_time === slot.end,
                       );
+<<<<<<< HEAD
                       if (!cell) return <td key={dow} className="rounded-md bg-white/5 min-w-[100px] h-16" />;
                       const col = subjectColor[cell.subject];
                       return (
                         <td key={dow} className={cn("rounded-md px-2 py-1.5 min-w-[100px] h-16 align-top", col.bg)}>
+=======
+                      if (!cell) return <td key={dow} className="rounded-md bg-white/5 min-w-[90px] h-14" />;
+                      const col = subjectColor[cell.subject];
+                      return (
+                        <td key={dow} className={cn("rounded-md px-2 py-1.5 min-w-[90px] h-14 align-top", col.bg)}>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                           <p className={cn("font-bold text-xs leading-tight", col.text)}>{cell.subject}</p>
                           <p className={cn("text-[10px] opacity-80 mt-0.5", col.text)}>
                             {cell.class_name}{cell.room ? ` · ${cell.room}` : ""}
@@ -835,6 +877,7 @@ function SchedulePage() {
 
   // ── Render helpers ─────────────────────────────────────────────────────────
   const todayDowValue = new Date().getDay();
+<<<<<<< HEAD
   const totalLectures = lectures.filter(l => !l.lecture_date).length;
   const todayCount = lectures.filter(l => !l.lecture_date && l.day_of_week === todayDowValue).length;
   const proxiesThisYear = proxies.filter((p: any) => p.status === "accepted").length;
@@ -842,10 +885,17 @@ function SchedulePage() {
   return (
     <AppShell title="My Schedule" subtitle="Fixed timetable, added lectures and accepted proxy duties">
       {showTimetable && createPortal(
+=======
+
+  return (
+    <AppShell title="My Schedule" subtitle="Fixed timetable, added lectures and accepted proxy duties">
+      {showTimetable && (
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         <TimetableModal
           lectures={lectures}
           teacherName={profile?.full_name ?? ""}
           onClose={() => setShowTimetable(false)}
+<<<<<<< HEAD
         />,
         document.body
       )}
@@ -869,12 +919,20 @@ function SchedulePage() {
         </div>
       </div>
 
+=======
+        />
+      )}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-4">
           {/* Pending compensation offers banner */}
           {pendingCompOffers.length > 0 && (
             <div className="rounded-lg border border-success/40 bg-success/8 p-4 space-y-2">
+<<<<<<< HEAD
               <p className="text-sm font-semibold text-success-foreground flex items-center gap-1"><Gift className="size-4"/>Compensation lecture offers pending your response</p>
+=======
+              <p className="text-sm font-semibold text-success-foreground">🎁 Compensation lecture offers pending your response</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <p className="text-xs text-muted-foreground">Go to <strong>Proxy Duties</strong> to accept or decline. Accepted lectures will appear in your schedule automatically.</p>
               <ul className="mt-2 space-y-1">
                 {pendingCompOffers.map((o) => (
@@ -897,6 +955,7 @@ function SchedulePage() {
             const isCurrentWeek = weekOffset === 0;
             return (
               <div className="flex items-center justify-between rounded-xl border border-border bg-muted/30 px-3 py-2">
+<<<<<<< HEAD
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -910,12 +969,23 @@ function SchedulePage() {
                   </TooltipTrigger>
                   <TooltipContent side="bottom">Previous week</TooltipContent>
                 </Tooltip>
+=======
+                <button
+                  type="button"
+                  onClick={() => setWeekOffset((w) => w - 1)}
+                  className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                  aria-label="Previous week"
+                >
+                  <ChevronLeft className="size-4" />
+                </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 <div className="text-center">
                   <p className="text-sm font-semibold">
                     {isCurrentWeek ? "This week" : weekOffset === 1 ? "Next week" : weekOffset === -1 ? "Last week" : `Week of ${fmt(weekStart)}`}
                   </p>
                   <p className="text-xs text-muted-foreground">{fmt(weekStart)} – {fmt(weekEnd)}</p>
                 </div>
+<<<<<<< HEAD
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -929,6 +999,16 @@ function SchedulePage() {
                   </TooltipTrigger>
                   <TooltipContent side="bottom">Next week</TooltipContent>
                 </Tooltip>
+=======
+                <button
+                  type="button"
+                  onClick={() => setWeekOffset((w) => w + 1)}
+                  className="rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                  aria-label="Next week"
+                >
+                  <ChevronRight className="size-4" />
+                </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               </div>
             );
           })()}
@@ -1148,14 +1228,18 @@ function SchedulePage() {
             </Button>
           </form>
         </SectionCard>
+<<<<<<< HEAD
 
         {/* ── Excel bulk upload ─────────────────────────────────────────── */}
         <ExcelUploadCard teacherId={profile!.id} departmentId={profile?.department_id ?? null} onDone={() => qc.invalidateQueries({ queryKey: ["my-lectures"] })} />
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       </div>
     </AppShell>
   );
 }
 
+<<<<<<< HEAD
 // ── Excel Upload Card ─────────────────────────────────────────────────────────
 // Expected Excel format (any sheet name):
 //   Col A: Day       — Mon / Monday / 1-7 / Sun=0
@@ -1409,6 +1493,8 @@ function ExcelUploadCard({
   );
 }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function LectureRow({
   lecture: l,
   onRemove,
@@ -1455,6 +1541,7 @@ function LectureRow({
           </div>
         </div>
         {onRemove && (
+<<<<<<< HEAD
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" className="shrink-0 -mt-1" onClick={() => onRemove(l.id)}>
@@ -1463,6 +1550,11 @@ function LectureRow({
             </TooltipTrigger>
             <TooltipContent side="left">Remove lecture</TooltipContent>
           </Tooltip>
+=======
+          <Button variant="ghost" size="icon" className="shrink-0 -mt-1" onClick={() => onRemove(l.id)}>
+            <Trash2 className="size-4" />
+          </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         )}
       </div>
     </li>

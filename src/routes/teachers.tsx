@@ -1,11 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useRef, useState } from "react";
+=======
+import { useState } from "react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
+<<<<<<< HEAD
 import { SectionCard, StatCard, Empty } from "@/components/ui-bits";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,6 +22,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GuardedTextarea, type GuardHandle } from "@/components/GuardedField";
+=======
+import { SectionCard, Empty } from "@/components/ui-bits";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   Select,
   SelectContent,
@@ -26,16 +39,24 @@ import {
 } from "@/components/ui/select";
 import {
   GraduationCap, Calendar, BookOpen, TrendingUp,
+<<<<<<< HEAD
   X, ChevronRight, Clock, UserCircle2, Edit3, Check, MessageCircle, KeyRound,
 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { directPasswordReset } from "@/lib/admin.functions";
+=======
+  X, ChevronRight, Clock, UserCircle2, Edit3, Check,
+} from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { fmtDate, leaveTypeLabel, type LeaveType } from "@/lib/leave";
 
 export const Route = createFileRoute("/teachers")({
   head: () => ({
     meta: [
+<<<<<<< HEAD
       { name: "robots", content: "noindex, nofollow" },
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "Teachers — CSC Leave Management" },
       { name: "description", content: "Directory of teaching staff with department, designation and leave usage." },
       { property: "og:title", content: "Teachers — CSC Leave Management" },
@@ -65,7 +86,11 @@ function TeachersPage() {
     },
   });
 
+<<<<<<< HEAD
   const { data: rows = [], isLoading: rowsLoading, isError: rowsError } = useQuery({
+=======
+  const { data: rows = [] } = useQuery({
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     queryKey: ["staff", role, profile?.department_id],
     enabled: !!profile,
     queryFn: async () => {
@@ -75,8 +100,12 @@ function TeachersPage() {
 
       let q = supabase
         .from("profiles")
+<<<<<<< HEAD
         .select("id, full_name, designation, department_id, date_of_joining, date_of_birth, gender, experience_years, subjects_taught, phone, user_id, departments(name)")
         .eq("approved", true)   // Fix: exclude unapproved/pending registrations
+=======
+        .select("id, full_name, designation, department_id, date_of_joining, date_of_birth, gender, experience_years, subjects_taught, departments(name)")
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         .order("full_name");
       if (role === "hod") q = q.eq("department_id", profile!.department_id ?? "");
       const { data, error } = await q;
@@ -89,6 +118,7 @@ function TeachersPage() {
         .in("status", ["approved", "hod_approved"])
         .gte("from_date", `${year}-01-01`);
 
+<<<<<<< HEAD
       const baseData = (data ?? []).filter((p: any) => !excludedIds.has(p.id));
 
       // Check which teachers have pending password reset requests (HOD only)
@@ -106,6 +136,16 @@ function TeachersPage() {
           unpaid: (leaves ?? []).filter((l: any) => l.teacher_id === p.id).reduce((s: number, l: any) => s + Number(l.unpaid_days), 0),
           leaveHistory: (leaves ?? []).filter((l: any) => l.teacher_id === p.id),
           _hasPendingReset: pendingResetIds.has(p.id),
+=======
+      return (data ?? [])
+        .filter((p) => !excludedIds.has(p.id))
+        .map((p) => ({
+          ...p,
+          deptName: (p.departments as { name: string } | null)?.name ?? "—",
+          taken: (leaves ?? []).filter((l) => l.teacher_id === p.id).reduce((s, l) => s + Number(l.total_days), 0),
+          unpaid: (leaves ?? []).filter((l) => l.teacher_id === p.id).reduce((s, l) => s + Number(l.unpaid_days), 0),
+          leaveHistory: (leaves ?? []).filter((l) => l.teacher_id === p.id),
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         }));
     },
   });
@@ -122,15 +162,19 @@ function TeachersPage() {
     return matchDept && matchSearch;
   });
 
+<<<<<<< HEAD
   const totalLeavesTaken = rows.reduce((s, r) => s + r.taken, 0);
   const totalUnpaid      = rows.reduce((s, r) => s + r.unpaid, 0);
   const onLeaveToday     = rows.filter(r => (r as any).onLeaveToday).length;
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   return (
     <AppShell
       title="Teachers"
       subtitle={role === "hod" ? "Staff in your department" : "All college staff"}
     >
+<<<<<<< HEAD
       {/* Stats strip */}
       {rows.length > 0 && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-6">
@@ -141,6 +185,8 @@ function TeachersPage() {
         </div>
       )}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className={`grid gap-6 transition-all ${selected ? "lg:grid-cols-[1fr_380px]" : "grid-cols-1"}`}>
         {/* Staff list */}
         <SectionCard title={`${filtered.length} of ${rows.length} staff member(s)`}>
@@ -196,6 +242,7 @@ function TeachersPage() {
                         <td className="py-3 font-medium">{r.full_name}</td>
                         <td className="py-3 capitalize text-muted-foreground">{r.designation}</td>
                         <td className="py-3">{r.deptName}</td>
+<<<<<<< HEAD
                         <td className="py-3">
                           {r._hasPendingReset && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-warning/15 text-warning text-[10px] font-semibold px-2 py-0.5">
@@ -203,6 +250,8 @@ function TeachersPage() {
                             </span>
                           )}
                         </td>
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                         <td className="py-3 text-muted-foreground">
                           {r.experience_years != null ? `${r.experience_years} yr` : "—"}
                         </td>
@@ -256,7 +305,10 @@ function TeachersPage() {
             teacher={selected}
             onClose={() => setSelectedId(null)}
             isHod={role === "hod"}
+<<<<<<< HEAD
             hodDeptId={profile?.department_id ?? null}
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           />
         )}
       </div>
@@ -269,12 +321,18 @@ function TeacherDetailPanel({
   teacher,
   onClose,
   isHod,
+<<<<<<< HEAD
   hodDeptId,
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }: {
   teacher: any;
   onClose: () => void;
   isHod: boolean;
+<<<<<<< HEAD
   hodDeptId: string | null;
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 }) {
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
@@ -282,6 +340,7 @@ function TeacherDetailPanel({
   const [doj, setDoj] = useState<string>(teacher.date_of_joining ?? "");
   const [gender, setGender] = useState<string>((teacher as any).gender ?? "");
   const [subjects, setSubjects] = useState<string>(teacher.subjects_taught ?? "");
+<<<<<<< HEAD
   const subjectsGuardRef = useRef<GuardHandle>(null);
   const [saving, setSaving] = useState(false);
   const resetFn = useServerFn(directPasswordReset);
@@ -312,6 +371,9 @@ function TeacherDetailPanel({
     );
     window.open(`https://wa.me/${intl}?text=${msg}`, "_blank");
   }
+=======
+  const [saving, setSaving] = useState(false);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // DOB: stored as "DD-MM" or "DD-MM-YYYY"; split into 3 fields
   function parseDob(raw: string | null | undefined): { day: string; month: string; year: string } {
@@ -336,10 +398,13 @@ function TeacherDetailPanel({
   }
 
   async function saveDetails() {
+<<<<<<< HEAD
     if (subjects.trim()) {
       const guardErr = await subjectsGuardRef.current?.validateNow();
       if (guardErr) return; // error already shown inline
     }
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
@@ -347,7 +412,11 @@ function TeacherDetailPanel({
         experience_years: expYears ? parseInt(expYears, 10) : null,
         date_of_joining: doj || null,
         date_of_birth: buildDobValue(),
+<<<<<<< HEAD
         gender: (gender || null) as "female" | "male" | "other" | null,
+=======
+        gender: gender || null,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         subjects_taught: subjects.trim() || null,
       })
       .eq("id", teacher.id);
@@ -355,7 +424,11 @@ function TeacherDetailPanel({
     if (error) return toast.error(error.message);
     toast.success("Details updated");
     setEditing(false);
+<<<<<<< HEAD
     qc.invalidateQueries({ predicate: (q) => q.queryKey[0] === "staff" });
+=======
+    qc.invalidateQueries({ queryKey: ["staff"] });
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   // Fetch this teacher's lectures
@@ -407,6 +480,7 @@ function TeacherDetailPanel({
         </div>
         <div className="flex gap-1">
           {isHod && (
+<<<<<<< HEAD
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
@@ -430,13 +504,32 @@ function TeacherDetailPanel({
             </TooltipTrigger>
             <TooltipContent side="bottom">Close</TooltipContent>
           </Tooltip>
+=======
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8"
+              onClick={() => setEditing((v) => !v)}
+              title="Edit teacher details"
+            >
+              <Edit3 className="size-4" />
+            </Button>
+          )}
+          <Button variant="ghost" size="icon" className="size-8" onClick={onClose}>
+            <X className="size-4" />
+          </Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         </div>
       </div>
 
       <div className="p-5 space-y-5 max-h-[calc(100vh-220px)] overflow-y-auto">
 
         {/* Key stats */}
+<<<<<<< HEAD
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-2">
+=======
+        <div className="grid grid-cols-2 gap-3">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           {[
             { label: "Leaves this yr", value: teacher.taken, icon: Calendar, color: "text-warning-foreground" },
             { label: "Pay-cut days", value: teacher.unpaid, icon: TrendingUp, color: teacher.unpaid > 0 ? "text-destructive" : "text-muted-foreground" },
@@ -538,12 +631,19 @@ function TeacherDetailPanel({
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Subjects taught (comma-separated)</Label>
+<<<<<<< HEAD
               <GuardedTextarea
                 ref={subjectsGuardRef}
                 fieldName="Subjects"
                 rows={2}
                 value={subjects}
                 onChange={setSubjects}
+=======
+              <Textarea
+                rows={2}
+                value={subjects}
+                onChange={(e) => setSubjects(e.target.value)}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 className="text-sm resize-none"
                 placeholder="e.g. Data Structures, DBMS, OS"
               />
@@ -622,6 +722,7 @@ function TeacherDetailPanel({
           </div>
         )}
 
+<<<<<<< HEAD
         {/* HOD: Password reset — only shown when teacher has a pending request */}
         {isHod && teacher.department_id === hodDeptId && teacher._hasPendingReset && (
           <div className="rounded-xl border border-border p-4 space-y-3">
@@ -665,6 +766,8 @@ function TeacherDetailPanel({
           </div>
         )}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {/* Timetable */}
         {lectures.length > 0 && (
           <div>
@@ -692,11 +795,19 @@ function TeacherDetailPanel({
         )}
 
         {/* Leave history */}
+<<<<<<< HEAD
         {(teacher.leaveHistory ?? []).length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Leave history this year</p>
             <ul className="space-y-1.5">
               {(teacher.leaveHistory ?? []).slice(0, 6).map((l: any, i: number) => (
+=======
+        {teacher.leaveHistory.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Leave history this year</p>
+            <ul className="space-y-1.5">
+              {teacher.leaveHistory.slice(0, 6).map((l: any, i: number) => (
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 <li key={i} className="flex items-center gap-2 text-xs rounded-lg border border-border px-3 py-2">
                   <span className="font-medium text-muted-foreground">{leaveTypeLabel(l.leave_type as LeaveType)}</span>
                   <span className="text-muted-foreground">·</span>
@@ -704,14 +815,23 @@ function TeacherDetailPanel({
                   <span className="ml-auto font-medium">{Number(l.total_days)} day{Number(l.total_days) !== 1 ? "s" : ""}</span>
                 </li>
               ))}
+<<<<<<< HEAD
               {(teacher.leaveHistory ?? []).length > 6 && (
                 <p className="text-xs text-muted-foreground text-center pt-1">+{(teacher.leaveHistory ?? []).length - 6} more</p>
+=======
+              {teacher.leaveHistory.length > 6 && (
+                <p className="text-xs text-muted-foreground text-center pt-1">+{teacher.leaveHistory.length - 6} more</p>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               )}
             </ul>
           </div>
         )}
 
+<<<<<<< HEAD
         {(teacher.leaveHistory ?? []).length === 0 && lectures.length === 0 && !editing && (
+=======
+        {teacher.leaveHistory.length === 0 && lectures.length === 0 && !editing && (
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           <div className="rounded-xl border border-dashed border-border py-6 text-center">
             <GraduationCap className="mx-auto size-8 text-muted-foreground/40 mb-2" />
             <p className="text-xs text-muted-foreground">No leaves or timetable data yet.</p>

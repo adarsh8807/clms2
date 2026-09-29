@@ -64,7 +64,11 @@ function StatusPill({ status }: { status: DocRow["status"] }) {
       </span>
     );
   return (
+<<<<<<< HEAD
     <span className="inline-flex items-center gap-1 rounded-full bg-warning/15 px-2.5 py-0.5 text-xs font-semibold text-warning">
+=======
+    <span className="inline-flex items-center gap-1 rounded-full bg-warning/15 px-2.5 py-0.5 text-xs font-semibold text-warning-foreground">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <Clock className="size-3" /> Pending review
     </span>
   );
@@ -86,11 +90,19 @@ function DocCard({
 
   async function handleFile(file: File) {
     if (!file) return;
+<<<<<<< HEAD
     if (file.size > 10 * 1024 * 1024) { toast.error("File must be under 10 MB"); return; }
+=======
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("File must be under 10 MB");
+      return;
+    }
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setUploading(true);
     try {
       const ext = file.name.split(".").pop();
       const path = `${teacherId}/${doc.type}-${Date.now()}.${ext}`;
+<<<<<<< HEAD
       if (existing?.file_path) {
         await supabase.storage.from("hr-docs").remove([existing.file_path]);
       }
@@ -102,6 +114,34 @@ function DocCard({
       );
       if (dbErr) throw dbErr;
       toast.success(`${doc.label} uploaded — pending HR review`);
+=======
+
+      // Delete old file if exists
+      if (existing?.file_path) {
+        await supabase.storage.from("hr-docs").remove([existing.file_path]);
+      }
+
+      const { error: uploadErr } = await supabase.storage
+        .from("hr-docs")
+        .upload(path, file, { upsert: true });
+      if (uploadErr) throw uploadErr;
+
+      // Upsert document record
+      const { error: dbErr } = await supabase.from("teacher_documents").upsert(
+        {
+          teacher_id: teacherId,
+          doc_type: doc.type,
+          file_path: path,
+          original_name: file.name,
+          status: "pending",
+          hr_note: null,
+        },
+        { onConflict: "teacher_id,doc_type" },
+      );
+      if (dbErr) throw dbErr;
+
+      toast.success(`${doc.label} uploaded successfully`);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       onUploaded();
     } catch (e: any) {
       toast.error(e.message ?? "Upload failed");
@@ -110,6 +150,7 @@ function DocCard({
     }
   }
 
+<<<<<<< HEAD
   const isApproved = existing?.status === "approved";
   const isRejected = existing?.status === "rejected";
   const isPending  = existing?.status === "pending";
@@ -122,6 +163,17 @@ function DocCard({
       isPending  && "border-warning/40 bg-warning/5",
       !existing  && "border-border",
     )}>
+=======
+  return (
+    <div
+      className={cn(
+        "rounded-xl border p-4 space-y-3 transition-colors",
+        existing?.status === "approved" && "border-success/40 bg-success/5",
+        existing?.status === "rejected" && "border-destructive/40 bg-destructive/5",
+        !existing && "border-border",
+      )}
+    >
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
@@ -144,6 +196,7 @@ function DocCard({
         </p>
       )}
 
+<<<<<<< HEAD
       {/* HR rejection note */}
       {isRejected && existing?.hr_note && (
         <p className="text-xs text-destructive rounded bg-destructive/10 px-3 py-2">
@@ -176,6 +229,36 @@ function DocCard({
             {uploading
               ? <><Loader2 className="size-3.5 animate-spin mr-1.5" />Uploading…</>
               : <><Upload className="size-3.5 mr-1.5" />{isRejected ? "Re-upload" : existing ? "Replace" : "Upload"}</>}
+=======
+      {existing?.hr_note && existing.status === "rejected" && (
+        <p className="text-xs text-destructive rounded bg-destructive/10 px-3 py-2">
+          HR note: {existing.hr_note}
+        </p>
+      )}
+
+      {/* Can't re-upload if already approved */}
+      {existing?.status !== "approved" && (
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            className="hidden"
+            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+          />
+          <Button
+            size="sm"
+            variant={existing ? "outline" : "default"}
+            className="w-full"
+            disabled={uploading}
+            onClick={() => inputRef.current?.click()}
+          >
+            {uploading ? (
+              <><Loader2 className="size-3.5 animate-spin mr-1.5" /> Uploading…</>
+            ) : (
+              <><Upload className="size-3.5 mr-1.5" /> {existing ? "Re-upload" : "Upload"}</>
+            )}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </Button>
         </>
       )}
@@ -237,6 +320,7 @@ function OnboardingPage() {
           </div>
         )}
 
+<<<<<<< HEAD
         {/* Progress indicator */}
         {(() => {
           const totalDocs     = DOCS.length;
@@ -260,6 +344,8 @@ function OnboardingPage() {
           );
         })()}
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
         {/* Doc cards */}
         <div className="space-y-3">
           {DOCS.map((d) => (

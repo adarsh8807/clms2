@@ -1,14 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { useState, useEffect, useRef } from "react";
+=======
+import { useState } from "react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+<<<<<<< HEAD
 import { useBalances } from "@/hooks/useBalances";
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import { AppShell } from "@/components/AppShell";
 import { Guarded } from "@/components/Guard";
 import { SectionCard } from "@/components/ui-bits";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import { Tooltip, TooltipContent as _TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 const IS_NATIVE_APP = typeof navigator !== "undefined" && /Median|GoNative/i.test(navigator.userAgent);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,6 +24,10 @@ const TooltipContent = (IS_NATIVE_APP ? () => null : _TooltipContent) as typeof 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GuardedInput, type GuardHandle } from "@/components/GuardedField";
+=======
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 import {
   Select,
   SelectContent,
@@ -23,7 +35,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+<<<<<<< HEAD
 import { Camera, Check, CheckCircle2, Eye, EyeOff, KeyRound, Loader2 } from "lucide-react";
+=======
+import { KeyRound, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 const GENDERS: { value: string; label: string }[] = [
   { value: "male",   label: "Male" },
@@ -36,12 +52,16 @@ const MONTHS = [
   "January","February","March","April","May","June",
   "July","August","September","October","November","December",
 ];
+<<<<<<< HEAD
 function daysInMonth(month: string, year: string): number {
   const m = parseInt(month);
   const y = parseInt(year) || 2000; // use a leap year as default so Feb gets 29
   if (!m) return 31;
   return new Date(y, m, 0).getDate();
 }
+=======
+const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
 function parseDob(val: string): { day: string; month: string; year: string } {
   if (!val) return { day: "", month: "", year: "" };
@@ -65,6 +85,7 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
   const [month, setMonth] = useState(parsed.month);
   const [year,  setYear]  = useState(parsed.year);
 
+<<<<<<< HEAD
   // Compute valid days for the selected month/year — prevents invalid combos like Feb 31
   const maxDay = daysInMonth(month, year);
   const days = Array.from({ length: maxDay }, (_, i) => String(i + 1).padStart(2, "0"));
@@ -75,16 +96,29 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
     const clampedDay = parseInt(d) > max ? String(max).padStart(2, "0") : d;
     setDay(clampedDay); setMonth(m); setYear(y);
     onChange(buildDob(clampedDay, m, y));
+=======
+  function update(d: string, m: string, y: string) {
+    setDay(d); setMonth(m); setYear(y);
+    onChange(buildDob(d, m, y));
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
   }
 
   return (
     <div className="space-y-2">
       <Label>Date of Birth <span className="text-muted-foreground text-xs">(optional — year is optional)</span></Label>
+<<<<<<< HEAD
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-[80px_1fr_100px]">
         <Select value={day} onValueChange={(v) => update(v, month, year)}>
           <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
           <SelectContent>
             {days.map((d) => <SelectItem key={d} value={d}>{parseInt(d)}</SelectItem>)}
+=======
+      <div className="grid grid-cols-[80px_1fr_100px] gap-2">
+        <Select value={day} onValueChange={(v) => update(v, month, year)}>
+          <SelectTrigger><SelectValue placeholder="Day" /></SelectTrigger>
+          <SelectContent>
+            {DAYS.map((d) => <SelectItem key={d} value={d}>{parseInt(d)}</SelectItem>)}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </SelectContent>
         </Select>
         <Select value={month} onValueChange={(v) => update(day, v, year)}>
@@ -116,6 +150,7 @@ function DobPicker({ value, onChange }: { value: string; onChange: (v: string) =
   );
 }
 
+<<<<<<< HEAD
 // Indian mobile: exactly 10 digits, starts with 6-9
 const INDIAN_PHONE_RE = /^[6-9]\d{9}$/;
 function validateIndianPhone(v: string): string {
@@ -130,6 +165,11 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { name: "robots", content: "noindex, nofollow" },
+=======
+export const Route = createFileRoute("/profile")({
+  head: () => ({
+    meta: [
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       { title: "My Profile — CSC Leave Management" },
       { name: "description", content: "Your staff profile, role, department and current leave entitlement." },
       { property: "og:title", content: "My Profile — CSC Leave Management" },
@@ -143,6 +183,7 @@ export const Route = createFileRoute("/profile")({
   ),
 });
 
+<<<<<<< HEAD
 function LeaveBalancePanel({ profileId }: { profileId?: string }) {
   const { data: balances = [] } = useBalances(profileId);
   const displayed = balances.filter(b => b.type === "casual" || b.type === "medical");
@@ -173,10 +214,13 @@ function LeaveBalancePanel({ profileId }: { profileId?: string }) {
   );
 }
 
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 function ProfilePage() {
   const { profile, role, session } = useAuth();
   const qc = useQueryClient();
   const [name, setName] = useState(profile?.full_name ?? "");
+<<<<<<< HEAD
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [phoneError, setPhoneError] = useState("");
   const nameGuardRef = useRef<GuardHandle>(null);
@@ -215,6 +259,11 @@ function ProfilePage() {
       setAvatarBusy(false);
     }
   }
+=======
+  const [gender, setGender] = useState(profile?.gender ?? "");
+  const [dob, setDob] = useState(profile?.date_of_birth ?? "");
+  const [busy, setBusy] = useState(false);
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
   // Password change state
   const [oldPw, setOldPw] = useState("");
@@ -231,6 +280,7 @@ function ProfilePage() {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     if (name.trim().length < 3) return toast.error("Enter your full name");
+<<<<<<< HEAD
     const guardErr = await nameGuardRef.current?.validateNow();
     if (guardErr) return;
     // Phone validation — optional field but must be valid if filled
@@ -239,21 +289,31 @@ function ProfilePage() {
       if (err) { setPhoneError(err); return; }
     }
     setPhoneError("");
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     setBusy(true);
     const { error } = await supabase
       .from("profiles")
       .update({
         full_name: name.trim(),
+<<<<<<< HEAD
         gender: (gender || null) as "female" | "male" | "other" | null,
         date_of_birth: dob || null,
         phone: phone.trim() || null,
+=======
+        gender: gender || null,
+        date_of_birth: dob || null,
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
       })
       .eq("id", profile!.id);
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Profile updated");
+<<<<<<< HEAD
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+=======
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
   }
 
@@ -284,7 +344,11 @@ function ProfilePage() {
     const { error: updateError } = await supabase.auth.updateUser({ password: newPw });
     if (updateError) { setPwBusy(false); return toast.error(updateError.message); }
 
+<<<<<<< HEAD
     // Step 3: Update password_changed_at to restart the expiry clock
+=======
+    // Step 3: Update password_changed_at to restart the 90-day clock
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     await supabase
       .from("profiles")
       .update({ password_changed_at: new Date().toISOString() })
@@ -292,6 +356,7 @@ function ProfilePage() {
 
     setPwBusy(false);
     setPwSuccess(true);
+<<<<<<< HEAD
     setOldPw(""); setNewPw(""); setConfirmPw("");
     toast.success("Password changed — please log in again with your new password");
 
@@ -300,6 +365,12 @@ function ProfilePage() {
     setTimeout(async () => {
       await supabase.auth.signOut({ scope: "global" });
     }, 1800);
+=======
+    setOldPw("");
+    setNewPw("");
+    setConfirmPw("");
+    toast.success("Password changed successfully");
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
     qc.invalidateQueries();
 
     setTimeout(() => setPwSuccess(false), 4000);
@@ -322,6 +393,7 @@ function ProfilePage() {
 
   return (
     <AppShell title="My Profile" subtitle="Account details and settings">
+<<<<<<< HEAD
       <div className="space-y-6">
         {/* College info banner — full width */}
         <div className="flex items-center gap-4 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/8 to-primary/4 px-5 py-4">
@@ -343,10 +415,14 @@ function ProfilePage() {
 
         {/* 3-column grid: Details | Password | Account Info */}
         <div className="grid gap-6 lg:grid-cols-[1fr_1fr_300px]">
+=======
+      <div className="grid gap-6 lg:grid-cols-2 max-w-3xl">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
 
         {/* Details card */}
         <SectionCard title="Details">
           <form onSubmit={save} className="space-y-4">
+<<<<<<< HEAD
 
             {/* Avatar upload */}
             <div className="flex items-center gap-4">
@@ -395,6 +471,11 @@ function ProfilePage() {
                 ? <p className="text-xs text-destructive">{phoneError}</p>
                 : <p className="text-xs text-muted-foreground">Indian mobile number (10 digits, starts with 6–9). Used by your HOD for password reset.</p>
               }
+=======
+            <div className="space-y-2">
+              <Label htmlFor="name">Full name</Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
@@ -404,7 +485,11 @@ function ProfilePage() {
               <Label>College ID</Label>
               <Input value={profile?.user_id ?? ""} disabled />
             </div>
+<<<<<<< HEAD
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+=======
+            <div className="grid grid-cols-2 gap-4">
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
               <div className="space-y-2">
                 <Label>Role</Label>
                 <Input value={role ?? ""} disabled className="capitalize" />
@@ -445,9 +530,13 @@ function ProfilePage() {
                 </p>
               </div>
             )}
+<<<<<<< HEAD
             <Button type="submit" disabled={busy} className={saved ? "bg-success text-success-foreground hover:bg-success/90" : ""}>
               {saved ? <span className="inline-flex items-center gap-1"><Check className="size-4"/>Saved</span> : busy ? "Saving…" : "Save changes"}
             </Button>
+=======
+            <Button type="submit" disabled={busy}>Save changes</Button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
           </form>
         </SectionCard>
 
@@ -484,6 +573,7 @@ function ProfilePage() {
                     className="pr-10"
                     autoComplete="current-password"
                   />
+<<<<<<< HEAD
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
@@ -498,6 +588,17 @@ function ProfilePage() {
                     </TooltipTrigger>
                     <TooltipContent side="left">{showOld ? "Hide password" : "Show password"}</TooltipContent>
                   </Tooltip>
+=======
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    onClick={() => setShowOld((v) => !v)}
+                    tabIndex={-1}
+                    aria-label={showOld ? "Hide password" : "Show password"}
+                  >
+                    {showOld ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 </div>
               </div>
 
@@ -522,6 +623,7 @@ function ProfilePage() {
                     className="pr-10"
                     autoComplete="new-password"
                   />
+<<<<<<< HEAD
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
@@ -536,6 +638,17 @@ function ProfilePage() {
                     </TooltipTrigger>
                     <TooltipContent side="left">{showNew ? "Hide password" : "Show password"}</TooltipContent>
                   </Tooltip>
+=======
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    onClick={() => setShowNew((v) => !v)}
+                    tabIndex={-1}
+                    aria-label={showNew ? "Hide password" : "Show password"}
+                  >
+                    {showNew ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 </div>
                 {/* Strength bar */}
                 {strength && (
@@ -563,6 +676,7 @@ function ProfilePage() {
                     className={`pr-10 ${confirmPw && confirmPw !== newPw ? "border-destructive focus-visible:ring-destructive/20" : confirmPw && confirmPw === newPw ? "border-success focus-visible:ring-success/20" : ""}`}
                     autoComplete="new-password"
                   />
+<<<<<<< HEAD
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
@@ -577,6 +691,17 @@ function ProfilePage() {
                     </TooltipTrigger>
                     <TooltipContent side="left">{showConfirm ? "Hide password" : "Show password"}</TooltipContent>
                   </Tooltip>
+=======
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    onClick={() => setShowConfirm((v) => !v)}
+                    tabIndex={-1}
+                    aria-label={showConfirm ? "Hide password" : "Show password"}
+                  >
+                    {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
                 </div>
                 {confirmPw && confirmPw !== newPw && (
                   <p className="text-xs text-destructive">Passwords do not match</p>
@@ -596,6 +721,7 @@ function ProfilePage() {
             </form>
           )}
         </SectionCard>
+<<<<<<< HEAD
         {/* ── Right: account info panel ─────────────────────────── */}
         <div className="hidden lg:flex flex-col gap-4">
 
@@ -679,3 +805,9 @@ function ProfilePage() {
     </AppShell>
   );
 }
+=======
+      </div>
+    </AppShell>
+  );
+}
+>>>>>>> 091004894f1363ab25ba14a2804976e3ea6f57b8
